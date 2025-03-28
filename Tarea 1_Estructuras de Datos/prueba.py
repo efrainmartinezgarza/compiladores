@@ -219,8 +219,11 @@ elif respuesta == 3:
         # Eliminación de un par (clave-valor)
         elif respuesta == 2:
             clave = input("Clave a eliminar: ")
-            diccionario.remove(clave)
-            print("Par eliminado satisfactoriamente.")
+            if diccionario.is_empty():
+                print("El diccionario está vacío.")
+            else:
+                diccionario.remove(clave)
+                print("Par eliminado satisfactoriamente.")
         
         # Vaciado del diccionario
         elif respuesta == 3:

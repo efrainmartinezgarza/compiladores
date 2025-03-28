@@ -135,8 +135,10 @@ class Dictionary:
 
     # remove: Elimina un par (clave, valor) del diccionario.
     def remove(self, clave):
-        if clave in self.elementos:
+        if len(self.elementos) != 0 and clave in self.elementos:
             del self.elementos[clave]
+        else:
+            return None
 
     # clear: Elimina todos los elementos del diccionario.
     def clear(self):
