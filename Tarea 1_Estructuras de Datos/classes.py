@@ -3,13 +3,13 @@
 Tarea 1: Estructuras de Datos (Python)
 Efraín Martínez Garza (A01280601)
 ------------------------------------------------------------------------------------------------------------------------------
-Descripción: Implementación de tres estrucutras de datos básicas (stack, queue y table) en Python.
+Descripción: Declaración e implementación de tres clases básicas para estructuras de datos en Python: 
+Pila (Stack), Fila (Queue) y Diccionario (Dictionary).
 ------------------------------------------------------------------------------------------------------------------------------"""
 
 """ Implementación de una pila (stack) 
 LIFO (Last In, First Out)
 ----------------------------------------------------------------------------------------------------------------------------"""
-
 class Stack:
 
     # Constructor
@@ -28,6 +28,10 @@ class Stack:
         if not self.is_empty():
             return self.elementos.pop()
         return None  
+    
+    # clear: Elimina todos los elementos de la pila.
+    def clear(self):
+        self.elementos = []
     
     # size: Regresa el tamaño de la pila (número de elementos).
     def size(self):
@@ -55,21 +59,21 @@ class Stack:
         if len(self.elementos) == 0:
             print("Pila vacía")
         else:
-            for elemento in self.elementos:
-                print(elemento, end = " ")
+            # Iteraración inversa para imprimir los elementos en el orden correcto (top -> bottom)
+            for elemento in reversed(self.elementos):
+                print(elemento)
 
 
 """ Implementación de una fila (Queue) 
 FIFO (first In, First Out)
 ----------------------------------------------------------------------------------------------------------------------------"""
-
 class Queue:
 
     # Constructor
     def __init__(self):
         self.elementos = []
 
-     # Métodos
+    # Métodos
     # ---------------------------------------------------------------------------
 
     # enqueue: Agrega un elemento al final de la fila.
@@ -81,6 +85,10 @@ class Queue:
         if self.is_empty() == False:
             return self.elementos.pop(0)
         return None
+    
+    # clear: Elimina todos los elementos de la fila.
+    def clear(self):
+        self.elementos = []
     
     # size: Devuelve el número de elementos contenidos en la fila.
     def size(self):
@@ -109,4 +117,55 @@ class Queue:
         else:
             for elemento in self.elementos:
                 print(elemento, end = " ")
-                
+
+""" Implementación de un diccionario (table) 
+----------------------------------------------------------------------------------------------------------------------------"""
+class Dictionary:
+
+    # Constructor
+    def __init__(self):
+        self.elementos = {}
+
+    # Métodos
+    # ---------------------------------------------------------------------------
+
+    # insert: Inserta en el diccionario un par conformado por una clave y un valor.
+    def insert(self, clave, valor):
+        self.elementos[clave] = valor
+
+    # remove: Elimina un par (clave, valor) del diccionario.
+    def remove(self, clave):
+        if clave in self.elementos:
+            del self.elementos[clave]
+
+    # clear: Elimina todos los elementos del diccionario.
+    def clear(self):
+        self.elementos = {}
+
+    # size: Devuelve el número de elementos contenidos en el diccionario.
+    def size(self):
+        return len(self.elementos)
+    
+    # is_empty: Devuelve "verdadero" si el diccionario está vacío, y "falso" si tiene algún elemento.
+    def is_empty(self):
+        return len(self.elementos) == 0  
+
+    # get: Regresa el valor correspondiente a la clave dada.
+    def get(self, clave):
+        return self.elementos.get(clave, None)
+
+    # keys: Regresa una lista con todas las claves del diccionario.
+    def keys(self):
+        return list(self.elementos.keys())
+        
+    # values: Devuelve una lista con todos los valores del diccionario.
+    def values(self):
+        return list(self.elementos.values())
+
+    # items: Devuelve una lista con todos los pares (clave-valor) del diccionario.
+    def items(self):
+        return list(self.elementos.items())
+
+    # print: Imprime los elementos contenidos en el diccionario.
+    def print_dict(self):
+        print("Diccionario:", self.elementos)
