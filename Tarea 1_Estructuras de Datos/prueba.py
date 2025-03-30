@@ -47,7 +47,7 @@ if respuesta == 1:
             if respuesta == 1:
                 elemento = input("Elemento a insertar: ")
                 pila.push(elemento)
-                print("Elemento insertado satisfactoriamente.")
+                print("Elemento (" + elemento + ") insertado satisfactoriamente.")
     
             # Eliminación de un elemento
             elif respuesta == 2:
@@ -62,18 +62,18 @@ if respuesta == 1:
                 pila.clear()
                 print("Pila limpiada satisfactoriamente.")
     
-            # Ver tamaño de la pila
+            # Visualizar tamaño de la pila
             elif respuesta == 4:
                 print("Tamaño de la pila: " + str(pila.size()))
     
-            # Ver si la pila está vacía
+            # Visualizar si la pila está vacía
             elif respuesta == 5:
                 if pila.is_empty():
                     print("La pila está vacía.")
                 else:
                     print("La pila no está vacía.")
     
-            # Ver el elemento al tope de la pila
+            # Visualizar el elemento al tope de la pila
             elif respuesta == 6:
                 elemento = pila.top()
                 if elemento != None:
@@ -81,7 +81,7 @@ if respuesta == 1:
                 else:
                     print("La pila está vacía.")
     
-            # Ver el elemento al fondo de la pila
+            # Visualizar el elemento al fondo de la pila
             elif respuesta == 7:
                 elemento = pila.bottom()
                 if elemento != None:
@@ -130,6 +130,7 @@ elif respuesta == 2:
         if respuesta == 1:
             elemento = input("Elemento a insertar: ")
             fila.enqueue(elemento)
+            print("Elemento (" + elemento + ") insertado satisfactoriamente.")
 
         # Eliminación de un elemento
         elif respuesta == 2:
@@ -144,18 +145,18 @@ elif respuesta == 2:
             fila.clear()
             print("Fila limpiada satisfactoriamente.")
         
-        # Ver tamaño de la fila
+        # Visualizar tamaño de la fila
         elif respuesta == 4:
             print("Tamaño de la fila: " + str(fila.size()))
 
-        # Ver si la fila está vacía
+        # Visualizar si la fila está vacía
         elif respuesta == 5:
             if fila.is_empty():
                 print("La fila está vacía.")
             else:
                 print("La fila no está vacía.")
         
-        # Ver el elemento al frente de la fila
+        # Visualizar el elemento al frente de la fila
         elif respuesta == 6:
             elemento = fila.front()
             if elemento != None:
@@ -163,9 +164,9 @@ elif respuesta == 2:
             else:
                 print("La fila está vacía.")
         
-        # Ver el elemento al final de la fila
+        # Visualizar el elemento al final de la fila
         elif respuesta == 7:
-            elemento = fila.last()
+            elemento = fila.back()
             if elemento != None:
                 print("Elemento al final de la fila: " + elemento)
             else:
@@ -174,7 +175,7 @@ elif respuesta == 2:
         # Imprimir los elementos de la fila
         elif respuesta == 8:
             print("Elementos de la fila: ")
-            fila.print_items()
+            fila.print_items() 
 
         # Pregunta al usuario: ¿Qué desea hacer con la fila?
         print("\n---------------------------------------------------")
@@ -202,7 +203,7 @@ elif respuesta == 3:
     print("7. Ver todas las claves (keys)")
     print("8. Ver todos los valores (values)")
     print("9. Ver todos los pares (clave-valor) (items)")
-    print("10. Imprimir los elementos del diccionario (print_dict)")
+    print("10. Imprimir los elementos del diccionario (print_items)")
     print("11. Salir")
     print("---------------------------------------------------")
     respuesta = int(input("Respuesta: "))
@@ -214,57 +215,61 @@ elif respuesta == 3:
             clave = input("Clave a insertar: ")
             valor = input("Valor a insertar: ")
             diccionario.insert(clave, valor)
-            print("Par insertado satisfactoriamente.")
+            print("Par ('" + clave + "', '" + valor + "') insertado satisfactoriamente.")
 
         # Eliminación de un par (clave-valor)
         elif respuesta == 2:
             clave = input("Clave a eliminar: ")
             if diccionario.is_empty():
                 print("El diccionario está vacío.")
+            elif diccionario.get(clave) == None:
+                print("La clave no existe en el diccionario.")
             else:
+                print("Par eliminado satisfactoriamente: ('" + str(clave) + "', '" + str(diccionario.get(clave)) + "')")
                 diccionario.remove(clave)
-                print("Par eliminado satisfactoriamente.")
         
         # Vaciado del diccionario
         elif respuesta == 3:
             diccionario.clear()
             print("Diccionario limpiado satisfactoriamente.")
         
-        # Ver tamaño del diccionario
+        # Visualizar tamaño del diccionario
         elif respuesta == 4:
             print("Tamaño del diccionario: " + str(diccionario.size()))
 
-        # Ver si el diccionario está vacío
+        # Visualizar si el diccionario está vacío
         elif respuesta == 5:
             if diccionario.is_empty():
                 print("El diccionario está vacío.")
             else:
                 print("El diccionario no está vacío.")
         
-        # Ver valor de una clave
+        # Visualizar valor de una clave
         elif respuesta == 6:
             clave = input("Clave a buscar: ")
             valor = diccionario.get(clave)
-            if valor != None:
+            if diccionario.is_empty():
+                print("Clave no encontrada (el diccionario está vacío).")
+            elif valor != None:
                 print("Valor de la clave " + clave + ": " + valor)
             else:
                 print("La clave no existe en el diccionario.")
         
-        # Ver todas las claves
+        # Visualizar todas las claves
         elif respuesta == 7:
             print("Claves del diccionario: ", diccionario.keys())
         
-        # Ver todos los valores
+        # Visualizar todos los valores
         elif respuesta == 8:
             print("Valores del diccionario: ", diccionario.values())
         
-        # Ver todos los pares (clave-valor)
+        # Visualizar todos los pares (clave-valor)
         elif respuesta == 9:
             print("Pares (clave-valor) del diccionario: ", diccionario.items())
 
         # Imprimir los elementos del diccionario
         elif respuesta == 10:
-            diccionario.print_dict()
+            diccionario.print_items()
         
         # Pregunta al usuario: ¿Qué desea hacer con el diccionario?
         print("\n---------------------------------------------------")

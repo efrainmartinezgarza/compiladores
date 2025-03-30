@@ -104,8 +104,8 @@ class Queue:
             return self.elementos[0]
         return None
     
-    # last: Regresa el valor de la última posición en la fila.
-    def last(self):
+    # back: Regresa el valor de la última posición en la fila.
+    def back(self):
         if len(self.elementos) != 0:
             return self.elementos[-1]
         return None
@@ -169,5 +169,5 @@ class Dictionary:
         return list(self.elementos.items())
 
     # print: Imprime los elementos contenidos en el diccionario.
-    def print_dict(self):
+    def print_items(self):
         print("Diccionario:", self.elementos)
