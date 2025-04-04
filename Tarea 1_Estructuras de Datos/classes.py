@@ -171,3 +171,11 @@ class Dictionary:
     # print: Imprime los elementos contenidos en el diccionario.
     def print_items(self):
         print("Diccionario:", self.elementos)
+
+""" Referencias:
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- Geeks for Geeks. (2025). Clases y objetos de Python. Geeks for Geeks. Recuperado de: https://www.geeksforgeeks.org/python-classes-and-objects/ 
+- Geeks for Geeks. (2025). Diccionarios en Python. Geeks for Geeks. Recuperado de: https://www.geeksforgeeks.org/python-dictionary/ 
+- Geeks for Geeks. (2024). Operaciones básicas en la estructura de datos de pila con implementaciones. Geeks for Geeks. Recuperado de: https://www.geeksforgeeks.org/basic-operations-in-stack-data-structure-with-implementations/ 
+- Geeks for Geeks. (2022). Stack and Queues in Python. Geeks for Geeks. Recuperado de: https://www.geeksforgeeks.org/stack-and-queues-in-python/ 
+"""

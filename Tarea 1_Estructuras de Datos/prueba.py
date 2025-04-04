@@ -3,7 +3,7 @@
 Tarea 1: Estructuras de Datos (Python)
 Efraín Martínez Garza (A01280601)
 ------------------------------------------------------------------------------------------------------------------------------
-Descripción: Programa para probar el correcto funcionamiento de las clases Stack, Queue y Dictionary.
+Descripción: Programa para probar el correcto funcionamiento de las clases: Stack, Queue y Dictionary.
 ------------------------------------------------------------------------------------------------------------------------------"""
 
 from classes import Stack, Queue, Dictionary
