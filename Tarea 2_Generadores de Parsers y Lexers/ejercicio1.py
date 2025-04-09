@@ -41,7 +41,7 @@ print("\nÁrbol sintáctico:")
 print("---------------------------------")
 print(arbol.pretty())
 
-# Obtener y mostrar los tokens encontrados
+# Obtención e impresión de los tokens encontrados
 tokens = parser.lex(expresionIngresada)  
 print("Tokens encontrados:")
 print("---------------------------------")
