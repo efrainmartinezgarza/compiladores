@@ -3,7 +3,7 @@
 Tarea 2: Ejericio con Lark (Python)
 Efraín Martínez Garza (A01280601)
 ------------------------------------------------------------------------------------------------------------------------------
-Descripción: Creación de un parser para evaluar expresiones aritméticas simples (suma y resta) utilizando la librería Lark.
+Descripción: Desarrollo de un parser para evaluar expresiones aritméticas simples (suma y resta) utilizando la librería Lark.
 ------------------------------------------------------------------------------------------------------------------------------"""
 
 # Importación de librerías
@@ -23,13 +23,29 @@ grammar = """
 """
 
 # Creación del parser
-parser = Lark(grammar, start='start')
+parser = Lark(grammar, start='start', lexer='standard')
 
 # Expresión a evaluar
-expression = "5 + 8 - 1 + 1"
+expresionIngresada = "1 + 2 - 3 + 5"
 
 # Aplicación del parser a la expresión (conversión a árbol sintáctico)
-arbol = parser.parse(expression)
+arbol = parser.parse(expresionIngresada)
+
+# Impresión de la expresión original
+print("\nExpresión original:")
+print("---------------------------------")
+print(expresionIngresada)
 
 # Impresión del árbol sintáctico generado
+print("\nÁrbol sintáctico:")
+print("---------------------------------")
 print(arbol.pretty())
+
+# Obtener y mostrar los tokens encontrados
+tokens = parser.lex(expresionIngresada)  
+print("Tokens encontrados:")
+print("---------------------------------")
+for token in tokens:
+    print(f"{token.type}: {token.value}")
+
+print("\n")
