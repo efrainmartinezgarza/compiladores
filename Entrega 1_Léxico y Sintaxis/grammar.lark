@@ -46,3 +46,55 @@ COLON: ":"
 SEMICOLON: ";"
 PERIOD: "."
 UNDERSCORE: "_"
+
+// Definición de regla inicial (punto de partida)
+// -----------------------------------------------------------------
+?start: program
+
+// Expresiones regulares (elementos básicos)
+// -----------------------------------------------------------------
+STRING: /"[^"\n]*"/
+DIGIT: /[0-9]/
+LETTER: /[a-zA-Z]/
+
+// Gramática (elementos complejos)
+// -----------------------------------------------------------------
+ID: LETTER (LETTER | DIGIT | UNDERSCORE)*
+NUMBER: DIGIT+
+FLOAT: ("+"|"-")? NUMBER "." NUMBER
+INT: ("+"|"-")? NUMBER
+CTE: INT | FLOAT
+TYPE: INT_KWORD | FLOAT_KWORD
+
+// Gramática (reglas sintácticas)
+// -----------------------------------------------------------------
+
+program: PROGRAM_KWORD ID SEMICOLON vars? funcs* MAIN_KWORD body END_KWORD
+
+vars: VAR_KWORD (ID (COMMA ID)* COLON TYPE SEMICOLON)+
+
+funcs: VOID_KWORD ID L_PARENTHESIS (ID COLON TYPE (COMMA ID COLON TYPE)*)? R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON
+
+body: L_CURLY_BRACE statement* R_CURLY_BRACE
+
+statement: assign | condition | cycle | f_call | print
+
+assign: ID EQUAL expression SEMICOLON
+
+condition: IF_KWORD L_PARENTHESIS expression R_PARENTHESIS body (ELSE_KWORD body SEMICOLON | SEMICOLON)
+
+cycle: WHILE_KWORD L_PARENTHESIS expression R_PARENTHESIS DO_KWORD body SEMICOLON
+
+f_call: ID L_PARENTHESIS (expression (COMMA expression)*)? R_PARENTHESIS SEMICOLON
+
+print: PRINT_KWORD L_PARENTHESIS (expression (COMMA expression)* | STRING) R_PARENTHESIS SEMICOLON
+
+expression: exp ((GREATER_THAN | LESS_THAN | NOT_EQUAL) exp)?
+
+?exp: term ((PLUS | MINUS) term)*
+
+?term: factor ((MULT_SIGN | DIV_SIGN) factor)*
+
+?factor: L_PARENTHESIS expression R_PARENTHESIS | (PLUS | MINUS)? (ID | CTE)
+
+// "?": Se agrega para establecer "reglas intermedias". Estas no se muestran como nodos en el árbol sintáctico.
