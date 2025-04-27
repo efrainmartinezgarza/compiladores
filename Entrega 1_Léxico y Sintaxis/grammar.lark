@@ -1,0 +1,48 @@
+// Comandos para ignorar espacios en blanco
+// -----------------------------------------------------------------
+%import common.WS
+%ignore WS
+
+// Palabras clave
+// -----------------------------------------------------------------
+PROGRAM_KWORD: "program"
+ID_KWORD: "id"
+MAIN_KWORD: "main"
+END_KWORD: "end"
+VOID_KWORD: "void"
+VAR_KWORD: "var"
+PRINT_KWORD: "print"
+WHILE_KWORD: "while"
+DO_KWORD: "do"
+IF_KWORD: "if"
+ELSE_KWORD: "else"
+INT_KWORD: "int"
+FLOAT_KWORD: "float"
+
+// Operadores y símbolos
+// -----------------------------------------------------------------
+EQUAL: "="
+GREATER_THAN: ">"
+LESS_THAN: "<"
+NOT_EQUAL: "!="
+MINUS: "-"
+PLUS: "+"
+MULT_SIGN: "*"
+DIV_SIGN: "/"
+
+// Llaves
+// -----------------------------------------------------------------
+L_CURLY_BRACE: "{"
+R_CURLY_BRACE: "}"
+L_PARENTHESIS: "("
+R_PARENTHESIS: ")"
+L_BRACKET: "["
+R_BRACKET: "]"
+
+// Signos de puntuación
+// -----------------------------------------------------------------
+COMMA: ","
+COLON: ":"
+SEMICOLON: ";"
+PERIOD: "."
+UNDERSCORE: "_"
