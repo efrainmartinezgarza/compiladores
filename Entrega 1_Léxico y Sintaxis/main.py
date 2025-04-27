@@ -27,3 +27,21 @@ tree = parser.parse(source_code)
 # Uso del lexer para descomponer el código fuente en tokens.
 tokens = parser.lex(source_code)
 
+# Impresión de la entrada de texto original.
+print("\nEntrada original:")
+print("---------------------------------")
+print(source_code)
+
+# Impresión de los tokens encontrados.
+print("\nTokens encontrados:")
+print("------------------------------")
+print("\nToken            |   Carácter")
+print("------------------------------")
+for token in tokens:
+    if hasattr(token, 'type'): 
+        print(f"{token.type:<16} | {repr(token.value):<10}") 
+                                                             
+# Impresión del árbol sintáctico generado.
+print("\nÁrbol sintáctico:")
+print("---------------------------------")
+print(tree.pretty()) 
