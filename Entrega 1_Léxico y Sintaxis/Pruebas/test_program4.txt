@@ -1,0 +1,11 @@
+program myProgram;
+var x: int;
+
+void printSum(a: int, b: int) [ var result: int; { result = a + b; print(result); } ];
+void greet() [ var msg: float; { print("Hello"); } ];
+
+main {
+  printSum(3, 4);
+  greet();
+}
+end

@@ -15,7 +15,7 @@ MAIN_PATH = Path(__file__).parent
 
 # Uso de rutas relativas para acceder a archivos externos.
 GRAMMAR_PATH = MAIN_PATH / "grammar.lark"
-TEST_PROGRAM_PATH = MAIN_PATH / "test_program.txt"
+TEST_PROGRAM_PATH = MAIN_PATH / "Pruebas/test_program.txt"
 
 # load_grammar_parser: Función para abrir y procesar el archivo de gramática del lenguaje BabyDuck.
 def load_grammar_parser():
@@ -53,7 +53,7 @@ for token in tokens:
     if hasattr(token, 'type'):  # "hasattr" valida si el objeto tiene un atributo específico (en este caso, "type").
         print(f"{token.type:<16} | {repr(token.value):<10}") # <16 y <10 ayudan a alinear el texto a la izquierda con un ancho específico.
                                                              # "repr" convierte el valor del token a un string literal (no interpreta caracteres especiales).
-
+                                                             
 # Impresión del árbol sintáctico generado.
 print("\nÁrbol sintáctico:")
 print("---------------------------------")
