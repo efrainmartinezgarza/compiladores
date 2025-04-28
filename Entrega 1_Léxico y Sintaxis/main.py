@@ -1,36 +1,48 @@
-from lark import Lark
-from pathlib import Path 
+"""------------------------------------------------------------------------------------------------------------------------------
+Entrega 1: Creación de un parser y lexer (BabyDuck Language)
+Efraín Martínez Garza (A01280601)
+------------------------------------------------------------------------------------------------------------------------------
+Descripción: Desarrollo de un parser y lexer para el lenguaje BabyDuck utilizando la librería Lark.
+------------------------------------------------------------------------------------------------------------------------------"""
+
+# Importación de librerías
+# Comando para instalar Lark: pip install lark-parser
+from lark import Lark # Clase principal para crear el parser.
+from pathlib import Path # Librería para manejar rutas de archivos con rutas relativas y absolutas.
 
 # Obtención del directorio donde está "main.py".
-CURRENT_DIR = Path(__file__).parent
+MAIN_PATH = Path(__file__).parent
 
 # Uso de rutas relativas para acceder a archivos externos.
-GRAMMAR_PATH = CURRENT_DIR / "grammar.lark"
-TEST_PROGRAM_PATH = CURRENT_DIR / "test_program.txt"
+GRAMMAR_PATH = MAIN_PATH / "grammar.lark"
+TEST_PROGRAM_PATH = MAIN_PATH / "test_program.txt"
 
-# load_parser: Función para abrir y procesar el archivo de gramática del lenguaje BabyDuck.
-def load_parser():
-    with open(GRAMMAR_PATH, "r") as file:
-        grammar = file.read()
-    return Lark(grammar, start="start", parser="earley") 
+# load_grammar_parser: Función para abrir y procesar el archivo de gramática del lenguaje BabyDuck.
+def load_grammar_parser():
+    with open(GRAMMAR_PATH, "r") as grammar_file:
+        grammar = grammar_file.read()
+    return Lark(grammar, start="start", parser="earley") # Lark(Contenido de la gramática, nombre del nodo inicial y el tipo de parser a utilizar).
+    # "earley" -> Selección de un parser top-down (permite más ambigüedad).
+    # "lalr" -> Selección de un parser bottom-up (más eficiente, pero más estricto).
 
 # Proceso de lectura del archivo que contiene el código fuente a analizar.
-with open(TEST_PROGRAM_PATH, "r") as f:
-    source_code = f.read() 
+with open(TEST_PROGRAM_PATH, "r") as test_file: # La "r" se usa para especificar que el archivo se abrirá en modo lectura ("read").
+    test_code = test_file.read() # Lectura y almacenamiento del contenido del archivo en una variable.
 
-# Creación del parser
-parser = load_parser()
+# Creación del parser: Se hace un llamado a la función load_parser() que contiene la gramática.
+# Aquí tambien se crea el lexer (al mismo tiempo que el parser).
+parser = load_grammar_parser()
 
 # Conversión de la entrada de texto a un árbol sintáctico.
-tree = parser.parse(source_code)
+tree = parser.parse(test_code)
 
 # Uso del lexer para descomponer el código fuente en tokens.
-tokens = parser.lex(source_code)
+tokens = parser.lex(test_code)
 
 # Impresión de la entrada de texto original.
 print("\nEntrada original:")
 print("---------------------------------")
-print(source_code)
+print(test_code)
 
 # Impresión de los tokens encontrados.
 print("\nTokens encontrados:")
@@ -38,10 +50,18 @@ print("------------------------------")
 print("\nToken            |   Carácter")
 print("------------------------------")
 for token in tokens:
-    if hasattr(token, 'type'): 
-        print(f"{token.type:<16} | {repr(token.value):<10}") 
-                                                             
+    if hasattr(token, 'type'):  # "hasattr" valida si el objeto tiene un atributo específico (en este caso, "type").
+        print(f"{token.type:<16} | {repr(token.value):<10}") # <16 y <10 ayudan a alinear el texto a la izquierda con un ancho específico.
+                                                             # "repr" convierte el valor del token a un string literal (no interpreta caracteres especiales).
+
 # Impresión del árbol sintáctico generado.
 print("\nÁrbol sintáctico:")
 print("---------------------------------")
-print(tree.pretty()) 
+print(tree.pretty()) # "pretty()" mejora la leibilidad del árbol sintáctico (incluye indentación y formato, no solo el texto plano).
+
+""" Referencias:
+    - Geeks for Geeks. (2025). Python repr() Function. Geeks for Geeks. Recuperado de: https://www.geeksforgeeks.org/python-repr-function/
+    - Lark. (2025). Repositorio de Lark. GitHub. Recuperado de: https://github.com/lark-parser/lark/blob/master/LICENSE 
+    - Lark. (2025). Welcome to Lark’s documentation. Lark. Recuperado de: https://lark-parser.readthedocs.io/en/stable/ 
+    - Python. (2025). Pathlib: Object-oriented filesystem paths. Python. Recuperado de:  https://docs.python.org/3/library/pathlib.html 
+"""
