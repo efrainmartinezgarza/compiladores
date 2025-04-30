@@ -61,19 +61,20 @@ LETTER: /[a-zA-Z]/
 // -----------------------------------------------------------------
 ID: LETTER (LETTER | DIGIT | UNDERSCORE)*
 NUMBER: DIGIT+
-FLOAT: ("+"|"-")? NUMBER "." NUMBER
-INT: ("+"|"-")? NUMBER
+INT: NUMBER
+FLOAT: NUMBER "." NUMBER
 CTE: INT | FLOAT
-TYPE: INT_KWORD | FLOAT_KWORD
 
 // Gramática (reglas sintácticas)
 // -----------------------------------------------------------------
 
+type: INT_KWORD | FLOAT_KWORD
+
 program: PROGRAM_KWORD ID SEMICOLON vars? funcs* MAIN_KWORD body END_KWORD
 
-vars: VAR_KWORD (ID (COMMA ID)* COLON TYPE SEMICOLON)+
+vars: VAR_KWORD (ID (COMMA ID)* COLON type SEMICOLON)+
 
-funcs: VOID_KWORD ID L_PARENTHESIS (ID COLON TYPE (COMMA ID COLON TYPE)*)? R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON
+funcs: VOID_KWORD ID L_PARENTHESIS (ID COLON type (COMMA ID COLON type)*)? R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON
 
 body: L_CURLY_BRACE statement* R_CURLY_BRACE
 
