@@ -63,39 +63,63 @@ ID: LETTER (LETTER | DIGIT | UNDERSCORE)*
 NUMBER: DIGIT+
 INT: NUMBER
 FLOAT: NUMBER "." NUMBER
-CTE: INT | FLOAT
+CTE: FLOAT | INT
 
 // Gramática (reglas sintácticas)
 // -----------------------------------------------------------------
 
-type: INT_KWORD | FLOAT_KWORD
+type: INT_KWORD -> type_int
+    | FLOAT_KWORD -> type_float
 
-program: PROGRAM_KWORD ID SEMICOLON vars? funcs* MAIN_KWORD body END_KWORD
+program: PROGRAM_KWORD ID SEMICOLON MAIN_KWORD body END_KWORD -> program_simple
+        | PROGRAM_KWORD ID SEMICOLON vars MAIN_KWORD body END_KWORD -> program_vars
+        | PROGRAM_KWORD ID SEMICOLON vars funcs+ MAIN_KWORD body END_KWORD -> program_vars_funcs
+        | PROGRAM_KWORD ID SEMICOLON funcs+ MAIN_KWORD body END_KWORD -> program_funcs
 
-vars: VAR_KWORD (ID (COMMA ID)* COLON type SEMICOLON)+
+vars: VAR_KWORD (ID COLON type SEMICOLON)+ -> vars_one_id
+        | VAR_KWORD (ID (COMMA ID)* COLON type SEMICOLON)+ -> vars_multiple_ids
 
-funcs: VOID_KWORD ID L_PARENTHESIS (ID COLON type (COMMA ID COLON type)*)? R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON
+funcs: VOID_KWORD ID L_PARENTHESIS R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_simple
+        | VOID_KWORD ID L_PARENTHESIS ID COLON type R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_id
+        | VOID_KWORD ID L_PARENTHESIS ID COLON type (COMMA ID COLON type)+ R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_multiple_ids
 
-body: L_CURLY_BRACE statement* R_CURLY_BRACE
+body: L_CURLY_BRACE R_CURLY_BRACE -> body_simple
+        | L_CURLY_BRACE statement+ R_CURLY_BRACE -> body_statement
 
 statement: assign | condition | cycle | f_call | print
 
 assign: ID EQUAL expression SEMICOLON
 
-condition: IF_KWORD L_PARENTHESIS expression R_PARENTHESIS body (ELSE_KWORD body SEMICOLON | SEMICOLON)
+condition: IF_KWORD L_PARENTHESIS expression R_PARENTHESIS body SEMICOLON -> condition_if
+        | IF_KWORD L_PARENTHESIS expression R_PARENTHESIS body ELSE_KWORD body SEMICOLON -> condition_if_else
 
 cycle: WHILE_KWORD L_PARENTHESIS expression R_PARENTHESIS DO_KWORD body SEMICOLON
 
-f_call: ID L_PARENTHESIS (expression (COMMA expression)*)? R_PARENTHESIS SEMICOLON
+f_call: ID L_PARENTHESIS R_PARENTHESIS SEMICOLON -> f_call_simple
+        | ID L_PARENTHESIS expression R_PARENTHESIS SEMICOLON -> f_call_one_expression
+        | ID L_PARENTHESIS expression (COMMA expression)+ R_PARENTHESIS SEMICOLON -> f_call_multiple_expressions
 
-print: PRINT_KWORD L_PARENTHESIS (expression (COMMA expression)* | STRING) R_PARENTHESIS SEMICOLON
+print: PRINT_KWORD L_PARENTHESIS STRING R_PARENTHESIS SEMICOLON -> print_string
+        | PRINT_KWORD L_PARENTHESIS expression R_PARENTHESIS SEMICOLON -> print_expression
+        | PRINT_KWORD L_PARENTHESIS expression (COMMA expression)+ R_PARENTHESIS SEMICOLON -> print_multiple_expressions
 
-expression: exp ((GREATER_THAN | LESS_THAN | NOT_EQUAL) exp)?
+expression: exp -> expression_simple
+        | exp GREATER_THAN exp -> expression_greater_than
+        | exp LESS_THAN exp -> expression_less_than
+        | exp NOT_EQUAL exp -> expression_not_equal
 
-?exp: term ((PLUS | MINUS) term)*
+?exp: term -> exp_simple
+     | exp (PLUS term)+ -> exp_plus
+     | exp (MINUS term)+ -> exp_minus
 
-?term: factor ((MULT_SIGN | DIV_SIGN) factor)*
+?term: factor -> term_simple
+     | term (MULT_SIGN factor)+ -> term_mult_sign
+     | term (DIV_SIGN factor)+ -> term_div_sign
 
-?factor: L_PARENTHESIS expression R_PARENTHESIS | (PLUS | MINUS)? (ID | CTE)
+?factor: L_PARENTHESIS expression R_PARENTHESIS -> factor_expression
+        | ID -> factor_id
+        | CTE -> factor_cte
+        | MINUS factor -> factor_minus  
+        | PLUS factor -> factor_plus  
 
 // "?": Se agrega para establecer "reglas intermedias". Estas no se muestran como nodos en el árbol sintáctico.
