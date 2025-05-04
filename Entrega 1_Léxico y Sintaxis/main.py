@@ -7,15 +7,27 @@ Descripción: Desarrollo de un parser y lexer para el lenguaje BabyDuck utilizan
 
 # Importación de librerías
 # Comando para instalar Lark: pip install lark-parser
-from lark import Lark # Clase principal para crear el parser.
+from lark import Lark, Tree # Clase principal para crear el parser.
 from pathlib import Path # Librería para manejar rutas de archivos con rutas relativas y absolutas.
+from transformer import MyTransformer # Importación de la clase MyTransformer desde el archivo transformer.py.
+
+def tree_to_dict(tree):
+    if isinstance(tree, Tree):
+        return {
+            "type": tree.data,
+            "children": [tree_to_dict(child) for child in tree.children]
+        }
+    elif hasattr(tree, 'value'):
+        return tree.value
+    else:
+        return str(tree)
 
 # Obtención del directorio donde está "main.py".
 MAIN_PATH = Path(__file__).parent
 
 # Uso de rutas relativas para acceder a archivos externos.
 GRAMMAR_PATH = MAIN_PATH / "grammar.lark"
-TEST_PROGRAM_PATH = MAIN_PATH / "Pruebas/test_program.txt"
+TEST_PROGRAM_PATH = MAIN_PATH / "Pruebas/test.txt"
 
 # load_grammar_parser: Función para abrir y procesar el archivo de gramática del lenguaje BabyDuck.
 def load_grammar_parser():
@@ -58,6 +70,15 @@ for token in tokens:
 print("\nÁrbol sintáctico:")
 print("---------------------------------")
 print(tree.pretty()) # "pretty()" mejora la leibilidad del árbol sintáctico (incluye indentación y formato, no solo el texto plano).
+
+# Transformación del árbol sintáctico a formato diccionario.
+transformer = MyTransformer()
+result = transformer.transform(tree)
+
+# Impresión del árbol sintáctico transformado a formato diccionario.
+print("\nÁrbol sintáctico transformado:")
+print("---------------------------------")
+print(result)
 
 """ Referencias:
     - Geeks for Geeks. (2025). Python repr() Function. Geeks for Geeks. Recuperado de: https://www.geeksforgeeks.org/python-repr-function/
