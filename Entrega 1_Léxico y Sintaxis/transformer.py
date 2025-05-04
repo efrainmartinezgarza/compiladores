@@ -7,10 +7,10 @@ class MyTransformer(Transformer):
 
     """ID: LETTER (LETTER | DIGIT | UNDERSCORE)*"""
     def ID(self, id):
-        return {"type": "id", "value": str(id)}
+        return {"type": "id", "value": id.value}
     
     def STRING(self, string):
-        return {"type": "string", "value": str(string)[1:-1]}  # Eliminar comillas de inicio y fin
+        return {"type": "string", "value": string[1:-1]}  # Eliminar comillas de inicio y fin
     
     # ----------------------------------------------------------------------------------------------------------------------------
     
@@ -51,7 +51,7 @@ class MyTransformer(Transformer):
             items = [term]
 
         for i in range(0, len(rest), 2):
-            operator = str(rest[i])
+            operator = rest[i]
             next_term = rest[i + 1]
             items.append(operator)
             items.append(next_term)
@@ -81,7 +81,7 @@ class MyTransformer(Transformer):
             items = [exp]
 
         for i in range(0, len(rest), 2):
-            operator = str(rest[i])  
+            operator = rest[i] 
             next_term = rest[i + 1]
             
             next_term_flat = self._flatten(next_term)
@@ -118,13 +118,13 @@ class MyTransformer(Transformer):
         return {"type": "expression_simple", "value": exp}
     
     def expression_greater_than(self, exp1, gt, exp2):
-        return {"type": "expression_greater_than", "value": [exp1, str(gt), exp2]}
+        return {"type": "expression_greater_than", "value": [exp1, gt, exp2]}
     
     def expression_less_than(self, exp1, lt, exp2):
-        return {"type": "expression_less_than", "value": [exp1, str(lt), exp2]}
+        return {"type": "expression_less_than", "value": [exp1, lt, exp2]}
     
     def expression_not_equal(self, exp1, ne, exp2):
-        return {"type": "expression_not_equal", "value": [exp1, str(ne), exp2]}
+        return {"type": "expression_not_equal", "value": [exp1, ne, exp2]}
     
     # ----------------------------------------------------------------------------------------------------------------------------
 
@@ -159,10 +159,10 @@ class MyTransformer(Transformer):
         | ID L_PARENTHESIS expression (COMMA expression)+ R_PARENTHESIS SEMICOLON -> f_call_multiple_expressions"""
     
     def f_call_simple(self, id, lpar, rpar, semicolon):
-        return {"type": "f_call_simple", "value": str(id)}
+        return {"type": "f_call_simple", "value": id}
     
     def f_call_one_expression(self, id, lpar, expression, rpar, semicolon):
-        return {"type": "f_call_one_expression", "function": str(id), "value": expression}
+        return {"type": "f_call_one_expression", "function": id, "value": expression}
     
     def f_call_multiple_expressions(self, id, lpar, expression, *rest):
         
@@ -170,7 +170,7 @@ class MyTransformer(Transformer):
         for i in range(0, len(rest)-2, 2):
             next_item = rest[i + 1]
             expressions.append(next_item)
-        return {"type": "f_call_multiple_expressions", "function": str(id), "value": expressions
+        return {"type": "f_call_multiple_expressions", "function": id, "value": expressions
         }
     
     # ----------------------------------------------------------------------------------------------------------------------------
@@ -284,8 +284,8 @@ class MyTransformer(Transformer):
 
             # Guardar declaración
             declarations.append({
-                "id": str(id_token),
-                "type": str(type_token)
+                "id": id_token,
+                "type": type_token
             })
 
         return {
@@ -300,18 +300,18 @@ class MyTransformer(Transformer):
         while i < len(rest):
             ids = []
 
-            ids.append(str(rest[i]))
+            ids.append(rest[i])
             i += 1
 
             while i < len(rest) and rest[i] == ',':
                 i += 1  # Saltamos la coma
-                ids.append(str(rest[i]))
+                ids.append(rest[i])
                 i += 1
 
             if i < len(rest) and rest[i] == ':':
                 i += 1  # Saltamos el :
 
-            var_type = str(rest[i])
+            var_type = rest[i]
             i += 1
 
             if i < len(rest) and rest[i] == ';':
@@ -336,7 +336,7 @@ class MyTransformer(Transformer):
     def funcs_simple(self, void_kw, id, lpar, rpar, lbracket, vars, body, rbracket, semicolon):
         return {
             "type": "funcs_simple",
-            "funcs_name": str(id),
+            "funcs_name": id,
             "vars": vars,
             "body": body
         }
@@ -344,16 +344,16 @@ class MyTransformer(Transformer):
     def funcs_id(self, void_kw, id, lpar, param, colon, param_type, rpar, lbracket, vars, body, rbracket, semicolon):
         return {
             "type": "funcs_id",
-            "funcs_name": str(id),
-            "param": str(param),
-            "param_type": str(param_type),
+            "funcs_name": id,
+            "param": param,
+            "param_type": param_type,
             "vars": vars,
             "body": body
         }
     
     def funcs_multiple_ids(self, void_kw, id, lpar, param, colon, param_type, *rest):
         
-        parameters = [{"id": str(param), "type": str(param_type)}]
+        parameters = [{"id": param, "type": param_type}]
         i = 0
 
         for i in range(0, len(rest)-6, 4):
@@ -362,8 +362,8 @@ class MyTransformer(Transformer):
             param_type = rest[i + 3]
 
             parameters.append({
-                "id": str(param_id),
-                "type": str(param_type)
+                "id": param_id,
+                "type": param_type
             })
 
         vars_node = rest[-4]
@@ -371,7 +371,7 @@ class MyTransformer(Transformer):
 
         return {
             "type": "funcs_multiple_ids",
-            "funcs_name": str(id),
+            "funcs_name": id,
             "parameters": parameters,
             "vars": vars_node,
             "body": body_node
