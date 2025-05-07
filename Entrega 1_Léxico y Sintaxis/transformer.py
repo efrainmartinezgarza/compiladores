@@ -30,10 +30,18 @@ class MyTransformer(Transformer):
         return {"type": "factor_cte", "value": float(cte) if '.' in cte else int(cte)}
 
     def factor_minus(self, minus, factor):
-        return {"type": "factor_minus", "value": -factor}
+        if isinstance(factor, dict) and "value" in factor:
+            numeric_value = factor["value"]
+        else:
+            numeric_value = factor
+        return {"type": "factor_cte", "value": -numeric_value}
 
     def factor_plus(self, plus, factor):
-        return {"type": "factor_plus", "value": -factor}
+        if isinstance(factor, dict) and "value" in factor:
+            numeric_value = factor["value"]
+        else:
+            numeric_value = factor
+        return {"type": "factor_cte", "value": +numeric_value}
     
     # ----------------------------------------------------------------------------------------------------------------------------
 
@@ -187,10 +195,20 @@ class MyTransformer(Transformer):
     # ----------------------------------------------------------------------------------------------------------------------------
 
     """statement: assign | condition | cycle | f_call | print"""
-    def statement(self, assign):
+    def statement(self, value):
+        if isinstance(value, dict) and "function" in value:
+            # Si es una llamada a print(...)
+            function_name = value["function"]["value"] if isinstance(value["function"], dict) else value["function"]
+            if function_name == "print":
+                return {
+                    "type": "print_expression",
+                    "value": value["value"]
+                }
+        
+        # Si no es print, devolver normalmente como 'statement'
         return {
             "type": "statement",
-            "value": assign
+            "value": value
         }
     
     # ----------------------------------------------------------------------------------------------------------------------------
@@ -204,15 +222,24 @@ class MyTransformer(Transformer):
             "value": []
         }
     
-    def body_statement(self, lcurly, *rest):
-        statements = []
-        for i in range(0, len(rest)-1, 1):
-            statement = rest[i]
-            statements.append(statement)
+    def body_statement(self, lcurly, *statements):
+        processed_statements = []
+        for stmt in statements:
+            if isinstance(stmt, dict):
+                processed_statements.append(stmt)
+            elif hasattr(stmt, 'data'):
+                # Si es un Tree, lo convertimos en statement
+                processed_statements.append({
+                    "type": "statement",
+                    "value": stmt
+                })
+            else:
+                # Si es Token o string, lo ignoramos o lanzamos error
+                continue
         return {
             "type": "body_statement",
-            "value": statements
-        } 
+            "value": processed_statements
+        }
       
     # ----------------------------------------------------------------------------------------------------------------------------
 
@@ -352,23 +379,17 @@ class MyTransformer(Transformer):
         }
     
     def funcs_multiple_ids(self, void_kw, id, lpar, param, colon, param_type, *rest):
-        
         parameters = [{"id": param, "type": param_type}]
         i = 0
-
         for i in range(0, len(rest)-6, 4):
-            
             param_id = rest[i + 1]
             param_type = rest[i + 3]
-
             parameters.append({
                 "id": param_id,
                 "type": param_type
             })
-
         vars_node = rest[-4]
         body_node = rest[-3]
-
         return {
             "type": "funcs_multiple_ids",
             "funcs_name": id,
