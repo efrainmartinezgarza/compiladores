@@ -1,26 +1,29 @@
 program myProgram;
-var x, y: int; a, b: float; c_d8, d: int;
+var x, y: int; a, b: float; c_d8, d: int; total: int;
 
+void prinst() [ var msg: float; { print("Hello"); } ];
 void printSum(a: int, b: int) [ var result: int; { result = a + b; print(result); } ];
 void greet() [ var msg: float; { print("Hello"); } ];
 
 main {
 
-  x = 3.2 + 4 - 2 * 5 / 2;
+  x = 3 + 4 - 2 * 5 - 2;
   y = 5 - 2;
   total = x + y;
+  a = 1.0;
+  a = a + y;
 
   if (x < 5) { x = x + 1; } else { x = 0; }; 
   if (x > 0) { print(x); };
 
-  while (a != b) do { print(a); };
+  while (y < 10) do { y = y + 1; print("Agua"); };
   while (x > 0) do { x = x - 1; };
-
-  printSum(3, 4);
-  calculate();
-
+  
+  printSum(2, 4);
+  greet();
+  
   print("Hello world");
-  print(x, y + 2);
+  print(y + 2);
   print(x);
 
 }
