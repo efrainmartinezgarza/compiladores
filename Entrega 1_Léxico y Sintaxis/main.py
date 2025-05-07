@@ -10,6 +10,7 @@ Descripción: Desarrollo de un parser y lexer para el lenguaje BabyDuck utilizan
 from lark import Lark, Tree # Clase principal para crear el parser.
 from pathlib import Path # Librería para manejar rutas de archivos con rutas relativas y absolutas.
 from transformer import MyTransformer # Importación de la clase MyTransformer desde el archivo transformer.py.
+from directory import Directory # Importación de la clase Directory desde el archivo directory.py.
 
 def tree_to_dict(tree):
     if isinstance(tree, Tree):
@@ -27,7 +28,7 @@ MAIN_PATH = Path(__file__).parent
 
 # Uso de rutas relativas para acceder a archivos externos.
 GRAMMAR_PATH = MAIN_PATH / "grammar.lark"
-TEST_PROGRAM_PATH = MAIN_PATH / "Pruebas/test.txt"
+TEST_PROGRAM_PATH = MAIN_PATH / "Pruebas/test_program.txt"
 
 # load_grammar_parser: Función para abrir y procesar el archivo de gramática del lenguaje BabyDuck.
 def load_grammar_parser():
@@ -79,6 +80,17 @@ result = transformer.transform(tree)
 print("\nÁrbol sintáctico transformado:")
 print("---------------------------------")
 print(result)
+
+print("\nResultado del ejecución:")
+print("---------------------------------")
+checker = Directory() # Creación de un objeto de la clase Directory para manejar el directorio de funciones y variables.
+checker.set_program_ast(result) # Establecimiento del AST del programa en el objeto "checker".
+checker.analyze(result) # Análisis del AST del programa (llenado del directorio de funciones y variables).
+checker.execute_program() # Ejecución del programa (ejecución de las funciones y variables definidas en el AST).
+
+print("\nDirectorio de funciones:")
+print("---------------------------------")
+checker.print_func_dir()
 
 """ Referencias:
     - Geeks for Geeks. (2025). Python repr() Function. Geeks for Geeks. Recuperado de: https://www.geeksforgeeks.org/python-repr-function/
