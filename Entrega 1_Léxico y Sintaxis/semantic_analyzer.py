@@ -3,12 +3,15 @@ Permite examinar cosas como que las variables están declaradas antes de usarse,
 que las funciones están definidas antes de llamarse, y que los tipos de datos son correctos.
 """
 
+from quad_generator import QuadGenerator
+from lark.lexer import Token
 class SemanticAnalyzer:
 
-    def __init__(self, directory, evaluator):
+    def __init__(self, directory, evaluator, quad_gen):
         self.dir = directory # Acceso al directorio de funciones y variables
         self.eval = evaluator # Acceso al evaluador de expresiones
         self.is_executing = False # Indica si se está ejecutando el programa
+        self.quad_gen = quad_gen
 
     # Método principal para analizar el AST (árbol de sintaxis abstracta) del programa.
     def analyze(self, ast):
@@ -75,6 +78,7 @@ class SemanticAnalyzer:
         # Declaración de los parámetros de la función como variables dentro del ámbito de la función.
         for p in params:
             self.dir.declare_variable(p["id"], p["type"])
+            self.quad_gen.register_variable(p["id"], p["type"])
 
         # Si la función tiene variables locales, se declaran también.
         # Se recorre la lista de variables y se declaran en el ámbito de la función.
@@ -97,6 +101,7 @@ class SemanticAnalyzer:
         # Dependiendo del tipo de declaración de variables, se obtienen los identificadores y tipos.
         if vars_node["type"] == "vars_one_id": # Declaración de una sola variable
             declarations = vars_node["declarations"]
+
         elif vars_node["type"] == "vars_multiple_ids": # Declaración de múltiples variables
             for d in vars_node["declarations"]:
                 for id_token in d["ids"]:
@@ -116,6 +121,7 @@ class SemanticAnalyzer:
             
             # Se declara la variable en el directorio de funciones.
             self.dir.declare_variable(var_id, var_type)
+            self.quad_gen.register_variable(var_id, var_type)
 
     # Método para analizar el cuerpo de una función o del programa principal.
     def analyze_body(self, body_node):
@@ -131,27 +137,90 @@ class SemanticAnalyzer:
             for stmt in body_node["value"]:
                 self.analyze_statement(stmt)
         else:
-            raise ValueError(f"Tipo de cuerpo desconocido: {body_node.get('type')}")
-
+            raise ValueError(f"Tipo de cuerpo desconocido: {body_node.get('type')}") 
+    
     # Método para analizar una sentencia específica dentro del cuerpo.
     def analyze_statement(self, stmt_node):
-
-        # Almacena el tipo de sentencia que se está analizando.
         t = stmt_node.get("type")
 
-        # Dependiendo del tipo de sentencia, se realizan diferentes validaciones.
-        if t == "assign":
+        if t == "statement":
+            self.analyze_statement(stmt_node["value"])
+
+        elif t == "assign":
             self.validate_assign(stmt_node) 
+            var_id = stmt_node["id"]["value"]
+            self.analyze_expression(stmt_node["value"])
+            self.quad_gen.generate_assignment_quad(var_id)
+
         elif "f_call" in t:
             self.validate_function_call(stmt_node)
-        elif "print" in t:
+
+        elif t == "print_expression":
+            self.validate_expression_uses(stmt_node["value"])
+            self.analyze_expression(stmt_node["value"])
+            self.quad_gen.generate_print_quad()
+
+        elif t == "print_multiple_expressions":
             # Se valida la expresión dentro de los print
-            for expr in stmt_node.get("value", [stmt_node]):
+            for expr in stmt_node.get("value", []):
                 self.validate_expression_uses(expr)
+                self.analyze_expression(expr)
+                self.quad_gen.generate_print_quad()
+
+        elif t == "print_string":
+            self.validate_expression_uses(stmt_node["value"])
+            value = stmt_node["value"]["value"]
+            self.quad_gen.filaCuadruplos.append(("print", "", "", f'"{value}"'))
+
         elif "condition" in t:
-            self.analyze_body(stmt_node.get("body"))
+            self.analyze_expression(stmt_node["condition"])  
+            self.quad_gen.generate_goToFalse()
+            false_jump = self.quad_gen.jumps_stack.pop()
+
+            # Analiza body del if
+            if t == "condition_if":
+                self.analyze_body(stmt_node["body"])
+
+                # No hay else, llena salto falso directamente
+                self.quad_gen.fill_jump(false_jump)
+
+            elif t == "condition_if_else":
+                self.analyze_body(stmt_node["body1"])  # Cuerpo del if
+
+                # Hay else, entonces genero un goTo al final
+                self.quad_gen.generate_goTo()
+                end_jump = self.quad_gen.jumps_stack.pop()
+
+                self.quad_gen.fill_jump(false_jump)  # Falso va al else
+                self.analyze_body(stmt_node["body2"])  # Cuerpo del else
+
+                self.quad_gen.fill_jump(end_jump)  # Fin del else
+
         elif t == "cycle":
-            self.analyze_body(stmt_node.get("body"))
+            # Se guarda la ubicación del inicio del ciclo
+            loop_start = len(self.quad_gen.filaCuadruplos)
+
+            # Se valúa la condición
+            self.analyze_expression(stmt_node["condition"])
+
+            # Se genera un salto si la condición es falsa
+            self.quad_gen.generate_goToFalse()
+            false_jump = self.quad_gen.jumps_stack.pop() #se guarda posición del goToFalse (-1)
+
+            # Analizar el body del while
+            self.analyze_body(stmt_node["body"])
+
+            # Se genera salto para volver a checar la condición del while
+            self.quad_gen.generate_goTo()
+            back_jump = self.quad_gen.jumps_stack.pop() #se guarda la posición del goTo (-1)
+
+            # Se rellena el salto hacia el inicio 
+            self.quad_gen.filaCuadruplos[back_jump] = ("goTo", "", "", loop_start)
+
+            # Se rellena el salto falso para salir del ciclo 
+            self.quad_gen.fill_jump(false_jump)
+
+          
 
     # Verifica que las variables utilizadas en las expresiones estén declaradas.
     def validate_expression_uses(self, node):
@@ -231,3 +300,52 @@ class SemanticAnalyzer:
 
             # Se valida que el tipo del argumento coincida con el tipo esperado.
             self.eval.validate_type_match(param["id"], param["type"], val)
+    
+    def analyze_expression(self, expr):
+        if isinstance(expr, dict):
+            t = expr.get("type")
+
+            if t == "factor_cte":
+                value = expr["value"]
+                value_type = "int" if isinstance(value, int) else "float"
+                self.quad_gen.push_operand(value, value_type)
+
+            elif t == "factor_id":
+                var_id = expr["value"]["value"]
+                var_type = self.quad_gen.get_var_type(var_id)
+                self.quad_gen.push_operand(var_id, var_type)
+
+            elif t == "factor_expression":
+                self.analyze_expression(expr["value"])
+
+            elif t == "factor_minus":
+                self.analyze_expression(expr["value"])
+
+            elif t in ["term_simple", "exp_simple", "expression_simple"]:
+                self.analyze_expression(expr["value"])
+
+            elif t in ["term", "exp"]:
+                items = expr["value"]
+                self.analyze_expression(items[0])
+                i = 1
+                while i < len(items):
+                    token_or_op = items[i]
+                    if isinstance(token_or_op, Token):
+                        self.quad_gen.push_operator(token_or_op.value)
+                        i += 1
+                        self.analyze_expression(items[i])
+                        self.quad_gen.generate_quad_if_applicable()
+                    else:
+                        self.analyze_expression(token_or_op)
+                    i += 1
+
+            elif t in ["expression_greater_than", "expression_less_than", "expression_not_equal"]:
+                op_map = {
+                    "expression_greater_than": ">",
+                    "expression_less_than": "<",
+                    "expression_not_equal": "!="
+                }
+                self.analyze_expression(expr["value"][0])
+                self.analyze_expression(expr["value"][2])
+                self.quad_gen.push_operator(op_map[t])
+                self.quad_gen.generate_quad_if_applicable()

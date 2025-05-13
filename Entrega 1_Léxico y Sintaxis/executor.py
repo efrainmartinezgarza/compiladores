@@ -2,13 +2,11 @@ class Executor:
     def __init__(self, directory, evaluator):
         self.dir = directory
         self.eval = evaluator
-        self._analysis_passed = False
 
     def execute_program(self, program_ast):
         program_type = program_ast.get("type")
         if program_type not in ["program_simple", "program_vars", "program_funcs", "program_vars_funcs"]:
             raise ValueError(f"Tipo de programa desconocido: {program_type}")
-
         self.dir.set_current_scope("global")
         body = program_ast.get("body")
         print("Iniciando ejecución del cuerpo principal...")
@@ -20,6 +18,8 @@ class Executor:
         if body_node.get("type") == "body_statement":
             for stmt in body_node.get("value", []):
                 self.execute_statement(stmt)
+        else:
+            raise ValueError(f"Tipo de cuerpo desconocido: {body_node.get('type')}")
 
     def execute_statement(self, stmt_node):
         stmt_type = stmt_node.get("type")
@@ -35,11 +35,17 @@ class Executor:
             self.execute_condition(stmt_node)
         elif stmt_type == "cycle":
             self.execute_cycle(stmt_node)
+        else:
+            raise ValueError(f"Sentencia desconocida: {stmt_type}")
 
     def execute_assign(self, assign_node):
         var_id = assign_node["id"]["value"]
         expr_node = assign_node["value"]
         value = self.eval.evaluate(expr_node)
+        var_info = self.dir.find_variable(var_id)
+        if not var_info:
+            raise NameError(f"Variable '{var_id}' no declarada.")
+        self.eval.validate_type_match(var_id, var_info["type"], value)
         self.dir.assign_variable_value(var_id, value)
 
     def execute_print(self, print_node):
@@ -55,9 +61,10 @@ class Executor:
         print(", ".join(output))
 
     def execute_function_call(self, call_node):
+        func_name = ""
+        args = []
         if call_node.get("type") == "f_call_simple":
             func_name = call_node["value"]["value"]
-            args = []
         elif call_node.get("type") == "f_call_one_expression":
             func_name = call_node["function"]["value"]
             args = [call_node["value"]]
@@ -67,14 +74,23 @@ class Executor:
 
         if func_name in self.dir.built_in_functions:
             return
+        if func_name not in self.dir.func_dir:
+            raise NameError(f"Función '{func_name}' no definida.")
 
         expected_params = self.dir.func_dir[func_name]["params"]
-        self.dir.set_current_scope(func_name)
+        if len(args) != len(expected_params):
+            raise TypeError(f"Función '{func_name}' espera {len(expected_params)} argumentos.")
 
+        self.dir.set_current_scope(func_name)
         for i, param in enumerate(expected_params):
             var_id = param["id"]
             value = self.eval.evaluate(args[i])
-            self.dir.assign_variable_value(var_id, value)
+            var_info = self.dir.func_dir[func_name]["vars"][var_id]
+            self.eval.validate_type_match(var_id, var_info["type"], value)
+            var_info.update({
+                "assigned": True,
+                "value": value
+            })
 
         self.execute_body(self.dir.func_dir[func_name]["body"])
         self.dir.set_current_scope("global")

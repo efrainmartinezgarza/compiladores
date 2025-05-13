@@ -86,11 +86,14 @@ print("---------------------------------")
 checker = Directory() # Creación de un objeto de la clase Directory para manejar el directorio de funciones y variables.
 checker.set_program_ast(result) # Establecimiento del AST del programa en el objeto "checker".
 checker.analyze() # Análisis del AST del programa (llenado del directorio de funciones y variables).
-checker.execute() # Ejecución del programa (ejecución de las funciones y variables definidas en el AST).Z
+#checker.execute() # Ejecución del programa (ejecución de las funciones y variables definidas en el AST).
 
 print("\nDirectorio de funciones:")
 print("---------------------------------")
 checker.print_func_dir()
+checker.quad_gen
+checker.print_quadruples()
+
 
 """ Referencias:
     - Geeks for Geeks. (2025). Python repr() Function. Geeks for Geeks. Recuperado de: https://www.geeksforgeeks.org/python-repr-function/
