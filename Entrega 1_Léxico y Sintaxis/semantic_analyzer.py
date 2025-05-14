@@ -168,7 +168,7 @@ class SemanticAnalyzer:
                 self.quad_gen.generate_print_quad()
 
         elif t == "print_string":
-            self.validate_expression_uses(stmt_node["value"])
+            #self.validate_expression_uses(stmt_node["value"])
             value = stmt_node["value"]["value"]
             self.quad_gen.filaCuadruplos.append(("print", "", "", f'"{value}"'))
 
@@ -245,7 +245,7 @@ class SemanticAnalyzer:
             for i in node:
                 self.validate_expression_uses(i)
 
-    # Se asegura de que la variable esté declarada y que el tipo de dato sea correcto.
+    # Se asegura de que la variable esté declarada.
     def validate_assign(self, assign_node):
 
         # Obtención del nombre de la variable.

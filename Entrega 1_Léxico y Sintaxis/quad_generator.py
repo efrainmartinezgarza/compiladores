@@ -5,7 +5,7 @@ class QuadGenerator:
 
     def __init__(self):
         self.pilaOperandos = []        # Pila de operandos
-        self.filaOperadores = []        # Pila de operadores
+        self.pilaOperadores = []        # Pila de operadores
         self.pilaTipos = []       # Pila de tipos
         self.filaCuadruplos = []   # Fila de cuádruplos
         self.temp_count = 1    # Contador de variables temporales
@@ -20,8 +20,9 @@ class QuadGenerator:
 
     # Agregar OPERADOR 
     def push_operator(self, operator):
-        self.filaOperadores.append(operator)
+        self.pilaOperadores.append(operator)
 
+    # Generación de etiqueta de temporal (T0, T1, T2)
     def new_temp(self):
         temp_name = f"t{self.temp_count}"
         self.temp_count += 1
@@ -30,15 +31,17 @@ class QuadGenerator:
     # Generación de cuádruplos
     def generate_quad_if_applicable(self):
 
-        if len(self.filaOperadores) > 0:
+        if len(self.pilaOperadores) > 0:
+            
+            # Acceso al útimo operador de la pila de operadores
+            op = self.pilaOperadores[-1]
 
-            op = self.filaOperadores[-1]
             if op in ['+', '-', '*', '/', '>', '<', '!=']:
                 right = self.pilaOperandos.pop()
                 left = self.pilaOperandos.pop()
                 right_type = self.pilaTipos.pop()
                 left_type = self.pilaTipos.pop()
-                operator = self.filaOperadores.pop()
+                operator = self.pilaOperadores.pop()
 
                 # Validación con cubo semántico
                 result_type = self.cube.get_result_type(left_type, right_type, operator)
@@ -79,7 +82,7 @@ class QuadGenerator:
 
     def reset(self):
         self.pilaOperandos.clear()
-        self.filaOperadores.clear()
+        self.pilaOperadores.clear()
         self.pilaTipos.clear()
         self.filaCuadruplos.clear()
         self.temp_count = 0
