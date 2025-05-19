@@ -302,14 +302,17 @@ class SemanticAnalyzer:
         if len(args) != len(expected):
             raise TypeError(f"Función '{func_name}' espera {len(expected)} args, recibió {len(args)}.")
         
-        # Se recorre la lista de parámetros esperados y se valida el tipo de cada argumento.
         for i, param in enumerate(expected):
-
-            # Se obtiene el valor del argumento evaluando la expresión.
-            val = self.eval.evaluate(args[i])
-
-            # Se valida que el tipo del argumento coincida con el tipo esperado.
-            self.eval.validate_type_match(param["id"], param["type"], val)
+            arg_expr = args[i]
+            
+            # Analiza la expresión del argumento para obtener su tipo
+            self.analyze_expression(arg_expr)
+            
+            # Obtiene el tipo desde pilaTipos 
+            arg_type = self.quad_gen.pilaTipos.pop()  
+    
+            if arg_type != param["type"]:
+                raise TypeError(f"Argumento '{param['id']}' debe ser '{param['type']}', recibido '{arg_type}'")
     
     def analyze_expression(self, expr):
         if isinstance(expr, dict):
