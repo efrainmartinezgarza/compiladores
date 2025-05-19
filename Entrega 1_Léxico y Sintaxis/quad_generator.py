@@ -3,6 +3,8 @@
 from semantic_cube import SemanticCube
 class QuadGenerator:
 
+    debug_mode = True
+
     def __init__(self):
         self.pilaOperandos = []        # Pila de operandos
         self.pilaOperadores = []        # Pila de operadores
@@ -20,6 +22,8 @@ class QuadGenerator:
 
     # Agregar OPERADOR 
     def push_operator(self, operator):
+               
+        # Inserción del operador en la pila de operadores
         self.pilaOperadores.append(operator)
 
     # Generación de etiqueta de temporal (T0, T1, T2)
@@ -46,6 +50,10 @@ class QuadGenerator:
                 # Validación con cubo semántico
                 result_type = self.cube.get_result_type(left_type, right_type, operator)
 
+                # Transformación del operador a número
+                if (self.debug_mode == False):
+                    operator = self.transform_operador_to_number(operator)
+
                 temp = self.new_temp()
                 self.filaCuadruplos.append((operator, left, right, temp))
                 self.pilaOperandos.append(temp)
@@ -66,12 +74,25 @@ class QuadGenerator:
             raise TypeError(f"No se puede asignar un valor de tipo '{value_type}' a la variable '{target}' de tipo '{target_type}'")
 
         # Generación del cuádruplo de asignación
-        self.filaCuadruplos.append(('=', value, '', target))
+        operator = '='
+        
+        # Transformación del operador a número
+        if (self.debug_mode == False):
+            operator = self.transform_operador_to_number(operator)
+
+        self.filaCuadruplos.append((operator, value, '', target))
 
     def generate_print_quad(self):
         value = self.pilaOperandos.pop()
         self.pilaTipos.pop()
-        self.filaCuadruplos.append(('print', '', '', value))
+        operator = "print"
+
+        # Transformación del operador a número
+        if (self.debug_mode == False):
+            operator = self.transform_operador_to_number(operator)
+
+        # Generación del cuádruplo de impresión
+        self.filaCuadruplos.append((operator, '', '', value))
 
     def print_filaCuadruplos(self):
         print("\nCuádruplos generados:")
@@ -94,20 +115,59 @@ class QuadGenerator:
     def get_var_type(self, var_id):
         return self.var_table.get(var_id, None)
     
-    def generate_goToFalse(self):
-        condition = self.pilaOperandos.pop()
-        self.filaCuadruplos.append(("goToFalse", condition, "", None))
-        self.jumps_stack.append(len(self.filaCuadruplos) - 1)
+    def generate_go(self, operator):
+         # Extrae el último temporal de la pila de operandos (aquello que se evalúa para el salto)
 
-    def generate_goTo(self):
-        self.filaCuadruplos.append(("goTo", "", "", None))
-        self.jumps_stack.append(len(self.filaCuadruplos) - 1)
+        if(operator == "goTo"):
+            condition = ""
+        else:
+            condition = self.pilaOperandos.pop()
 
-    def generate_goToTrue(self):
-        self.filaCuadruplos.append(("goToTrue", "", "", None))
-        self.jumps_stack.append(len(self.filaCuadruplos) - 1)
+        # Transformación del operador a número
+        if (self.debug_mode == False):
+            operator = self.transform_operador_to_number(operator)
 
-    def fill_jump(self, jump_index):
-        target = len(self.filaCuadruplos)
+        # Generación del cuádruplo de salto condicional
+        self.filaCuadruplos.append((operator, condition, "", None))
+
+        # Almacena el índice del cuádruplo de salto (para llenarlo después)
+        self.jumps_stack.append(len(self.filaCuadruplos) - 1)
+    
+    def fill_jump(self, jump_index, target=None):
+        if target is None:
+            target = len(self.filaCuadruplos)
+        
         quad = self.filaCuadruplos[jump_index]
         self.filaCuadruplos[jump_index] = (quad[0], quad[1], quad[2], target)
+
+
+    def transform_operador_to_number(self, operator):
+
+        if operator == '+':
+            return 1
+        elif operator == '-':
+            return 2
+        elif operator == '*':
+            return 3
+        elif operator == '/':
+            return 4
+        elif operator == '>':
+            return 5
+        elif operator == '<':
+            return 6
+        elif operator == '=':
+            return 7
+        elif operator == "!=":
+            return 8
+        elif operator == "print":
+            return 9
+        elif operator == "goTo":
+            return 10
+        elif operator == "goToFalse":
+            return 11
+        elif operator == "goToTrue":
+            return 12
+        else:
+            raise ValueError(f"Operador desconocido: {operator}")
+
+

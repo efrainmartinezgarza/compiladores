@@ -170,11 +170,12 @@ class SemanticAnalyzer:
         elif t == "print_string":
             #self.validate_expression_uses(stmt_node["value"])
             value = stmt_node["value"]["value"]
-            self.quad_gen.filaCuadruplos.append(("print", "", "", f'"{value}"'))
+            self.quad_gen.push_operand(f'"{value}"', "string")
+            self.quad_gen.generate_print_quad()
 
         elif "condition" in t:
             self.analyze_expression(stmt_node["condition"])  
-            self.quad_gen.generate_goToFalse()
+            self.quad_gen.generate_go("goToFalse")
             false_jump = self.quad_gen.jumps_stack.pop()
 
             # Analiza body del if
@@ -188,7 +189,7 @@ class SemanticAnalyzer:
                 self.analyze_body(stmt_node["body1"])  # Cuerpo del if
 
                 # Hay else, entonces genero un goTo al final
-                self.quad_gen.generate_goTo()
+                self.quad_gen.generate_go("goTo")
                 end_jump = self.quad_gen.jumps_stack.pop()
 
                 self.quad_gen.fill_jump(false_jump)  # Falso va al else
@@ -204,18 +205,18 @@ class SemanticAnalyzer:
             self.analyze_expression(stmt_node["condition"])
 
             # Se genera un salto si la condición es falsa
-            self.quad_gen.generate_goToFalse()
+            self.quad_gen.generate_go("goToFalse")
             false_jump = self.quad_gen.jumps_stack.pop() #se guarda posición del goToFalse (-1)
 
             # Analizar el body del while
             self.analyze_body(stmt_node["body"])
 
             # Se genera salto para volver a checar la condición del while
-            self.quad_gen.generate_goTo()
+            self.quad_gen.generate_go("goTo")
             back_jump = self.quad_gen.jumps_stack.pop() #se guarda la posición del goTo (-1)
 
             # Se rellena el salto hacia el inicio 
-            self.quad_gen.filaCuadruplos[back_jump] = ("goTo", "", "", loop_start)
+            self.quad_gen.fill_jump(back_jump, loop_start)
 
             # Se rellena el salto falso para salir del ciclo 
             self.quad_gen.fill_jump(false_jump)

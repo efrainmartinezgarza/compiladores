@@ -92,6 +92,8 @@ print("\nDirectorio de funciones:")
 print("---------------------------------")
 checker.print_func_dir()
 checker.quad_gen
+
+# Impresión de los cuádrupls generados
 checker.print_quadruples()
 
 
