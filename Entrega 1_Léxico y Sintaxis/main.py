@@ -95,6 +95,8 @@ checker.quad_gen
 
 # Impresión de los cuádrupls generados
 checker.print_quadruples()
+checker.memory_manager.print_constants_table()
+checker.memory_manager.print_memory()
 
 
 """ Referencias:

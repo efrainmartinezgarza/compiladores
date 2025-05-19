@@ -5,15 +5,16 @@ class QuadGenerator:
 
     debug_mode = True
 
-    def __init__(self):
+    def __init__(self, memory_manager, directory):
         self.pilaOperandos = []        # Pila de operandos
         self.pilaOperadores = []        # Pila de operadores
         self.pilaTipos = []       # Pila de tipos
         self.filaCuadruplos = []   # Fila de cuádruplos
         self.temp_count = 1    # Contador de variables temporales
         self.cube = SemanticCube()  # Acceso al cubo semántico
-        self.var_table = {}    # Tabla de símbolos temporal para lookup de tipos
         self.jumps_stack = []  # Pila de saltos
+        self.memory_manager = memory_manager  # Acceso al gestor de memoria
+        self.dir = directory  # Acceso al directorio de funciones y variables
 
     # Agregar OPERANDO y TIPO en sus respectivas pilas
     def push_operand(self, operand, var_type):
@@ -48,17 +49,22 @@ class QuadGenerator:
                 operator = self.pilaOperadores.pop()
 
                 # Validación con cubo semántico
-                result_type = self.cube.get_result_type(left_type, right_type, operator)
+                result_type = self.cube.get_result_type(left_type, right_type, operator)  
 
+                # Creación de la dirección del temporal
+                address_temp = self.memory_manager.generate_temporal(result_type)
+           
                 # Transformación del operador a número
                 if (self.debug_mode == False):
                     operator = self.transform_operador_to_number(operator)
-
-                temp = self.new_temp()
-                self.filaCuadruplos.append((operator, left, right, temp))
-                self.pilaOperandos.append(temp)
+                
+                #temp = self.new_temp()
+                
+                self.filaCuadruplos.append((operator, left, right, address_temp))
+                self.pilaOperandos.append(address_temp)
                 self.pilaTipos.append(result_type)
-
+                  
+                
     def generate_assignment_quad(self, target):
         value = self.pilaOperandos.pop()
         value_type = self.pilaTipos.pop()
@@ -75,12 +81,15 @@ class QuadGenerator:
 
         # Generación del cuádruplo de asignación
         operator = '='
+
+        # Creación de dirección para la variable que va a recibir el valor
+        address = self.memory_manager.get_var_address(target, self.dir.current_scope, self.dir)
         
         # Transformación del operador a número
         if (self.debug_mode == False):
             operator = self.transform_operador_to_number(operator)
 
-        self.filaCuadruplos.append((operator, value, '', target))
+        self.filaCuadruplos.append((operator, value, '', address))
 
     def generate_print_quad(self):
         value = self.pilaOperandos.pop()
@@ -107,13 +116,10 @@ class QuadGenerator:
         self.pilaTipos.clear()
         self.filaCuadruplos.clear()
         self.temp_count = 0
-        self.var_table.clear()
-
-    def register_variable(self, var_id, var_type):
-        self.var_table[var_id] = var_type
 
     def get_var_type(self, var_id):
-        return self.var_table.get(var_id, None)
+        var_info = self.memory_manager.get_var_info(var_id, self.dir.current_scope, self.dir)
+        return var_info["type"] if var_info else None
     
     def generate_go(self, operator):
          # Extrae el último temporal de la pila de operandos (aquello que se evalúa para el salto)

@@ -50,7 +50,7 @@ class FunctionDirectory:
 
     # Declara una nueva variable dentro del scope actual.
     # Si la variable ya existe o es una palabra reservada, lanza un error.
-    def declare_variable(self, var_id, var_type):
+    def declare_variable(self, var_id, var_type, address):
         if var_id in FunctionDirectory.RESERVED_WORDS: # Verifica si la variable es una palabra reservada
             raise NameError(f"El nombre '{var_id}' es una palabra reservada.")
         current_vars = self.get_current_vars()
@@ -58,7 +58,8 @@ class FunctionDirectory:
             raise NameError(f"La variable '{var_id}' ya está declarada en el scope '{self.current_scope}'.")
         current_vars[var_id] = {
             "type": var_type,
-            "assigned": False
+            "assigned": False,
+            "address": address
         }
 
     # Permite asignar un valor a una variable ya declarada.
@@ -66,7 +67,7 @@ class FunctionDirectory:
         var_info = self.func_dir[self.current_scope]["vars"][var_id]
         var_info.update({
             "assigned": True,
-            "value": value
+            "value": value,
         })
 
     # Permite encontrar una variable en el ámbito actual o global.
@@ -86,7 +87,7 @@ class FunctionDirectory:
             raise NameError(f"Variable '{var_id}' no tiene valor asignado.")
         return var["value"]
 
-    # Función auxiliar: Imprime el directorio de funciones y variables en un formato legible.
+   # Función auxiliar: Imprime el directorio de funciones y variables en un formato legible.
     def print_func_dir(self):
         for scope, info in self.func_dir.items():
             print(f"Scope: {scope}")
@@ -99,6 +100,7 @@ class FunctionDirectory:
                 for var_id, var_data in info["vars"].items():
                     if not isinstance(var_data, dict):
                         continue
-                    value_str = f"= {var_data['value']}" if var_data.get("assigned") else "(sin valor)"
-                    print(f"    {var_id} : {var_data['type']} {value_str}")
+                    # Mostrar la dirección en lugar del valor
+                    address = var_data.get('address', 'Sin dirección asignada')
+                    print(f"    {var_id} : {var_data['type']} | Dirección: {address}")
             print()

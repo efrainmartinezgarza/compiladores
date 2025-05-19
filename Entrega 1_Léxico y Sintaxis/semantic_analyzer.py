@@ -3,15 +3,15 @@ Permite examinar cosas como que las variables están declaradas antes de usarse,
 que las funciones están definidas antes de llamarse, y que los tipos de datos son correctos.
 """
 
-from quad_generator import QuadGenerator
 from lark.lexer import Token
 class SemanticAnalyzer:
 
-    def __init__(self, directory, evaluator, quad_gen):
+    def __init__(self, directory, evaluator, quad_gen, memory_manager):
         self.dir = directory # Acceso al directorio de funciones y variables
         self.eval = evaluator # Acceso al evaluador de expresiones
         self.is_executing = False # Indica si se está ejecutando el programa
         self.quad_gen = quad_gen
+        self.memory_manager = memory_manager # Acceso al generador de cuádruplos
 
     # Método principal para analizar el AST (árbol de sintaxis abstracta) del programa.
     def analyze(self, ast):
@@ -77,9 +77,9 @@ class SemanticAnalyzer:
 
         # Declaración de los parámetros de la función como variables dentro del ámbito de la función.
         for p in params:
-            self.dir.declare_variable(p["id"], p["type"])
-            self.quad_gen.register_variable(p["id"], p["type"])
-
+            address = self.memory_manager.get_next_address(p["type"], "local")
+            self.dir.declare_variable(p["id"], p["type"], address)
+            
         # Si la función tiene variables locales, se declaran también.
         # Se recorre la lista de variables y se declaran en el ámbito de la función.
         if func_node.get("vars"):
@@ -113,15 +113,18 @@ class SemanticAnalyzer:
             # Se obtiene el identificador y el tipo de la variable.
             var_id = decl["id"]["value"]
             var_type = decl["type"]["value"]
+            print(f"Declarando variable: {var_id} de tipo {var_type}")
 
             # Si se hizo un análisis de variables globales, se establece el ámbito como "global".
             # En caso contrario, se establece el ámbito actual de la función en el que se están declarando las variables.
             if is_global:
                 self.dir.set_current_scope("global")
-            
+                address = self.memory_manager.get_next_address(var_type, "global")
+            else:
+                address = self.memory_manager.get_next_address(var_type, "local")
+
             # Se declara la variable en el directorio de funciones.
-            self.dir.declare_variable(var_id, var_type)
-            self.quad_gen.register_variable(var_id, var_type)
+            self.dir.declare_variable(var_id, var_type, address)
 
     # Método para analizar el cuerpo de una función o del programa principal.
     def analyze_body(self, body_node):
@@ -170,7 +173,13 @@ class SemanticAnalyzer:
         elif t == "print_string":
             #self.validate_expression_uses(stmt_node["value"])
             value = stmt_node["value"]["value"]
-            self.quad_gen.push_operand(f'"{value}"', "string")
+            # Se genera un address para la cadena
+            if(self.memory_manager.get_constant_address(value, "string") == None):
+                address = self.memory_manager.add_constant(value, "string")
+            else:
+                address = self.memory_manager.get_constant_address(value, "string")
+
+            self.quad_gen.push_operand(address, "string")
             self.quad_gen.generate_print_quad()
 
         elif "condition" in t:
@@ -309,12 +318,32 @@ class SemanticAnalyzer:
             if t == "factor_cte":
                 value = expr["value"]
                 value_type = "int" if isinstance(value, int) else "float"
-                self.quad_gen.push_operand(value, value_type)
+
+                # Generación de address para la constante
+                if(self.memory_manager.get_constant_address(value, value_type) == None):
+                    address = self.memory_manager.add_constant(value, value_type)
+                else:
+                    address = self.memory_manager.get_constant_address(value, value_type)
+
+                self.quad_gen.push_operand(address, value_type)
 
             elif t == "factor_id":
                 var_id = expr["value"]["value"]
                 var_type = self.quad_gen.get_var_type(var_id)
-                self.quad_gen.push_operand(var_id, var_type)
+
+                # Identificación del scope de la variable
+                if self.dir.current_scope == "global":
+                    scope = "global"
+                else:
+                    scope = "local"
+
+                # Generación de address para la variable
+                if(self.memory_manager.get_var_address(var_id, scope, self.dir) == None):
+                    address = self.memory_manager.assign_variable_address(var_type, scope)
+                else:
+                    address = self.memory_manager.get_var_address(var_id, scope, self.dir)
+
+                self.quad_gen.push_operand(address, var_type)
 
             elif t == "factor_expression":
                 self.analyze_expression(expr["value"])

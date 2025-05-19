@@ -3,13 +3,15 @@ from expression_evaluator import ExpressionEvaluator
 from semantic_analyzer import SemanticAnalyzer
 from quad_generator import QuadGenerator
 from executor import Executor
+from memory_manager import MemoryManager
 
 class Directory:
     def __init__(self):
         self.function_dir = FunctionDirectory()
         self.evaluator = ExpressionEvaluator(self.function_dir)
-        self.quad_gen = QuadGenerator()
-        self.analyzer = SemanticAnalyzer(self.function_dir, self.evaluator, self.quad_gen)
+        self.memory_manager = MemoryManager()
+        self.quad_gen = QuadGenerator(self.memory_manager, self.function_dir)
+        self.analyzer = SemanticAnalyzer(self.function_dir, self.evaluator, self.quad_gen, self.memory_manager)
         self.executor = Executor(self.function_dir, self.evaluator)
         self.program_ast = None
 
