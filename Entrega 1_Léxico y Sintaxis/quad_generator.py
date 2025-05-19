@@ -52,7 +52,7 @@ class QuadGenerator:
                 result_type = self.cube.get_result_type(left_type, right_type, operator)  
 
                 # Creación de la dirección del temporal
-                address_temp = self.memory_manager.generate_temporal(result_type)
+                address_temp = self.memory_manager.generate_address(result_type, 'temporal')
            
                 # Transformación del operador a número
                 if (self.debug_mode == False):
@@ -62,8 +62,7 @@ class QuadGenerator:
                 
                 self.filaCuadruplos.append((operator, left, right, address_temp))
                 self.pilaOperandos.append(address_temp)
-                self.pilaTipos.append(result_type)
-                  
+                self.pilaTipos.append(result_type)                  
                 
     def generate_assignment_quad(self, target):
         value = self.pilaOperandos.pop()
@@ -83,7 +82,7 @@ class QuadGenerator:
         operator = '='
 
         # Creación de dirección para la variable que va a recibir el valor
-        address = self.memory_manager.get_var_address(target, self.dir.current_scope, self.dir)
+        address = self.memory_manager.get_variable_address(target, self.dir.current_scope, self.dir)
         
         # Transformación del operador a número
         if (self.debug_mode == False):
@@ -92,6 +91,7 @@ class QuadGenerator:
         self.filaCuadruplos.append((operator, value, '', address))
 
     def generate_print_quad(self):
+        print("self.pilaOperandos", self.pilaOperandos)
         value = self.pilaOperandos.pop()
         self.pilaTipos.pop()
         operator = "print"
@@ -116,8 +116,8 @@ class QuadGenerator:
         self.temp_count = 0
 
     def get_var_type(self, var_id):
-        var_info = self.memory_manager.get_var_info(var_id, self.dir.current_scope, self.dir)
-        return var_info["type"] if var_info else None
+        var_type = self.dir.find_variable(var_id)
+        return var_type["type"] if var_type else None
     
     def generate_go(self, operator):
          # Extrae el último temporal de la pila de operandos (aquello que se evalúa para el salto)

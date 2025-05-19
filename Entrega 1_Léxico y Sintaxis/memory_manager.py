@@ -31,10 +31,8 @@ class MemoryManager:
         # Tabla de constantes
         self.constants_table = {}
 
-    def get_next_address(self, var_type, memory_segment='global'):
-        """
-        Asigna la siguiente dirección disponible en el segmento dado.
-        """
+    # Asignación de la siguiente dirección disponible (en el segmento actual)
+    def generate_address(self, var_type, memory_segment='global'):
         limit_low, limit_high = self.memory_limits[memory_segment][var_type]
         current = self.pointers[memory_segment][var_type]
 
@@ -45,53 +43,31 @@ class MemoryManager:
         self.pointers[memory_segment][var_type] += 1
         return address
 
+    # Agregar una constante a la tabla de constantes y crear su dirección
     def add_constant(self, value, const_type):
-        """
-        Añade una constante a la tabla si no existe y devuelve su dirección.
-        """
+
+        # Si la constante ya está registrada, devuelve su dirección
         key = (value, const_type)
         if key in self.constants_table:
             return self.constants_table[key]
+        
+        # Si no está registrada, se crea una nueva dirección
+        # Creación de la dirección para la constante
+        address = self.generate_address(const_type, 'constant')
 
-        address = self.get_next_address(const_type, 'constant')
+        # Almacenamiento de la dirección en la tabla de constantes (como clave-valor)
         self.constants_table[key] = address
         return address
 
+    # Búsqueda de la dirección de una constante ya registrada en la "tabla de constantes"
     def get_constant_address(self, value, const_type):
-        """
-        Devuelve la dirección de una constante ya registrada.
-        """
         key = (value, const_type)
-        return self.constants_table.get(key)
-
-    def reset_local_pointers(self):
-        """
-        Reinicia los contadores de memoria local para una nueva función.
-        """
-        for t in ['int', 'float', 'bool']:
-            self.pointers['local'][t] = self.memory_limits['local'][t][0]
-
-    def reset_temporal_pointers(self):
-        """
-        Reinicia los contadores de memoria temporal para una nueva ejecución.
-        """
-        for t in ['int', 'float', 'bool']:
-            self.pointers['temporal'][t] = self.memory_limits['temporal'][t][0]
-
-    def generate_temporal(self, var_type):
-        """
-        Genera una variable temporal de tipo dado.
-        """
-        return self.get_next_address(var_type, 'temporal')
-
-    def assign_variable_address(self, var_type, scope):
-        """
-        Asigna una dirección a una variable global o local.
-        """
-        address = self.get_next_address(var_type, scope)
-        return address
+        return self.constants_table.get(key) # Devuelve la dirección si existe, o None si no está registrada
     
-    def get_var_address(self, var_id, scope, dir_func):
+    # Obtención de la dirección de una variable dada su ID y su ámbito 
+    # (se busca en el directorio de funciones y variables)
+    def get_variable_address(self, var_id, scope, dir_func):
+        
         # Buscar en el ámbito actual
         func_info = dir_func.func_dir.get(scope, {})
         vars_dict = func_info.get("vars", {})
@@ -106,9 +82,9 @@ class MemoryManager:
             var_info_global = global_vars.get(var_id)
             if var_info_global and "address" in var_info_global:
                 return var_info_global["address"]
-
         return None
     
+    # Impresión de la tabla de constantes
     def print_constants_table(self):
         """
         Imprime la tabla de constantes.
@@ -116,24 +92,7 @@ class MemoryManager:
         for (value, const_type), address in self.constants_table.items():
             print(f"Valor: {value:<10} | Tipo: {const_type:<10} | Dirección: {address:<10}")
 
-    def get_var_info(self, var_id, scope, dir_func):
-        func_info = dir_func.func_dir.get(scope, {})
-        vars_dict = func_info.get("vars", {})
-
-        var_info = vars_dict.get(var_id)
-        if var_info and "type" in var_info:
-            return var_info
-
-        # Busca en global si no está en el scope actual
-        if scope != "global":
-            global_info = dir_func.func_dir.get("global", {}).get("vars", {})
-            var_info_global = global_info.get(var_id)
-            if var_info_global and "type" in var_info_global:
-                return var_info_global
-
-        return None
-    
-    # Impresión de la tabla de memoria
+     # Impresión de la tabla de memoria
     def print_memory(self):
         
         for segment, types in self.memory_limits.items():
@@ -141,3 +100,6 @@ class MemoryManager:
             for var_type, (low, high) in types.items():
                 print(f"{var_type.upper()} -> Rango: {low} - {high} | Dirección actual: {self.pointers[segment][var_type]}")
             print("-----------------------------------------------------------")
+
+    
+   

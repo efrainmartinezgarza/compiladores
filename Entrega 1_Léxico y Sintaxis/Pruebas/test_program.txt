@@ -24,6 +24,7 @@ main {
   print("Hello world");
   print(y + 2);
   print(x);
+  print(x,y);
 
 }
 end

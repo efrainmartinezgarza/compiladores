@@ -72,7 +72,7 @@ class SemanticAnalyzer:
 
         # Declaración de los parámetros de la función como variables dentro del ámbito de la función.
         for p in params:
-            address = self.memory_manager.get_next_address(p["type"], "local")
+            address = self.memory_manager.generate_address(p["type"], "local")
             self.dir.declare_variable(p["id"], p["type"], address)
             
         # Si la función tiene variables locales, se declaran también.
@@ -113,9 +113,9 @@ class SemanticAnalyzer:
             # En caso contrario, se establece el ámbito actual de la función en el que se están declarando las variables.
             if is_global:
                 self.dir.set_current_scope("global")
-                address = self.memory_manager.get_next_address(var_type, "global")
+                address = self.memory_manager.generate_address(var_type, "global")
             else:
-                address = self.memory_manager.get_next_address(var_type, "local")
+                address = self.memory_manager.generate_address(var_type, "local")
 
             # Se declara la variable en el directorio de funciones.
             self.dir.declare_variable(var_id, var_type, address)
@@ -153,15 +153,18 @@ class SemanticAnalyzer:
             self.validate_function_call(stmt_node)
 
         elif t == "print_expression":
-            self.validate_expression_uses(stmt_node["value"])
-            self.analyze_expression(stmt_node["value"])
-            self.quad_gen.generate_print_quad()
+            # Si hay multiples valores a imprimir
+            if isinstance(stmt_node["value"], list):
+                count = len(stmt_node["value"])
+                for i in stmt_node["value"]:
+                    self.validate_expression_uses(i)
+                    self.analyze_expression(i)
+                    self.quad_gen.generate_print_quad()
 
-        elif t == "print_multiple_expressions":
-            # Se valida la expresión dentro de los print
-            for expr in stmt_node.get("value", []):
-                self.validate_expression_uses(expr)
-                self.analyze_expression(expr)
+            else:
+                # Si solo hay un valor a imprimir
+                self.validate_expression_uses(stmt_node["value"])
+                self.analyze_expression(stmt_node["value"])                
                 self.quad_gen.generate_print_quad()
 
         elif t == "print_string":
@@ -335,10 +338,10 @@ class SemanticAnalyzer:
                     scope = "local"
 
                 # Generación de address para la variable
-                if(self.memory_manager.get_var_address(var_id, scope, self.dir) == None):
-                    address = self.memory_manager.assign_variable_address(var_type, scope)
+                if(self.memory_manager.get_variable_address(var_id, scope, self.dir) == None):
+                    address = self.memory_manager.generate_address(var_type, scope)
                 else:
-                    address = self.memory_manager.get_var_address(var_id, scope, self.dir)
+                    address = self.memory_manager.get_variable_address(var_id, scope, self.dir)
 
                 self.quad_gen.push_operand(address, var_type)
 
@@ -376,3 +379,6 @@ class SemanticAnalyzer:
                 self.analyze_expression(expr["value"][2])
                 self.quad_gen.push_operator(op_map[t])
                 self.quad_gen.generate_quad_if_applicable()
+
+            print(f"[DEBUG] pilaOperandos después de analyze_expression: {self.quad_gen.pilaOperandos}")
+            print(f"[DEBUG] pilaTipos después de analyze_expression: {self.quad_gen.pilaTipos}")

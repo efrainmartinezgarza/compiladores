@@ -81,8 +81,9 @@ print("\nÁrbol sintáctico transformado:")
 print("---------------------------------")
 print(result)
 
-print("\nResultado del ejecución:")
-print("---------------------------------")
+# Sección 2: Directorio de funciones y variables, cuádruplos y memoria.
+# ----------------------------------------------------------------------------------------------------------------------------------
+
 checker = Directory() # Creación de un objeto de la clase Directory para manejar el directorio de funciones y variables.
 checker.set_program_ast(result) # Establecimiento del AST del programa en el objeto "checker".
 checker.analyze() # Análisis del AST del programa (llenado del directorio de funciones y variables).
