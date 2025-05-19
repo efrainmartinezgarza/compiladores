@@ -6,18 +6,13 @@ que las funciones están definidas antes de llamarse, y que los tipos de datos s
 from lark.lexer import Token
 class SemanticAnalyzer:
 
-    def __init__(self, directory, evaluator, quad_gen, memory_manager):
+    def __init__(self, directory, quad_gen, memory_manager):
         self.dir = directory # Acceso al directorio de funciones y variables
-        self.eval = evaluator # Acceso al evaluador de expresiones
-        self.is_executing = False # Indica si se está ejecutando el programa
         self.quad_gen = quad_gen
         self.memory_manager = memory_manager # Acceso al generador de cuádruplos
 
     # Método principal para analizar el AST (árbol de sintaxis abstracta) del programa.
     def analyze(self, ast):
-
-        # Se asegura de que el programa no esté en ejecución antes de comenzar el análisis.
-        self.is_executing = False
 
         # Obtiene el tipo de programa (program_simple, program_vars, etc.) y llama al método correspondiente.
         t = ast.get("type")
@@ -113,7 +108,6 @@ class SemanticAnalyzer:
             # Se obtiene el identificador y el tipo de la variable.
             var_id = decl["id"]["value"]
             var_type = decl["type"]["value"]
-            print(f"Declarando variable: {var_id} de tipo {var_type}")
 
             # Si se hizo un análisis de variables globales, se establece el ámbito como "global".
             # En caso contrario, se establece el ámbito actual de la función en el que se están declarando las variables.

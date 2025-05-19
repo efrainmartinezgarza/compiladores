@@ -103,9 +103,7 @@ class QuadGenerator:
         # Generación del cuádruplo de impresión
         self.filaCuadruplos.append((operator, '', '', value))
 
-    def print_filaCuadruplos(self):
-        print("\nCuádruplos generados:")
-        print("----------------------------------------------------")
+    def print_filaCuadruplos(self):     
         for i, cuad in enumerate(self.filaCuadruplos):
             op, left, right, res = cuad
             print(f"{i:<3} {op:<10} {left:<10} {right:<10} {res:<10}")

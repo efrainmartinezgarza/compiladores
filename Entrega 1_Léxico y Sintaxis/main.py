@@ -90,12 +90,19 @@ checker.analyze() # Análisis del AST del programa (llenado del directorio de fu
 
 print("\nDirectorio de funciones:")
 print("---------------------------------")
-checker.print_func_dir()
-checker.quad_gen
+checker.function_dir.print_func_dir() # Impresión del directorio de funciones y variables.
 
 # Impresión de los cuádrupls generados
-checker.print_quadruples()
+print("\nCuádruplos generados:")
+print("----------------------------------------------------")
+checker.quad_gen.print_filaCuadruplos()
+
+print("\nTabla de constantes:")
+print("-----------------------------------------------------------")
 checker.memory_manager.print_constants_table()
+
+print("\nTabla de memoria:")
+print("-----------------------------------------------------------")
 checker.memory_manager.print_memory()
 
 

@@ -92,14 +92,6 @@ class MemoryManager:
         return address
     
     def get_var_address(self, var_id, scope, dir_func):
-        """
-        Busca la dirección de una variable ya declarada usando el directorio.
-
-        :param var_id: Nombre de la variable.
-        :param scope: Ámbito ('global' o nombre de función).
-        :param dir_func: Instancia del directorio de funciones/variables.
-        :return: Dirección de memoria si existe, None en otro caso.
-        """
         # Buscar en el ámbito actual
         func_info = dir_func.func_dir.get(scope, {})
         vars_dict = func_info.get("vars", {})
@@ -121,8 +113,6 @@ class MemoryManager:
         """
         Imprime la tabla de constantes.
         """
-        print("\nTabla de constantes:")
-        print("----------------------------------------------------")
         for (value, const_type), address in self.constants_table.items():
             print(f"Valor: {value:<10} | Tipo: {const_type:<10} | Dirección: {address:<10}")
 
@@ -145,9 +135,9 @@ class MemoryManager:
     
     # Impresión de la tabla de memoria
     def print_memory(self):
-        print("\nTabla de memoria:")
-        print("----------------------------------------------------")
+        
         for segment, types in self.memory_limits.items():
-            print(f"Segmento: {segment}")
+            print(segment.upper())
             for var_type, (low, high) in types.items():
-                print(f"  Tipo: {var_type} | Rango: {low} - {high} | Dirección actual: {self.pointers[segment][var_type]}")
+                print(f"{var_type.upper()} -> Rango: {low} - {high} | Dirección actual: {self.pointers[segment][var_type]}")
+            print("-----------------------------------------------------------")
