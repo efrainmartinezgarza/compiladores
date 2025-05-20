@@ -1,0 +1,255 @@
+[RESULTADO] EXITOSO
+--------------------------------------------------
+
+📝 Tokens encontrados:
+------------------------------
+Token            |   Carácter
+------------------------------
+PROGRAM_KWORD    | 'program' 
+ID               | 'myProgram'
+SEMICOLON        | ';'       
+VAR_KWORD        | 'var'     
+ID               | 'x'       
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+VOID_KWORD       | 'void'    
+ID               | 'printSum'
+L_PARENTHESIS    | '('       
+ID               | 'a'       
+COLON            | ':'       
+INT_KWORD        | 'int'     
+COMMA            | ','       
+ID               | 'b'       
+COLON            | ':'       
+INT_KWORD        | 'int'     
+R_PARENTHESIS    | ')'       
+L_BRACKET        | '['       
+VAR_KWORD        | 'var'     
+ID               | 'result'  
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+L_CURLY_BRACE    | '{'       
+ID               | 'result'  
+EQUAL            | '='       
+ID               | 'a'       
+PLUS             | '+'       
+ID               | 'b'       
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'result'  
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+R_BRACKET        | ']'       
+SEMICOLON        | ';'       
+VOID_KWORD       | 'void'    
+ID               | 'greet'   
+L_PARENTHESIS    | '('       
+R_PARENTHESIS    | ')'       
+L_BRACKET        | '['       
+VAR_KWORD        | 'var'     
+ID               | 'msg'     
+COLON            | ':'       
+FLOAT_KWORD      | 'float'   
+SEMICOLON        | ';'       
+L_CURLY_BRACE    | '{'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+STRING           | '"Hello"' 
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+R_BRACKET        | ']'       
+SEMICOLON        | ';'       
+MAIN_KWORD       | 'main'    
+L_CURLY_BRACE    | '{'       
+ID               | 'printSum'
+L_PARENTHESIS    | '('       
+CTE              | '3'       
+COMMA            | ','       
+CTE              | '4'       
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+ID               | 'greet'   
+L_PARENTHESIS    | '('       
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+END_KWORD        | 'end'     
+
+
+Árbol sintáctico (raw):
+------------------------------
+program_vars_funcs
+  program
+  myProgram
+  ;
+  vars_one_id
+    var
+    x
+    :
+    type_int	int
+    ;
+  funcs_multiple_ids
+    void
+    printSum
+    (
+    a
+    :
+    type_int	int
+    ,
+    b
+    :
+    type_int	int
+    )
+    [
+    vars_one_id
+      var
+      result
+      :
+      type_int	int
+      ;
+    body_statement
+      {
+      statement
+        assign
+          result
+          =
+          expression_simple
+            exp_plus
+              exp_simple
+                term_simple
+                  factor_id	a
+              +
+              term_simple
+                factor_id	b
+          ;
+      statement
+        f_call_one_expression
+          print
+          (
+          expression_simple
+            exp_simple
+              term_simple
+                factor_id	result
+          )
+          ;
+      }
+    ]
+    ;
+  funcs_simple
+    void
+    greet
+    (
+    )
+    [
+    vars_one_id
+      var
+      msg
+      :
+      type_float	float
+      ;
+    body_statement
+      {
+      statement
+        print_string
+          print
+          (
+          "Hello"
+          )
+          ;
+      }
+    ]
+    ;
+  main
+  body_statement
+    {
+    statement
+      f_call_multiple_expressions
+        printSum
+        (
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	3
+        ,
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	4
+        )
+        ;
+    statement
+      f_call_simple
+        greet
+        (
+        )
+        ;
+    }
+  end
+
+
+
+Árbol transformado (AST):
+------------------------------
+{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'myProgram'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'x'}, 'type': {'type': 'type_int', 'value': 'int'}}]}, 'funcs': [{'type': 'funcs_multiple_ids', 'funcs_name': {'type': 'id', 'value': 'printSum'}, 'parameters': [{'id': {'type': 'id', 'value': 'a'}, 'type': {'type': 'type_int', 'value': 'int'}}, {'id': {'type': 'id', 'value': 'b'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'result'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'a': {'type': 'int', 'assigned': False, 'address': 1000}, 'b': {'type': 'int', 'assigned': False, 'address': 1001}, 'result': {'type': 'int', 'assigned': False, 'address': 1002}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}}]}}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'result'}}}}}}]}}, {'type': 'funcs_simple', 'funcs_name': {'type': 'id', 'value': 'greet'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'msg'}, 'type': {'type': 'type_float', 'value': 'float'}}], 'msg': {'type': 'float', 'assigned': False, 'address': 2000}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Hello'}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'f_call_multiple_expressions', 'function': {'type': 'id', 'value': 'printSum'}, 'value': [{'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 3}}}}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 4}}}}]}}, {'type': 'statement', 'value': {'type': 'f_call_simple', 'value': {'type': 'id', 'value': 'greet'}}}]}}
+
+
+Directorio de funciones y variables:
+------------------------------
+Scope: global
+  Variables:
+    x : int | Dirección: 3000
+
+Scope: printSum
+  Parámetros:
+    a : int
+    b : int
+  Variables:
+    a : int | Dirección: 1000
+    b : int | Dirección: 1001
+    result : int | Dirección: 1002
+
+Scope: greet
+  Variables:
+    msg : float | Dirección: 2000
+
+
+
+Cuádruplos generados:
+------------------------------
+0   1          1003       1004       5000      
+1   7          5000                  1002      
+2   9                                1005      
+3   9                                9000      
+
+
+Tabla de constantes:
+------------------------------
+Valor: Hello      | Tipo: string     | Dirección: 9000      
+Valor: 3          | Tipo: int        | Dirección: 7000      
+Valor: 4          | Tipo: int        | Dirección: 7001      
+
+
+Uso de memoria:
+------------------------------
+LOCAL
+INT -> Rango: 1000 - 1999 | Dirección actual: 1006
+FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2001
+-----------------------------------------------------------
+GLOBAL
+INT -> Rango: 3000 - 3999 | Dirección actual: 3001
+FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4000
+-----------------------------------------------------------
+TEMPORAL
+INT -> Rango: 5000 - 5999 | Dirección actual: 5001
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
+-----------------------------------------------------------
+CONSTANTE
+INT -> Rango: 7000 - 7999 | Dirección actual: 7002
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9001
+-----------------------------------------------------------

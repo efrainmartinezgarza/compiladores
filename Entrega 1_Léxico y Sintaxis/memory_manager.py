@@ -4,23 +4,22 @@ class MemoryManager:
 
         # Límites por tipo y segmento (ahora inician desde 1000)
         self.memory_limits = {
-            'global': {
+            'local': {
                 'int': (1000, 1999),
                 'float': (2000, 2999),
             },
-            'local': {
-                'int': (4000, 4999),
-                'float': (5000, 5999),
+            'global': {
+                'int': (3000, 3999),
+                'float': (4000, 4999),
             },
             'temporal': {
+                'int': (5000, 5999),
+                'float': (6000, 6999),
+            },
+            'constante': {
                 'int': (7000, 7999),
                 'float': (8000, 8999),
-                'bool': (9000, 9999)
-            },
-            'constant': {
-                'int': (10000, 10999),
-                'float': (11000, 11999),
-                'string': (12000, 12999)
+                'string': (9000, 9999)
             }
         }
 
@@ -53,7 +52,7 @@ class MemoryManager:
         
         # Si no está registrada, se crea una nueva dirección
         # Creación de la dirección para la constante
-        address = self.generate_address(const_type, 'constant')
+        address = self.generate_address(const_type, 'constante')
 
         # Almacenamiento de la dirección en la tabla de constantes (como clave-valor)
         self.constants_table[key] = address

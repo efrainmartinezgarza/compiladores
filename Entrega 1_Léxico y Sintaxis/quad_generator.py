@@ -3,7 +3,7 @@
 from semantic_cube import SemanticCube
 class QuadGenerator:
 
-    debug_mode = True
+    debug_mode = False
 
     def __init__(self, memory_manager, directory):
         self.pilaOperandos = []        # Pila de operandos
@@ -81,7 +81,7 @@ class QuadGenerator:
         # Generación del cuádruplo de asignación
         operator = '='
 
-        # Creación de dirección para la variable que va a recibir el valor
+        # Obtención de dirección para la variable que va a recibir el valor
         address = self.memory_manager.get_variable_address(target, self.dir.current_scope, self.dir)
         
         # Transformación del operador a número
@@ -91,7 +91,6 @@ class QuadGenerator:
         self.filaCuadruplos.append((operator, value, '', address))
 
     def generate_print_quad(self):
-        print("self.pilaOperandos", self.pilaOperandos)
         value = self.pilaOperandos.pop()
         self.pilaTipos.pop()
         operator = "print"

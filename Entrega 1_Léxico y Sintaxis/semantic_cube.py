@@ -37,7 +37,7 @@ class SemanticCube:
             },
             "/": {
                 INT: {
-                    INT: FLOAT,       # int / int = int
+                    INT: INT,         # int / int = int
                     FLOAT: FLOAT},    # int / float = float
                 
                 FLOAT: {

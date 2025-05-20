@@ -379,6 +379,3 @@ class SemanticAnalyzer:
                 self.analyze_expression(expr["value"][2])
                 self.quad_gen.push_operator(op_map[t])
                 self.quad_gen.generate_quad_if_applicable()
-
-            print(f"[DEBUG] pilaOperandos después de analyze_expression: {self.quad_gen.pilaOperandos}")
-            print(f"[DEBUG] pilaTipos después de analyze_expression: {self.quad_gen.pilaTipos}")

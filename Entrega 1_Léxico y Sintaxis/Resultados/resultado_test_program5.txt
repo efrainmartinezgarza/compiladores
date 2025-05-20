@@ -1,0 +1,186 @@
+[RESULTADO] EXITOSO
+--------------------------------------------------
+
+📝 Tokens encontrados:
+------------------------------
+Token            |   Carácter
+------------------------------
+PROGRAM_KWORD    | 'program' 
+ID               | 'myProgram'
+SEMICOLON        | ';'       
+VAR_KWORD        | 'var'     
+ID               | 'x'       
+COMMA            | ','       
+ID               | 'y'       
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+ID               | 'a'       
+COMMA            | ','       
+ID               | 'b'       
+COLON            | ':'       
+FLOAT_KWORD      | 'float'   
+SEMICOLON        | ';'       
+MAIN_KWORD       | 'main'    
+L_CURLY_BRACE    | '{'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+STRING           | '"Hello world"'
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'x'       
+COMMA            | ','       
+ID               | 'y'       
+PLUS             | '+'       
+CTE              | '2'       
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'x'       
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'x'       
+COMMA            | ','       
+ID               | 'y'       
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+END_KWORD        | 'end'     
+
+
+Árbol sintáctico (raw):
+------------------------------
+program_vars
+  program
+  myProgram
+  ;
+  vars_multiple_ids
+    var
+    x
+    ,
+    y
+    :
+    type_int	int
+    ;
+    a
+    ,
+    b
+    :
+    type_float	float
+    ;
+  main
+  body_statement
+    {
+    statement
+      print_string
+        print
+        (
+        "Hello world"
+        )
+        ;
+    statement
+      f_call_multiple_expressions
+        print
+        (
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	x
+        ,
+        expression_simple
+          exp_plus
+            exp_simple
+              term_simple
+                factor_id	y
+            +
+            term_simple
+              factor_cte	2
+        )
+        ;
+    statement
+      f_call_one_expression
+        print
+        (
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	x
+        )
+        ;
+    statement
+      f_call_multiple_expressions
+        print
+        (
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	x
+        ,
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	y
+        )
+        ;
+    }
+  end
+
+
+
+Árbol transformado (AST):
+------------------------------
+{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'myProgram'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'x'}, {'type': 'id', 'value': 'y'}], 'type': {'type': 'type_int', 'value': 'int'}}, {'ids': [{'type': 'id', 'value': 'a'}, {'type': 'id', 'value': 'b'}], 'type': {'type': 'type_float', 'value': 'float'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Hello world'}}}, {'type': 'print_expression', 'value': [{'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}, {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}]}}]}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}}, {'type': 'print_expression', 'value': [{'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}}]}]}}
+
+
+Directorio de funciones y variables:
+------------------------------
+Scope: global
+  Variables:
+    x : int | Dirección: 3000
+    y : int | Dirección: 3001
+    a : float | Dirección: 4000
+    b : float | Dirección: 4001
+
+
+
+Cuádruplos generados:
+------------------------------
+0   9                                9000      
+1   9                                3000      
+2   1          3001       7000       5000      
+3   9                                5000      
+4   9                                3000      
+5   9                                3000      
+6   9                                3001      
+
+
+Tabla de constantes:
+------------------------------
+Valor: Hello world | Tipo: string     | Dirección: 9000      
+Valor: 2          | Tipo: int        | Dirección: 7000      
+
+
+Uso de memoria:
+------------------------------
+LOCAL
+INT -> Rango: 1000 - 1999 | Dirección actual: 1000
+FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2000
+-----------------------------------------------------------
+GLOBAL
+INT -> Rango: 3000 - 3999 | Dirección actual: 3002
+FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4002
+-----------------------------------------------------------
+TEMPORAL
+INT -> Rango: 5000 - 5999 | Dirección actual: 5001
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
+-----------------------------------------------------------
+CONSTANTE
+INT -> Rango: 7000 - 7999 | Dirección actual: 7001
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9001
+-----------------------------------------------------------
