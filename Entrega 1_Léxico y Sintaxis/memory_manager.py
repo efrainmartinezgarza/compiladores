@@ -2,7 +2,6 @@ class MemoryManager:
 
     def __init__(self):
 
-        # Límites por tipo y segmento (ahora inician desde 1000)
         self.memory_limits = {
             'local': {
                 'int': (1000, 1999),
