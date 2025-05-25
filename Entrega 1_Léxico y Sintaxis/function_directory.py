@@ -35,6 +35,7 @@ class FunctionDirectory:
 
         if func_name in FunctionDirectory.RESERVED_WORDS: # Verifica si la función es una palabra reservada
             raise NameError(f"El nombre '{func_name}' es una palabra reservada.")
+        
         if func_name in self.func_dir: # Verifica si la función ya está declarada
             raise NameError(f"La función '{func_name}' ya está declarada.")
                 
@@ -62,15 +63,18 @@ class FunctionDirectory:
 
     # Declara una nueva variable dentro del scope actual.
     # Si la variable ya existe o es una palabra reservada, lanza un error.
-    def declare_variable(self, var_id, var_type, address):
+    def declare_variable(self, var_id, var_type, address, is_param=False):
+
         if var_id in FunctionDirectory.RESERVED_WORDS: # Verifica si la variable es una palabra reservada
             raise NameError(f"El nombre '{var_id}' es una palabra reservada.")
         current_vars = self.get_current_vars()
+
         if var_id in current_vars: # Verifica si la variable ya está declarada
             raise NameError(f"La variable '{var_id}' ya está declarada en el scope '{self.current_scope}'.")
+        
         current_vars[var_id] = {
             "type": var_type,
-            "assigned": False,
+            "assigned": True if is_param else False,
             "address": address
         }
 

@@ -226,9 +226,7 @@ class QuadGenerator:
         elif operator == "param":
             return 15
         elif operator == "ENDFUNC":
-            return 16
-        elif operator == "goToMain":
-            return 17       
+            return 16     
         else:
             raise ValueError(f"Operador desconocido: {operator}")
 

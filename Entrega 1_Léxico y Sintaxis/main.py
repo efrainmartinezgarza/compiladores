@@ -11,6 +11,7 @@ from lark import Lark, Tree # Clase principal para crear el parser.
 from pathlib import Path # Librería para manejar rutas de archivos con rutas relativas y absolutas.
 from transformer import MyTransformer # Importación de la clase MyTransformer desde el archivo transformer.py.
 from directory import Directory # Importación de la clase Directory desde el archivo directory.py.
+from virtual_machine import VirtualMachine # Importación de la clase VirtualMachine desde el archivo vm.py.
 
 def tree_to_dict(tree):
     if isinstance(tree, Tree):
@@ -28,7 +29,7 @@ MAIN_PATH = Path(__file__).parent
 
 # Uso de rutas relativas para acceder a archivos externos.
 GRAMMAR_PATH = MAIN_PATH / "grammar.lark"
-TEST_PROGRAM_PATH = MAIN_PATH / "Pruebas/test_program1.txt"
+TEST_PROGRAM_PATH = MAIN_PATH / "Pruebas/test_program.txt"
 
 # load_grammar_parser: Función para abrir y procesar el archivo de gramática del lenguaje BabyDuck.
 def load_grammar_parser():
@@ -105,6 +106,14 @@ checker.memory_manager.print_constants_table()
 print("\nTabla de memoria:")
 print("-----------------------------------------------------------")
 checker.memory_manager.print_memory()
+
+quadruples = checker.quad_gen.filaCuadruplos # Obtención de los cuádruplos generados.
+function_directory = checker.function_dir.func_dir # Obtención del directorio de funciones y variables.
+constant_table = checker.memory_manager.constants_table # Obtención de la tabla de constantes.
+
+# Máquina virtual
+vm = VirtualMachine(quadruples, function_directory, constant_table)
+vm.run()
 
 
 """ Referencias:

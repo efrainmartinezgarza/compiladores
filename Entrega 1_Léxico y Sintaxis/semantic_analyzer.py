@@ -86,7 +86,7 @@ class SemanticAnalyzer:
         # Declaración de los parámetros de la función como variables dentro del ámbito de la función.
         for p in params:
             address = self.memory_manager.generate_address(p["type"], "local")
-            self.dir.declare_variable(p["id"], p["type"], address)
+            self.dir.declare_variable(p["id"], p["type"], address, True) # True indica que es un parámetro
 
             # Se actualiza el número de recursos utilizados (parámetros) en el directorio de funciones.
             self.dir.update_resource(func_name, "params", p["type"])
@@ -167,6 +167,8 @@ class SemanticAnalyzer:
             var_id = stmt_node["id"]["value"]
             self.analyze_expression(stmt_node["value"])
             self.quad_gen.generate_assignment_quad(var_id)
+            # Se marca la variable como asignada
+            self.dir.find_variable(var_id)["assigned"] = True
 
         elif "f_call" in t:
             self.validate_function_call(stmt_node)
@@ -357,22 +359,26 @@ class SemanticAnalyzer:
                 self.quad_gen.push_operand(address, value_type)
 
             elif t == "factor_id":
-                var_id = expr["value"]["value"]
-                var_type = self.quad_gen.get_var_type(var_id)
+                    var_id = expr["value"]["value"]
 
-                # Identificación del scope de la variable
-                if self.dir.current_scope == "global":
-                    scope = "global"
-                else:
-                    scope = "local"
+                    # Buscar información de la variable (tipo, dirección, asignada, etc.)
+                    var_info = self.dir.find_variable(var_id)
+                    if var_info is None:
+                        raise Exception(f"Error semántico: la variable '{var_id}' no está declarada.")
 
-                # Generación de address para la variable
-                if(self.memory_manager.get_variable_address(var_id, scope, self.dir) == None):
-                    address = self.memory_manager.generate_address(var_type, scope)
-                else:
-                    address = self.memory_manager.get_variable_address(var_id, scope, self.dir)
+                    var_type = var_info["type"]  # Obtener el tipo desde el directorio
 
-                self.quad_gen.push_operand(address, var_type)
+                    # Verificar que haya sido inicializada antes de usarse
+                    if not var_info.get("assigned", False):
+                        raise Exception(f"Error semántico: la variable '{var_id}' se usa antes de ser inicializada.")
+
+                    # Obtener la dirección desde el directorio (ya está asignada durante declaración)
+                    address = var_info.get("address")
+                    if address is None:
+                        raise Exception(f"Error interno: la variable '{var_id}' no tiene dirección asignada.")
+
+                    # Empujar operando y tipo a las pilas del generador de cuádruplos
+                    self.quad_gen.push_operand(address, var_type)
 
             elif t == "factor_expression":
                 self.analyze_expression(expr["value"])

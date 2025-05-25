@@ -10,7 +10,6 @@ main {
   x = 3 + 4 - 2 * 5 - 2;
   y = 5;
   total = x + y;
-  a = a + y;
 
   if (x < 5) { x = x + 1; } else { x = 0; }; 
   if (x > 0) { print(x); };
