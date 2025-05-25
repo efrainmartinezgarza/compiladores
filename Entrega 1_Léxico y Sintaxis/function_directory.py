@@ -16,8 +16,13 @@ class FunctionDirectory:
 
         self.func_dir = {
             "global": {   # Scope global
+                "start_point": 0,
                 "params": [],
-                "vars": {}
+                "vars": {},
+                "resources": {
+                    "temporals": {"int": 0, "float": 0},
+                    "vars": {"int": 0, "float": 0},
+                }
             }
         }
         self.built_in_functions = {"print": {"params": []}}
@@ -26,16 +31,23 @@ class FunctionDirectory:
 
     # Permite agregar una nueva función al directorio de funciones.
     # Si la función ya existe o es una palabra reservada, lanza un error.
-    def add_function(self, func_name, params=None, var_table=None, body=None):
+    def add_function(self, func_name, start_point, params=None, var_table=None, body=None):
 
         if func_name in FunctionDirectory.RESERVED_WORDS: # Verifica si la función es una palabra reservada
             raise NameError(f"El nombre '{func_name}' es una palabra reservada.")
         if func_name in self.func_dir: # Verifica si la función ya está declarada
             raise NameError(f"La función '{func_name}' ya está declarada.")
+                
         self.func_dir[func_name] = {
+            "start_point": start_point,
             "params": params or [],
             "vars": var_table or {},
-            "body": body
+            "body": body,
+            "resources": {
+                "temporals": {"int": 0, "float": 0},
+                "vars": {"int": 0, "float": 0},
+                "params": {"int": 0, "float": 0}
+            }
         }
 
     # Permite definir el ámbito actual (scope) en el que se están declarando variables o funciones
@@ -86,11 +98,19 @@ class FunctionDirectory:
         if var is None or not var["assigned"]:
             raise NameError(f"Variable '{var_id}' no tiene valor asignado.")
         return var["value"]
+    
+    # Actualiza el numero de recursos utilizados por una función.
+    def update_resource(self, func_name, category, rtype, count=1): # (nombre_funcion, categoria, tipo_recurso, cantidad)
+        if self.current_scope == "global":
+            self.func_dir["global"]["resources"][category][rtype] += count
+        else:
+            self.func_dir[func_name]["resources"][category][rtype] += count
 
    # Función auxiliar: Imprime el directorio de funciones y variables en un formato legible.
     def print_func_dir(self):
         for scope, info in self.func_dir.items():
             print(f"Scope: {scope}")
+            print("Start Point:", info.get("start_point"))
             if info["params"]:
                 print("  Parámetros:")
                 for param in info["params"]:
@@ -103,4 +123,15 @@ class FunctionDirectory:
                     # Mostrar la dirección en lugar del valor
                     address = var_data.get('address', 'Sin dirección asignada')
                     print(f"    {var_id} : {var_data['type']} | Dirección: {address}")
+            if isinstance(info.get("resources"), dict):
+                resource_lines = []
+                for category, types in info["resources"].items():
+                    type_strs = [f"{rtype}={count}" for rtype, count in types.items() if count > 0]
+                    if type_strs:
+                        resource_lines.append(f"{category}({', '.join(type_strs)})")
+                if resource_lines:
+                    print(f"  Recursos: {', '.join(resource_lines)}")
             print()
+
+
+            

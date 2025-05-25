@@ -3,7 +3,7 @@
 from semantic_cube import SemanticCube
 class QuadGenerator:
 
-    debug_mode = False
+    debug_mode = True
 
     def __init__(self, memory_manager, directory):
         self.pilaOperandos = []        # Pila de operandos
@@ -11,6 +11,7 @@ class QuadGenerator:
         self.pilaTipos = []       # Pila de tipos
         self.filaCuadruplos = []   # Fila de cuádruplos
         self.temp_count = 1    # Contador de variables temporales
+        self.param_count = 1     # Contador de parámetros temporales
         self.cube = SemanticCube()  # Acceso al cubo semántico
         self.jumps_stack = []  # Pila de saltos
         self.memory_manager = memory_manager  # Acceso al gestor de memoria
@@ -53,7 +54,10 @@ class QuadGenerator:
 
                 # Creación de la dirección del temporal
                 address_temp = self.memory_manager.generate_address(result_type, 'temporal')
-           
+
+                # Aumento del contador de temporales en el scope actual
+                self.dir.update_resource(self.dir.current_scope, "temporals", result_type)
+
                 # Transformación del operador a número
                 if (self.debug_mode == False):
                     operator = self.transform_operador_to_number(operator)
@@ -143,6 +147,51 @@ class QuadGenerator:
         quad = self.filaCuadruplos[jump_index]
         self.filaCuadruplos[jump_index] = (quad[0], quad[1], quad[2], target)
 
+    def generate_ENDFUNC_quad(self):
+        operator = "ENDFUNC"
+
+        # Transformación del operador a número
+        if (self.debug_mode == False):
+            operator = self.transform_operador_to_number(operator)
+
+        # Generación del cuádruplo de fin de función
+        self.filaCuadruplos.append((operator, '', '', ''))
+
+    def generate_functionCall_quad(self, quadType, func_name):
+        
+        if(quadType == "ERA"):
+            operator = "ERA"
+        elif(quadType == "goSub"):
+            operator = "goSub"
+            self.param_count = 1 # Se reinicia el contador de parámetros finalizada la llamada a la función
+
+        # Transformación del operador a número
+        if (self.debug_mode == False):
+            operator = self.transform_operador_to_number(operator)
+
+        # Generación del cuádruplo de ERA
+        self.filaCuadruplos.append((operator, func_name, '', ''))
+
+    def new_param(self):
+        param_name = f"p{self.param_count}"
+        self.param_count += 1
+        return param_name
+
+    def generate_param_quad(self):
+        
+        operator = "param"
+        param = self.new_param()  # Genera un nuevo parámetro temporal (p1, p2, p3, ...)
+
+        # Transformación del operador a número
+        if (self.debug_mode == False):
+            operator = self.transform_operador_to_number(operator)
+
+        # Extrae el último temporal de la pila de operandos (aquello que se evalúa para el parámetro)
+        temp = self.pilaOperandos.pop()
+        self.pilaTipos.pop()
+
+        # Generación del cuádruplo de parámetro
+        self.filaCuadruplos.append((operator, temp, '', param))
 
     def transform_operador_to_number(self, operator):
 
@@ -170,6 +219,16 @@ class QuadGenerator:
             return 11
         elif operator == "goToTrue":
             return 12
+        elif operator == "ERA":
+            return 13
+        elif operator == "goSub":
+            return 14
+        elif operator == "param":
+            return 15
+        elif operator == "ENDFUNC":
+            return 16
+        elif operator == "goToMain":
+            return 17       
         else:
             raise ValueError(f"Operador desconocido: {operator}")
 

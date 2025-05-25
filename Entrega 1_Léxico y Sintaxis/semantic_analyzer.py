@@ -16,19 +16,29 @@ class SemanticAnalyzer:
 
         # Obtiene el tipo de programa (program_simple, program_vars, etc.) y llama al método correspondiente.
         t = ast.get("type")
+
+        self.quad_gen.generate_go("goTo")
+        jump_start = self.quad_gen.jumps_stack.pop() # Se guarda la posición del goTo al inicio del programa
+
         if t == "program_simple": # Programa simple (sin variables ni funciones)
+            self.quad_gen.fill_jump(jump_start)
             self.analyze_body(ast["body"])
         elif t == "program_vars": # Programa con variables (sin funciones)
             self.analyze_vars(ast["vars"], True)
+            self.quad_gen.fill_jump(jump_start)
             self.analyze_body(ast["body"])
         elif t == "program_funcs": # Programa con funciones (sin variables)
             for f in ast.get("funcs", []):
                 self.analyze_function(f)
+                self.quad_gen.generate_ENDFUNC_quad()
+            self.quad_gen.fill_jump(jump_start)
             self.analyze_body(ast["body"]) 
         elif t == "program_vars_funcs": # Programa con variables y funciones
             self.analyze_vars(ast["vars"], True) # Se pone "True" para indicar que son variables globales
             for f in ast.get("funcs", []):
                 self.analyze_function(f)
+                self.quad_gen.generate_ENDFUNC_quad()
+            self.quad_gen.fill_jump(jump_start)
             self.analyze_body(ast["body"])
         else:
             raise ValueError(f"Tipo de programa desconocido: {t}")
@@ -62,10 +72,13 @@ class SemanticAnalyzer:
                     "id": p["id"]["value"],
                     "type": p["type"]["value"]
                 })
-        
+           
+        # Se guarda la posición del cuádruplo de inicio de la función
+        start_point = len(self.quad_gen.filaCuadruplos)
+
         # Almacena la función en el directorio de funciones.
         # Guarda el nombre de la función, los parámetros y el cuerpo de la función.
-        self.dir.add_function(func_name, params, func_node.get("vars"), func_node.get("body"))
+        self.dir.add_function(func_name, start_point, params, func_node.get("vars"), func_node.get("body"))
 
         # Establece la función como el ámbito actual (scope)
         self.dir.set_current_scope(func_name)
@@ -74,7 +87,10 @@ class SemanticAnalyzer:
         for p in params:
             address = self.memory_manager.generate_address(p["type"], "local")
             self.dir.declare_variable(p["id"], p["type"], address)
-            
+
+            # Se actualiza el número de recursos utilizados (parámetros) en el directorio de funciones.
+            self.dir.update_resource(func_name, "params", p["type"])
+
         # Si la función tiene variables locales, se declaran también.
         # Se recorre la lista de variables y se declaran en el ámbito de la función.
         if func_node.get("vars"):
@@ -119,6 +135,9 @@ class SemanticAnalyzer:
 
             # Se declara la variable en el directorio de funciones.
             self.dir.declare_variable(var_id, var_type, address)
+
+            # Se actualiza el numero de recursos utilizados (variables) en el directorio de funciones.
+            self.dir.update_resource(self.dir.current_scope, "vars", var_type)
 
     # Método para analizar el cuerpo de una función o del programa principal.
     def analyze_body(self, body_node):
@@ -291,9 +310,13 @@ class SemanticAnalyzer:
         # Si la función no está definida en el directorio de funciones, se lanza un error.
         if func_name not in self.dir.func_dir:
             raise NameError(f"Función '{func_name}' no definida.")
+        
+        # Se genera el cuádruplo de llamada a la función.
+        self.quad_gen.generate_functionCall_quad("ERA", func_name)
 
         # Almacena los parámetros esperados de la función.
         expected = self.dir.func_dir[func_name]["params"]
+        print(f"Parámetros esperados: {expected}")
 
         # Si el número de argumentos no coincide con el número de parámetros esperados, se lanza un error.
         if len(args) != len(expected):
@@ -306,10 +329,16 @@ class SemanticAnalyzer:
             self.analyze_expression(arg_expr)
             
             # Obtiene el tipo desde pilaTipos 
-            arg_type = self.quad_gen.pilaTipos.pop()  
+            arg_type = self.quad_gen.pilaTipos[-1]  # No quitar aún, solo leer  
     
             if arg_type != param["type"]:
                 raise TypeError(f"Argumento '{param['id']}' debe ser '{param['type']}', recibido '{arg_type}'")
+            
+            # Se genera el cuádruplo del parametro
+            self.quad_gen.generate_param_quad()
+        
+        # Se genera el cuádruplo que marca el fin de la función llamada.
+        self.quad_gen.generate_functionCall_quad("goSub", func_name)
     
     def analyze_expression(self, expr):
         if isinstance(expr, dict):

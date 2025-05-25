@@ -1,7 +1,13 @@
 program myProgram;
 var x, y: int; c_d8: float;
+void greet(x:int, y:int) [ var msg: float; { print(x); } ];
+void printSum(a: int, b: int) [ var result: int; { result = a + b * 2; print(result); } ];
+
 
 main {
-  x = 3 + 4 - 2 * 5 / 2;
+  x = 3 + (4 - 2) * x / 2;
+  greet(4 + 8, x);
+  x = 3;
+  greet(3, x + 2);
 }
 end
