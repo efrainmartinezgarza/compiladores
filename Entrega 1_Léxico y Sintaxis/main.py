@@ -115,6 +115,12 @@ constant_table = checker.memory_manager.constants_table # Obtención de la tabla
 vm = VirtualMachine(quadruples, function_directory, constant_table)
 vm.run()
 
+# Impresión del estado final de la máquina virtual.
+print("\nEstado final de la máquina virtual:")
+print("-----------------------------------------------------------")
+vm.print_memory_state()
+
+
 
 """ Referencias:
     - Geeks for Geeks. (2025). Python repr() Function. Geeks for Geeks. Recuperado de: https://www.geeksforgeeks.org/python-repr-function/

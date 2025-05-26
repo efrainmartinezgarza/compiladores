@@ -8,6 +8,6 @@ main {
   x = 3 + (4 - 2) * x / 2; 
   c_d8 = x / 2.0;
   print(c_d8);
-  greet(x, x + 1);
+  greet(x, x + 1):
 }
 end

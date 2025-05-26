@@ -1,0 +1,21 @@
+program myProgram;
+var result, fact: int;
+
+void factorial(n: int) [ var a: int; {
+    if (n < 2) {
+        fact = 1;
+    } else {
+        factorial(n - 1);
+        fact = n * fact;
+    };
+}];
+
+main {
+    fact = 0;
+    factorial(5);
+    print(fact);
+
+    factorial(3);
+    print(fact);
+}
+end
