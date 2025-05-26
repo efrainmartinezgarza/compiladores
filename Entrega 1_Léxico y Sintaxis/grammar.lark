@@ -79,7 +79,8 @@ program: PROGRAM_KWORD ID SEMICOLON MAIN_KWORD body END_KWORD -> program_simple
 vars: VAR_KWORD (ID COLON type SEMICOLON)+ -> vars_one_id
         | VAR_KWORD (ID (COMMA ID)* COLON type SEMICOLON)+ -> vars_multiple_ids
 
-funcs: VOID_KWORD ID L_PARENTHESIS R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_simple
+funcs: VOID_KWORD ID L_PARENTHESIS R_PARENTHESIS L_BRACKET body R_BRACKET SEMICOLON -> funcs_no_vars
+        | VOID_KWORD ID L_PARENTHESIS R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_simple
         | VOID_KWORD ID L_PARENTHESIS ID COLON type R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_id
         | VOID_KWORD ID L_PARENTHESIS ID COLON type (COMMA ID COLON type)+ R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_multiple_ids
 
@@ -101,7 +102,7 @@ f_call: ID L_PARENTHESIS R_PARENTHESIS SEMICOLON -> f_call_simple
 
 print: PRINT_KWORD L_PARENTHESIS STRING R_PARENTHESIS SEMICOLON -> print_string
         | PRINT_KWORD L_PARENTHESIS expression R_PARENTHESIS SEMICOLON -> print_expression
-        | PRINT_KWORD L_PARENTHESIS expression (COMMA expression)+ R_PARENTHESIS SEMICOLON -> print_multiple_expressions
+        | PRINT_KWORD L_PARENTHESIS (expression | STRING) (COMMA (expression | STRING))+ R_PARENTHESIS SEMICOLON -> print_multiple_expressions
 
 expression: exp -> expression_simple
         | exp GREATER_THAN exp -> expression_greater_than

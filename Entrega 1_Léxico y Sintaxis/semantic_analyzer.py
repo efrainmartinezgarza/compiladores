@@ -178,14 +178,49 @@ class SemanticAnalyzer:
             if isinstance(stmt_node["value"], list):
                 count = len(stmt_node["value"])
                 for i in stmt_node["value"]:
+                    
+                    # Si se trata de una expresión, se valida y analiza
                     self.validate_expression_uses(i)
                     self.analyze_expression(i)
                     self.quad_gen.generate_print_quad()
-
             else:
                 # Si solo hay un valor a imprimir
                 self.validate_expression_uses(stmt_node["value"])
                 self.analyze_expression(stmt_node["value"])                
+                self.quad_gen.generate_print_quad()
+
+        elif t == "print_multiple_expressions":
+            # Si hay múltiples valores a imprimir
+            if isinstance(stmt_node["value"], list):
+                for item in stmt_node["value"]:
+                    if isinstance(item, dict):
+                        item_type = item.get("type")
+                        if item_type == "string":  # Caso: cadena literal
+                            value = item["value"]
+                            # Buscar si ya existe en memoria
+                            address = self.memory_manager.get_constant_address(value, "string")
+                            if address is None:
+                                address = self.memory_manager.add_constant(value, "string")
+                            self.quad_gen.push_operand(address, "string")
+                            self.quad_gen.generate_print_quad()
+                        else:  # Caso: expresión
+                            self.validate_expression_uses(item)
+                            self.analyze_expression(item)
+                            self.quad_gen.generate_print_quad()
+                    else:
+                        raise ValueError(f"Elemento desconocido en print_expression: {item}")
+            else:
+                # Si solo hay un valor a imprimir
+                item = stmt_node["value"]
+                if isinstance(item, dict) and item.get("type") == "string":
+                    value = item["value"]
+                    address = self.memory_manager.get_constant_address(value, "string")
+                    if address is None:
+                        address = self.memory_manager.add_constant(value, "string")
+                    self.quad_gen.push_operand(address, "string")
+                else:
+                    self.validate_expression_uses(item)
+                    self.analyze_expression(item)
                 self.quad_gen.generate_print_quad()
 
         elif t == "print_string":

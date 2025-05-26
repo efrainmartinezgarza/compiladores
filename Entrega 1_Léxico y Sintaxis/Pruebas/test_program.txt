@@ -1,7 +1,7 @@
 program myProgram;
 var x, y: int; a, b: float; c_d8, d: int; total: int;
 
-void prinst() [ var msg: float; { print("Hello"); } ];
+void prinst() [{ print("Hello"); } ];
 void printSum(a: int, b: int) [ var result: int; { result = a + b; print(result); } ];
 void greet() [ var msg: float; { print("Hello"); } ];
 
@@ -23,7 +23,8 @@ main {
   print("Hello world");
   print(y + 2);
   print(x);
-  print(x,y);
+  print("cama de agua",y, "agua");
+  print(y, "perro");
 
 }
 end

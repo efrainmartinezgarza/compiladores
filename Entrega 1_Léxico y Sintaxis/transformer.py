@@ -138,7 +138,8 @@ class MyTransformer(Transformer):
 
     """print: PRINT_KWORD L_PARENTHESIS STRING R_PARENTHESIS SEMICOLON -> print_string
         | PRINT_KWORD L_PARENTHESIS expression R_PARENTHESIS SEMICOLON -> print_expression
-        | PRINT_KWORD L_PARENTHESIS expression (COMMA expression)+ R_PARENTHESIS SEMICOLON -> print_multiple_expressions
+        | PRINT_KWORD L_PARENTHESIS (expression | STRING) (COMMA (expression | STRING))+ R_PARENTHESIS SEMICOLON -> print_multiple_expressions
+
     """
     
     def print_string(self, print_kw, lpar, string, rpar, semicolon):
@@ -146,7 +147,7 @@ class MyTransformer(Transformer):
     
     def print_expression(self, print_kw, lpar, expression, rpar, semicolon):
         return {"type": "print_expression", "value": expression}  
-    
+        
     def print_multiple_expressions(self, print_kw, lpar, first_expr, *rest):
         expressions = [first_expr] 
 
@@ -159,7 +160,6 @@ class MyTransformer(Transformer):
             "type": "print_multiple_expressions",
             "value": expressions
         }
-    
     # ----------------------------------------------------------------------------------------------------------------------------
 
     """f_call: ID L_PARENTHESIS R_PARENTHESIS SEMICOLON -> f_call_simple
@@ -356,10 +356,18 @@ class MyTransformer(Transformer):
     
     # ----------------------------------------------------------------------------------------------------------------------------
 
-    """funcs: VOID_KWORD ID L_PARENTHESIS R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_simple
+    """funcs: VOID_KWORD ID L_PARENTHESIS R_PARENTHESIS L_BRACKET body R_BRACKET SEMICOLON -> funcs_no_vars
+        | VOID_KWORD ID L_PARENTHESIS R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_simple
         | VOID_KWORD ID L_PARENTHESIS ID COLON type R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_id
         | VOID_KWORD ID L_PARENTHESIS ID COLON type (COMMA ID COLON type)+ R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_multiple_ids"""
     
+    def funcs_no_vars(self, void_kw, id, lpar, rpar, lbracket, body, rbracket, semicolon):
+        return {
+            "type": "funcs_no_vars",
+            "funcs_name": id,
+            "body": body
+        }
+
     def funcs_simple(self, void_kw, id, lpar, rpar, lbracket, vars, body, rbracket, semicolon):
         return {
             "type": "funcs_simple",
