@@ -7,7 +7,6 @@ class VirtualMachine:
         self.function_directory = function_directory            # Directorio de funciones y variables
         self.constants_table = constants_table                  # Tabla de constantes
         
-        
         # Variables gloables de la máquina virtual
         self.current_scope = "global"                           # Ámbito actual (scope) de ejecución
         self.instruction_pointer = 0                            # Puntero de instrucción (índice del cuádruplo actual)
@@ -250,7 +249,7 @@ class VirtualMachine:
                     if cond is not None and cond == False:
 
                         # Validación: Si el salto está fuera de rango, se lanza un error
-                        if not (0 <= result < len(self.quadruples)):
+                        if not (0 <= result < (len(self.quadruples) + 1)):
                             raise IndexError(f"Error: IP={result} se encuentra fuera de rango permitido")
                         
                         # Actualización del puntero de instrucción al cuádruplo de destino
@@ -372,7 +371,7 @@ class VirtualMachine:
                     # Se actualizan los componentes de la máquina virtual con el contexto restaurado
                     self.instruction_pointer = context['ip']
                     self.current_scope = context['scope']
-                    self.current_local_memory = context['local_memory']
+                    self.current_local_memory = context['local_memory'] 
                     jumped = True
 
                 case _: # Operación no reconocida (Error)

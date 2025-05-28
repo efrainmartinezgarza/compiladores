@@ -1,21 +1,17 @@
-program myProgram;
-var result, fact: int;
-
-void factorial(n: int) [ var a: int; {
-    if (n < 2) {
-        fact = 1;
-    } else {
-        factorial(n - 1);
-        fact = n * fact;
-    };
-}];
+program fibMini;
+var a, b, c, i: int;
 
 main {
-    fact = 0;
-    factorial(5);
-    print(fact);
+  a = 0; b = 1;
+  i = 0;
+  while (i < 5) do {
+    print(a);
+    c = a + b;
+    a = b;
+    b = c;
+    i = i + 1;
+  };
 
-    factorial(3);
-    print(fact);
+  print("Fin");
 }
 end

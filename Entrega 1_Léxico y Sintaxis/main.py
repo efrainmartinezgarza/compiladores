@@ -29,7 +29,7 @@ MAIN_PATH = Path(__file__).parent
 
 # Uso de rutas relativas para acceder a archivos externos.
 GRAMMAR_PATH = MAIN_PATH / "grammar.lark"
-TEST_PROGRAM_PATH = MAIN_PATH / "Pruebas/test_program.txt"
+TEST_PROGRAM_PATH = MAIN_PATH / "Pruebas/test_program7.txt"
 
 # load_grammar_parser: Función para abrir y procesar el archivo de gramática del lenguaje BabyDuck.
 def load_grammar_parser():

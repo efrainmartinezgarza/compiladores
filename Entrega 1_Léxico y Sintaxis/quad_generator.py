@@ -3,7 +3,7 @@
 from semantic_cube import SemanticCube
 class QuadGenerator:
 
-    debug_mode = True
+    debug_mode = False
 
     def __init__(self, memory_manager, directory):
         self.pilaOperandos = []        # Pila de operandos
