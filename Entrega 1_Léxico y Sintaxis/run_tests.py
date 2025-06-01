@@ -63,8 +63,8 @@ def analyze_file(file_path):
         checker = None
 
     # Capturar salida para guardarla en archivo
-    output_capture = StringIO()
-    sys.stdout = output_capture
+    output_capture = StringIO() # Creación de un buffer para capturar la salida
+    sys.stdout = output_capture # Redireccionamiento al buffer
 
     # Primero, imprimir el código original al buffer de captura
     print("Código original:")

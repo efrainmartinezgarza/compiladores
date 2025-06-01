@@ -1,40 +1,24 @@
-/*Prueba: Estructuras anidadas*/
-
-program TestComplexStructure;
+program Simple;
 var
-  i, j, k_val : int;
-  f_val : float;
+  x : int;
 
-void NestedFunc(x : int) [
+void SquareAndCheck(num : int) [
   var
-    y : int;
+    sq : int;
   {
-    y = x * x;
-    if (y > 100) {
-      print("Cuadrado grande: ", y);
+    sq = num * num;
+    if (sq > 50) {
+      print("Grande: ", sq);
     } else {
-      print("Cuadrado pequenio: ", y);
+      print("Pequenio: ", sq);
     };
   }
 ];
 
-main
-{
-  i = 0;
-  f_val = 10.5;
-  while (i < 3) do {
-    j = i + 1;
-    k_val = (j * 10) / 2;
-    if (k_val != (i+1)*5) {
-        print("Error en el cálculo.");
-    };
-    NestedFunc(k_val - i);
-    i = i + 1;
-    print("Ciclo ", i, " f_val is ", f_val);
-  };
-  f_val = f_val * -2.0;
-  print("Final f_val: ", f_val);
+main {
+  x = 5;
+  SquareAndCheck(x);
+  x = 3;
+  SquareAndCheck(x);
 }
 end
-
-

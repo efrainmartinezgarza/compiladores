@@ -3,46 +3,30 @@
 
 Código original:
 ------------------------------
-/*Prueba: Estructuras anidadas*/
-
-program TestComplexStructure;
+program Simple;
 var
-  i, j, k_val : int;
-  f_val : float;
+  x : int;
 
-void NestedFunc(x : int) [
+void SquareAndCheck(num : int) [
   var
-    y : int;
+    sq : int;
   {
-    y = x * x;
-    if (y > 100) {
-      print("Cuadrado grande: ", y);
+    sq = num * num;
+    if (sq > 50) {
+      print("Grande: ", sq);
     } else {
-      print("Cuadrado pequenio: ", y);
+      print("Pequenio: ", sq);
     };
   }
 ];
 
-main
-{
-  i = 0;
-  f_val = 10.5;
-  while (i < 3) do {
-    j = i + 1;
-    k_val = (j * 10) / 2;
-    if (k_val != (i+1)*5) {
-        print("Error en el cÃ¡lculo.");
-    };
-    NestedFunc(k_val - i);
-    i = i + 1;
-    print("Ciclo ", i, " f_val is ", f_val);
-  };
-  f_val = f_val * -2.0;
-  print("Final f_val: ", f_val);
+main {
+  x = 5;
+  SquareAndCheck(x);
+  x = 3;
+  SquareAndCheck(x);
 }
 end
-
-
 
 
 --------------------------------------------------
@@ -52,53 +36,45 @@ Tokens encontrados:
 Token            |   Carácter
 ------------------------------
 PROGRAM_KWORD    | 'program' 
-ID               | 'TestComplexStructure'
+ID               | 'Simple'  
 SEMICOLON        | ';'       
 VAR_KWORD        | 'var'     
-ID               | 'i'       
-COMMA            | ','       
-ID               | 'j'       
-COMMA            | ','       
-ID               | 'k_val'   
+ID               | 'x'       
 COLON            | ':'       
 INT_KWORD        | 'int'     
 SEMICOLON        | ';'       
-ID               | 'f_val'   
-COLON            | ':'       
-FLOAT_KWORD      | 'float'   
-SEMICOLON        | ';'       
 VOID_KWORD       | 'void'    
-ID               | 'NestedFunc'
+ID               | 'SquareAndCheck'
 L_PARENTHESIS    | '('       
-ID               | 'x'       
+ID               | 'num'     
 COLON            | ':'       
 INT_KWORD        | 'int'     
 R_PARENTHESIS    | ')'       
 L_BRACKET        | '['       
 VAR_KWORD        | 'var'     
-ID               | 'y'       
+ID               | 'sq'      
 COLON            | ':'       
 INT_KWORD        | 'int'     
 SEMICOLON        | ';'       
 L_CURLY_BRACE    | '{'       
-ID               | 'y'       
+ID               | 'sq'      
 EQUAL            | '='       
-ID               | 'x'       
+ID               | 'num'     
 MULT_SIGN        | '*'       
-ID               | 'x'       
+ID               | 'num'     
 SEMICOLON        | ';'       
 IF_KWORD         | 'if'      
 L_PARENTHESIS    | '('       
-ID               | 'y'       
+ID               | 'sq'      
 GREATER_THAN     | '>'       
-CTE              | '100'     
+CTE              | '50'      
 R_PARENTHESIS    | ')'       
 L_CURLY_BRACE    | '{'       
 PRINT_KWORD      | 'print'   
 L_PARENTHESIS    | '('       
-STRING           | '"Cuadrado grande: "'
+STRING           | '"Grande: "'
 COMMA            | ','       
-ID               | 'y'       
+ID               | 'sq'      
 R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
 R_CURLY_BRACE    | '}'       
@@ -106,9 +82,9 @@ ELSE_KWORD       | 'else'
 L_CURLY_BRACE    | '{'       
 PRINT_KWORD      | 'print'   
 L_PARENTHESIS    | '('       
-STRING           | '"Cuadrado pequenio: "'
+STRING           | '"Pequenio: "'
 COMMA            | ','       
-ID               | 'y'       
+ID               | 'sq'      
 R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
 R_CURLY_BRACE    | '}'       
@@ -118,96 +94,22 @@ R_BRACKET        | ']'
 SEMICOLON        | ';'       
 MAIN_KWORD       | 'main'    
 L_CURLY_BRACE    | '{'       
-ID               | 'i'       
+ID               | 'x'       
 EQUAL            | '='       
-CTE              | '0'       
-SEMICOLON        | ';'       
-ID               | 'f_val'   
-EQUAL            | '='       
-CTE              | '10.5'    
-SEMICOLON        | ';'       
-WHILE_KWORD      | 'while'   
-L_PARENTHESIS    | '('       
-ID               | 'i'       
-LESS_THAN        | '<'       
-CTE              | '3'       
-R_PARENTHESIS    | ')'       
-DO_KWORD         | 'do'      
-L_CURLY_BRACE    | '{'       
-ID               | 'j'       
-EQUAL            | '='       
-ID               | 'i'       
-PLUS             | '+'       
-CTE              | '1'       
-SEMICOLON        | ';'       
-ID               | 'k_val'   
-EQUAL            | '='       
-L_PARENTHESIS    | '('       
-ID               | 'j'       
-MULT_SIGN        | '*'       
-CTE              | '10'      
-R_PARENTHESIS    | ')'       
-DIV_SIGN         | '/'       
-CTE              | '2'       
-SEMICOLON        | ';'       
-IF_KWORD         | 'if'      
-L_PARENTHESIS    | '('       
-ID               | 'k_val'   
-NOT_EQUAL        | '!='      
-L_PARENTHESIS    | '('       
-ID               | 'i'       
-PLUS             | '+'       
-CTE              | '1'       
-R_PARENTHESIS    | ')'       
-MULT_SIGN        | '*'       
 CTE              | '5'       
-R_PARENTHESIS    | ')'       
-L_CURLY_BRACE    | '{'       
-PRINT_KWORD      | 'print'   
+SEMICOLON        | ';'       
+ID               | 'SquareAndCheck'
 L_PARENTHESIS    | '('       
-STRING           | '"Error en el cÃ¡lculo."'
+ID               | 'x'       
 R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
-R_CURLY_BRACE    | '}'       
-SEMICOLON        | ';'       
-ID               | 'NestedFunc'
-L_PARENTHESIS    | '('       
-ID               | 'k_val'   
-MINUS            | '-'       
-ID               | 'i'       
-R_PARENTHESIS    | ')'       
-SEMICOLON        | ';'       
-ID               | 'i'       
+ID               | 'x'       
 EQUAL            | '='       
-ID               | 'i'       
-PLUS             | '+'       
-CTE              | '1'       
+CTE              | '3'       
 SEMICOLON        | ';'       
-PRINT_KWORD      | 'print'   
+ID               | 'SquareAndCheck'
 L_PARENTHESIS    | '('       
-STRING           | '"Ciclo "'
-COMMA            | ','       
-ID               | 'i'       
-COMMA            | ','       
-STRING           | '" f_val is "'
-COMMA            | ','       
-ID               | 'f_val'   
-R_PARENTHESIS    | ')'       
-SEMICOLON        | ';'       
-R_CURLY_BRACE    | '}'       
-SEMICOLON        | ';'       
-ID               | 'f_val'   
-EQUAL            | '='       
-ID               | 'f_val'   
-MULT_SIGN        | '*'       
-MINUS            | '-'       
-CTE              | '2.0'     
-SEMICOLON        | ';'       
-PRINT_KWORD      | 'print'   
-L_PARENTHESIS    | '('       
-STRING           | '"Final f_val: "'
-COMMA            | ','       
-ID               | 'f_val'   
+ID               | 'x'       
 R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
 R_CURLY_BRACE    | '}'       
@@ -218,34 +120,26 @@ END_KWORD        | 'end'
 ------------------------------
 program_vars_funcs
   program
-  TestComplexStructure
+  Simple
   ;
-  vars_multiple_ids
+  vars_one_id
     var
-    i
-    ,
-    j
-    ,
-    k_val
+    x
     :
     type_int	int
     ;
-    f_val
-    :
-    type_float	float
-    ;
   funcs_id
     void
-    NestedFunc
+    SquareAndCheck
     (
-    x
+    num
     :
     type_int	int
     )
     [
     vars_one_id
       var
-      y
+      sq
       :
       type_int	int
       ;
@@ -253,15 +147,15 @@ program_vars_funcs
       {
       statement
         assign
-          y
+          sq
           =
           expression_simple
             exp_simple
               term_mult_sign
                 term_simple
-                  factor_id	x
+                  factor_id	num
                 *
-                factor_id	x
+                factor_id	num
           ;
       statement
         condition_if_else
@@ -270,11 +164,11 @@ program_vars_funcs
           expression_greater_than
             exp_simple
               term_simple
-                factor_id	y
+                factor_id	sq
             >
             exp_simple
               term_simple
-                factor_cte	100
+                factor_cte	50
           )
           body_statement
             {
@@ -282,12 +176,12 @@ program_vars_funcs
               print_multiple_expressions
                 print
                 (
-                "Cuadrado grande: "
+                "Grande: "
                 ,
                 expression_simple
                   exp_simple
                     term_simple
-                      factor_id	y
+                      factor_id	sq
                 )
                 ;
             }
@@ -298,12 +192,12 @@ program_vars_funcs
               print_multiple_expressions
                 print
                 (
-                "Cuadrado pequenio: "
+                "Pequenio: "
                 ,
                 expression_simple
                   exp_simple
                     term_simple
-                      factor_id	y
+                      factor_id	sq
                 )
                 ;
             }
@@ -316,181 +210,40 @@ program_vars_funcs
     {
     statement
       assign
-        i
+        x
         =
         expression_simple
           exp_simple
             term_simple
-              factor_cte	0
+              factor_cte	5
+        ;
+    statement
+      f_call_one_expression
+        SquareAndCheck
+        (
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	x
+        )
         ;
     statement
       assign
-        f_val
+        x
         =
         expression_simple
-          exp_simple
-            term_simple
-              factor_cte	10.5
-        ;
-    statement
-      cycle
-        while
-        (
-        expression_less_than
-          exp_simple
-            term_simple
-              factor_id	i
-          <
           exp_simple
             term_simple
               factor_cte	3
-        )
-        do
-        body_statement
-          {
-          statement
-            assign
-              j
-              =
-              expression_simple
-                exp_plus
-                  exp_simple
-                    term_simple
-                      factor_id	i
-                  +
-                  term_simple
-                    factor_cte	1
-              ;
-          statement
-            assign
-              k_val
-              =
-              expression_simple
-                exp_simple
-                  term_div_sign
-                    term_simple
-                      factor_expression
-                        (
-                        expression_simple
-                          exp_simple
-                            term_mult_sign
-                              term_simple
-                                factor_id	j
-                              *
-                              factor_cte	10
-                        )
-                    /
-                    factor_cte	2
-              ;
-          statement
-            condition_if
-              if
-              (
-              expression_not_equal
-                exp_simple
-                  term_simple
-                    factor_id	k_val
-                !=
-                exp_simple
-                  term_mult_sign
-                    term_simple
-                      factor_expression
-                        (
-                        expression_simple
-                          exp_plus
-                            exp_simple
-                              term_simple
-                                factor_id	i
-                            +
-                            term_simple
-                              factor_cte	1
-                        )
-                    *
-                    factor_cte	5
-              )
-              body_statement
-                {
-                statement
-                  print_string
-                    print
-                    (
-                    "Error en el cÃ¡lculo."
-                    )
-                    ;
-                }
-              ;
-          statement
-            f_call_one_expression
-              NestedFunc
-              (
-              expression_simple
-                exp_minus
-                  exp_simple
-                    term_simple
-                      factor_id	k_val
-                  -
-                  term_simple
-                    factor_id	i
-              )
-              ;
-          statement
-            assign
-              i
-              =
-              expression_simple
-                exp_plus
-                  exp_simple
-                    term_simple
-                      factor_id	i
-                  +
-                  term_simple
-                    factor_cte	1
-              ;
-          statement
-            print_multiple_expressions
-              print
-              (
-              "Ciclo "
-              ,
-              expression_simple
-                exp_simple
-                  term_simple
-                    factor_id	i
-              ,
-              " f_val is "
-              ,
-              expression_simple
-                exp_simple
-                  term_simple
-                    factor_id	f_val
-              )
-              ;
-          }
         ;
     statement
-      assign
-        f_val
-        =
-        expression_simple
-          exp_simple
-            term_mult_sign
-              term_simple
-                factor_id	f_val
-              *
-              factor_minus
-                -
-                factor_cte	2.0
-        ;
-    statement
-      print_multiple_expressions
-        print
+      f_call_one_expression
+        SquareAndCheck
         (
-        "Final f_val: "
-        ,
         expression_simple
           exp_simple
             term_simple
-              factor_id	f_val
+              factor_id	x
         )
         ;
     }
@@ -500,7 +253,7 @@ program_vars_funcs
 
 Árbol transformado (AST):
 ------------------------------
-{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'TestComplexStructure'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'i'}, {'type': 'id', 'value': 'j'}, {'type': 'id', 'value': 'k_val'}], 'type': {'type': 'type_int', 'value': 'int'}}, {'ids': [{'type': 'id', 'value': 'f_val'}], 'type': {'type': 'type_float', 'value': 'float'}}]}, 'funcs': [{'type': 'funcs_id', 'funcs_name': {'type': 'id', 'value': 'NestedFunc'}, 'param': {'type': 'id', 'value': 'x'}, 'param_type': {'type': 'type_int', 'value': 'int'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'y'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'x': {'type': 'int', 'assigned': True, 'address': 1000}, 'y': {'type': 'int', 'assigned': True, 'address': 1001}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'y'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}, Token('MULT_SIGN', '*'), {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}]}}}}}, {'type': 'statement', 'value': {'type': 'condition_if_else', 'condition': {'type': 'expression_greater_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}, Token('GREATER_THAN', '>'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 100}}}]}, 'body1': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'string', 'value': 'Cuadrado grande: '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}}]}}]}, 'body2': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'string', 'value': 'Cuadrado pequenio: '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}}]}}]}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'f_val'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 10.5}}}}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('LESS_THAN', '<'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 3}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'j'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'k_val'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'j'}}}, Token('MULT_SIGN', '*'), {'type': 'factor_cte', 'value': 10}]}}}}}, Token('DIV_SIGN', '/'), {'type': 'factor_cte', 'value': 2}]}}}}}, {'type': 'statement', 'value': {'type': 'condition_if', 'condition': {'type': 'expression_not_equal', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'k_val'}}}}, Token('NOT_EQUAL', '!='), {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}, Token('MULT_SIGN', '*'), {'type': 'factor_cte', 'value': 5}]}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Error en el cÃ¡lculo.'}}}]}}}, {'type': 'statement', 'value': {'type': 'f_call_one_expression', 'function': {'type': 'id', 'value': 'NestedFunc'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'k_val'}}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}, {'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'string', 'value': 'Ciclo '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}}, {'type': 'string', 'value': ' f_val is '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'f_val'}}}}}]}}]}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'f_val'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'f_val'}}}, Token('MULT_SIGN', '*'), {'type': 'factor_minus', 'value': {'type': 'factor_cte', 'value': 2.0}}]}}}}}, {'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'string', 'value': 'Final f_val: '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'f_val'}}}}}]}}]}}
+{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'Simple'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'x'}, 'type': {'type': 'type_int', 'value': 'int'}}]}, 'funcs': [{'type': 'funcs_id', 'funcs_name': {'type': 'id', 'value': 'SquareAndCheck'}, 'param': {'type': 'id', 'value': 'num'}, 'param_type': {'type': 'type_int', 'value': 'int'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'sq'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'num': {'type': 'int', 'assigned': True, 'address': 1000}, 'sq': {'type': 'int', 'assigned': True, 'address': 1001}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'sq'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'num'}}}, Token('MULT_SIGN', '*'), {'type': 'factor_id', 'value': {'type': 'id', 'value': 'num'}}]}}}}}, {'type': 'statement', 'value': {'type': 'condition_if_else', 'condition': {'type': 'expression_greater_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'sq'}}}}, Token('GREATER_THAN', '>'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 50}}}]}, 'body1': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'string', 'value': 'Grande: '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'sq'}}}}}]}}]}, 'body2': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'string', 'value': 'Pequenio: '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'sq'}}}}}]}}]}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 5}}}}}}, {'type': 'statement', 'value': {'type': 'f_call_one_expression', 'function': {'type': 'id', 'value': 'SquareAndCheck'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 3}}}}}}, {'type': 'statement', 'value': {'type': 'f_call_one_expression', 'function': {'type': 'id', 'value': 'SquareAndCheck'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}}}]}}
 
 
 Directorio de funciones y variables:
@@ -508,19 +261,16 @@ Directorio de funciones y variables:
 Scope: global
 Start Point: 0
   Variables:
-    i : int | Dirección: 3000
-    j : int | Dirección: 3001
-    k_val : int | Dirección: 3002
-    f_val : float | Dirección: 4000
-  Recursos: temporals(int=9, float=1), vars(int=3, float=1)
+    x : int | Dirección: 3000
+  Recursos: vars(int=1)
 
-Scope: NestedFunc
+Scope: SquareAndCheck
 Start Point: 1
   Parámetros:
-    x : int
+    num : int
   Variables:
-    x : int | Dirección: 1000
-    y : int | Dirección: 1001
+    num : int | Dirección: 1000
+    sq : int | Dirección: 1001
   Recursos: temporals(int=2), vars(int=1), params(int=1)
 
 
@@ -541,56 +291,22 @@ Cuádruplos generados:
 11  17                                         
 12  16                                         
 13  7          7001                  3000      
-14  7          8000                  4000      
-15  6          3000       7002       5002      
-16  11         5002                  40        
-17  1          3000       7003       5003      
-18  7          5003                  3001      
-19  3          3001       7004       5004      
-20  4          5004       7005       5005      
-21  7          5005                  3002      
-22  1          3000       7003       5006      
-23  3          5006       7006       5007      
-24  8          3002       5007       5008      
-25  11         5008                  28        
-26  9                                9002      
-27  17                                         
-28  13         NestedFunc                      
-29  2          3002       3000       5009      
-30  15         5009                  p1        
-31  14         NestedFunc                      
-32  1          3000       7003       5010      
-33  7          5010                  3000      
-34  9                                9003      
-35  9                                3000      
-36  9                                9004      
-37  9                                4000      
-38  17                                         
-39  10                               15        
-40  3          4000       8001       6000      
-41  7          6000                  4000      
-42  9                                9005      
-43  9                                4000      
-44  17                                         
+14  13         SquareAndCheck                      
+15  15         3000                  p1        
+16  14         SquareAndCheck                      
+17  7          7002                  3000      
+18  13         SquareAndCheck                      
+19  15         3000                  p1        
+20  14         SquareAndCheck                      
 
 
 Tabla de constantes:
 ------------------------------
-Valor: 100        | Tipo: int        | Dirección: 7000      
-Valor: Cuadrado grande:  | Tipo: string     | Dirección: 9000      
-Valor: Cuadrado pequenio:  | Tipo: string     | Dirección: 9001      
-Valor: 0          | Tipo: int        | Dirección: 7001      
-Valor: 10.5       | Tipo: float      | Dirección: 8000      
+Valor: 50         | Tipo: int        | Dirección: 7000      
+Valor: Grande:    | Tipo: string     | Dirección: 9000      
+Valor: Pequenio:  | Tipo: string     | Dirección: 9001      
+Valor: 5          | Tipo: int        | Dirección: 7001      
 Valor: 3          | Tipo: int        | Dirección: 7002      
-Valor: 1          | Tipo: int        | Dirección: 7003      
-Valor: 10         | Tipo: int        | Dirección: 7004      
-Valor: 2          | Tipo: int        | Dirección: 7005      
-Valor: 5          | Tipo: int        | Dirección: 7006      
-Valor: Error en el cÃ¡lculo. | Tipo: string     | Dirección: 9002      
-Valor: Ciclo      | Tipo: string     | Dirección: 9003      
-Valor:  f_val is  | Tipo: string     | Dirección: 9004      
-Valor: 2.0        | Tipo: float      | Dirección: 8001      
-Valor: Final f_val:  | Tipo: string     | Dirección: 9005      
 
 
 Uso de memoria:
@@ -600,26 +316,21 @@ INT -> Rango: 1000 - 1999 | Dirección actual: 1002
 FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2000
 -----------------------------------------------------------
 GLOBAL
-INT -> Rango: 3000 - 3999 | Dirección actual: 3003
-FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4001
+INT -> Rango: 3000 - 3999 | Dirección actual: 3001
+FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4000
 -----------------------------------------------------------
 TEMPORAL
-INT -> Rango: 5000 - 5999 | Dirección actual: 5011
-FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6001
+INT -> Rango: 5000 - 5999 | Dirección actual: 5002
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
 -----------------------------------------------------------
 CONSTANTE
-INT -> Rango: 7000 - 7999 | Dirección actual: 7007
-FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8002
-STRING -> Rango: 9000 - 9999 | Dirección actual: 9006
+INT -> Rango: 7000 - 7999 | Dirección actual: 7003
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9002
 -----------------------------------------------------------
 
 
 Salida de la Máquina Virtual:
 ------------------------------
-Cuadrado pequenio: 25
-Ciclo 1 f_val is 10.5
-Cuadrado pequenio: 81
-Ciclo 2 f_val is 10.5
-Cuadrado grande: 169
-Ciclo 3 f_val is 10.5
-Final f_val: 21.0
+Pequenio: 25
+Pequenio: 9
