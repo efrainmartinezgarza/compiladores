@@ -4,8 +4,8 @@
 %ignore WS
 %import common.C_COMMENT
 %ignore C_COMMENT 
-%import common.CPP_COMMENT // Added for C++-style comments
-%ignore CPP_COMMENT // Added to ignore C++-style comments
+%import common.CPP_COMMENT 
+%ignore CPP_COMMENT 
 
 // Palabras clave
 // -----------------------------------------------------------------
