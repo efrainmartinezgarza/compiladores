@@ -129,7 +129,7 @@ class VirtualMachine:
             '/': 4,
             '>': 5,
             '<': 6,
-            '=': 7, # Note: This is likely assignment, not comparison equality. Comparison is usually == or similar.
+            '=': 7, 
             '!=': 8,
             'print': 9,
             'goTo': 10,
@@ -139,7 +139,7 @@ class VirtualMachine:
             'goSub': 14,
             'param': 15,
             'ENDFUNC': 16,
-            'PRINT_NL': 17 # Added for newline after print statements
+            'PRINT_NL': 17 
         }
 
         # Si se recibió un número entero, solo se verifica si es un ID válido

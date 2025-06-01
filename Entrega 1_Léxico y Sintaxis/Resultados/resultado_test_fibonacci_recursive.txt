@@ -5,37 +5,37 @@ Código original:
 ------------------------------
 program FibonacciRecursive;
 var
-  i, n, fib_val : int; // Removed temp_fib_n_minus_1, temp_fib_n_minus_2 from global scope
+  i, n, fib_val : int; 
 
-// Calculates Fibonacci of x and stores it in global fib_val
 void CalculateFib(x : int) [
-  var // Added var block for local variables
+  var
     local_temp_fib_n_minus_1, local_temp_fib_n_minus_2 : int;
   {
     if (x < 2) {
       fib_val = x; // F(0) = 0, F(1) = 1
     } else {
-      // Calculate Fib(x-1)
+      
+      // CÃ¡lculo de Fib(x-1)
       CalculateFib(x-1);
       local_temp_fib_n_minus_1 = fib_val; // Use local variable
 
-      // Calculate Fib(x-2)
+      // CÃ¡lculo de Fib(x-2)
       CalculateFib(x-2);
       local_temp_fib_n_minus_2 = fib_val; // Use local variable
 
-      fib_val = local_temp_fib_n_minus_1 + local_temp_fib_n_minus_2; // Use local variables for calculation
+      fib_val = local_temp_fib_n_minus_1 + local_temp_fib_n_minus_2; 
     };
   }
 ];
 
 main {
-  n = 10; // Calculate Fibonacci sequence up to F(9)
+  n = 10; 
   print("Recursive Fibonacci sequence up to F(9):");
 
   i = 0;
   while (i < n) do {
-    CalculateFib(i); // Calculate Fibonacci for the current number 'i'
-    print(fib_val);    // Print the calculated Fibonacci number
+    CalculateFib(i); 
+    print(fib_val);  
     i = i + 1;
   };
 }

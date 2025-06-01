@@ -3,7 +3,7 @@
 
 Código original:
 ------------------------------
-/* Test case for funcs_id (function with one parameter) */
+/*Prueba: funcs_id (function with one parameter) */
 
 program TestFuncWithOneParam;
 var

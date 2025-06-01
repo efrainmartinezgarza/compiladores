@@ -3,7 +3,7 @@
 
 Código original:
 ------------------------------
-/* Test case for assign, expression_simple, exp_plus, term_simple, factor_id, factor_cte (FLOAT) */
+/* Prueba: assign, expression_simple, exp_plus, term_simple, factor_id, factor_cte (FLOAT) */
 program TestAssignmentsAndExpressions;
 var
   numA : int;

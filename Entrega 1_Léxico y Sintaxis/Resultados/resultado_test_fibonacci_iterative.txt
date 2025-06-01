@@ -15,13 +15,11 @@ main {
 
   print("Iterative Fibonacci sequence up to F(", n-1,"):");
 
-  // Maneja F(0)
   if (n > 0) {
     print(a);
     i = i + 1;
   };
 
-  // Maneja F(1) en adelante
   while (i < n) do {
     print(b);
     temp = a + b;
