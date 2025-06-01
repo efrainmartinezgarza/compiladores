@@ -8,6 +8,7 @@ var
   n, i, result : int;
 
 main {
+
   n = 5;
   result = 1;
   i = 1;
@@ -17,7 +18,7 @@ main {
     i = i + 1;
   };
 
-  print("Factorial of ", n, " is ", result);
+  print("El factorial de ", n, " es ", result, ".");
 }
 end
 
@@ -80,13 +81,15 @@ R_CURLY_BRACE    | '}'
 SEMICOLON        | ';'       
 PRINT_KWORD      | 'print'   
 L_PARENTHESIS    | '('       
-STRING           | '"Factorial of "'
+STRING           | '"El factorial de "'
 COMMA            | ','       
 ID               | 'n'       
 COMMA            | ','       
-STRING           | '" is "'  
+STRING           | '" es "'  
 COMMA            | ','       
 ID               | 'result'  
+COMMA            | ','       
+STRING           | '"."'     
 R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
 R_CURLY_BRACE    | '}'       
@@ -190,19 +193,21 @@ program_vars
       print_multiple_expressions
         print
         (
-        "Factorial of "
+        "El factorial de "
         ,
         expression_simple
           exp_simple
             term_simple
               factor_id	n
         ,
-        " is "
+        " es "
         ,
         expression_simple
           exp_simple
             term_simple
               factor_id	result
+        ,
+        "."
         )
         ;
     }
@@ -212,7 +217,7 @@ program_vars
 
 Árbol transformado (AST):
 ------------------------------
-{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'FactorialInMain'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'n'}, {'type': 'id', 'value': 'i'}, {'type': 'id', 'value': 'result'}], 'type': {'type': 'type_int', 'value': 'int'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'n'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 5}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('LESS_THAN', '<'), {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'result'}}}, Token('MULT_SIGN', '*'), {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}]}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}}}, {'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'string', 'value': 'Factorial of '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}}, {'type': 'string', 'value': ' is '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'result'}}}}}]}}]}}
+{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'FactorialInMain'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'n'}, {'type': 'id', 'value': 'i'}, {'type': 'id', 'value': 'result'}], 'type': {'type': 'type_int', 'value': 'int'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'n'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 5}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('LESS_THAN', '<'), {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'result'}}}, Token('MULT_SIGN', '*'), {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}]}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}}}, {'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'string', 'value': 'El factorial de '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}}, {'type': 'string', 'value': ' es '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'result'}}}}}, {'type': 'string', 'value': '.'}]}}]}}
 
 
 Directorio de funciones y variables:
@@ -245,15 +250,17 @@ Cuádruplos generados:
 13  9                                3000      
 14  9                                9001      
 15  9                                3002      
-16  17                                         
+16  9                                9002      
+17  17                                         
 
 
 Tabla de constantes:
 ------------------------------
 Valor: 5          | Tipo: int        | Dirección: 7000      
 Valor: 1          | Tipo: int        | Dirección: 7001      
-Valor: Factorial of  | Tipo: string     | Dirección: 9000      
-Valor:  is        | Tipo: string     | Dirección: 9001      
+Valor: El factorial de  | Tipo: string     | Dirección: 9000      
+Valor:  es        | Tipo: string     | Dirección: 9001      
+Valor: .          | Tipo: string     | Dirección: 9002      
 
 
 Uso de memoria:
@@ -273,10 +280,10 @@ FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
 CONSTANTE
 INT -> Rango: 7000 - 7999 | Dirección actual: 7002
 FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
-STRING -> Rango: 9000 - 9999 | Dirección actual: 9002
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9003
 -----------------------------------------------------------
 
 
 Salida de la Máquina Virtual:
 ------------------------------
-Factorial of 5 is 120
+El factorial de 5 es 120.

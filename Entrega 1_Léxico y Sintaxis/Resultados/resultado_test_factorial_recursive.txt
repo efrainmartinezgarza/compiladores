@@ -25,7 +25,7 @@ main {
   n = 5;
   fact_result = 1; 
   RecursiveFact(n);
-  print("Factorial of ", n, " is ", fact_result);
+  print("El factorial de ", n, " es ", fact_result, ".");
 }
 end
 
@@ -113,13 +113,15 @@ R_PARENTHESIS    | ')'
 SEMICOLON        | ';'       
 PRINT_KWORD      | 'print'   
 L_PARENTHESIS    | '('       
-STRING           | '"Factorial of "'
+STRING           | '"El factorial de "'
 COMMA            | ','       
 ID               | 'n'       
 COMMA            | ','       
-STRING           | '" is "'  
+STRING           | '" es "'  
 COMMA            | ','       
 ID               | 'fact_result'
+COMMA            | ','       
+STRING           | '"."'     
 R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
 R_CURLY_BRACE    | '}'       
@@ -260,19 +262,21 @@ program_vars_funcs
       print_multiple_expressions
         print
         (
-        "Factorial of "
+        "El factorial de "
         ,
         expression_simple
           exp_simple
             term_simple
               factor_id	n
         ,
-        " is "
+        " es "
         ,
         expression_simple
           exp_simple
             term_simple
               factor_id	fact_result
+        ,
+        "."
         )
         ;
     }
@@ -282,7 +286,7 @@ program_vars_funcs
 
 Árbol transformado (AST):
 ------------------------------
-{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'RecursiveFactorial'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'n'}, {'type': 'id', 'value': 'fact_result'}], 'type': {'type': 'type_int', 'value': 'int'}}]}, 'funcs': [{'type': 'funcs_id', 'funcs_name': {'type': 'id', 'value': 'RecursiveFact'}, 'param': {'type': 'id', 'value': 'x'}, 'param_type': {'type': 'type_int', 'value': 'int'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'prev'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'x': {'type': 'int', 'assigned': True, 'address': 1000}, 'prev': {'type': 'int', 'assigned': True, 'address': 1001}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'condition_if_else', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('LESS_THAN', '<'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}}]}, 'body1': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'fact_result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}]}, 'body2': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'prev'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}, {'type': 'statement', 'value': {'type': 'f_call_one_expression', 'function': {'type': 'id', 'value': 'RecursiveFact'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'prev'}}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'fact_result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'fact_result'}}}, Token('MULT_SIGN', '*'), {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}]}}}}}]}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'n'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 5}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'fact_result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}, {'type': 'statement', 'value': {'type': 'f_call_one_expression', 'function': {'type': 'id', 'value': 'RecursiveFact'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}}}}, {'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'string', 'value': 'Factorial of '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}}, {'type': 'string', 'value': ' is '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'fact_result'}}}}}]}}]}}
+{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'RecursiveFactorial'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'n'}, {'type': 'id', 'value': 'fact_result'}], 'type': {'type': 'type_int', 'value': 'int'}}]}, 'funcs': [{'type': 'funcs_id', 'funcs_name': {'type': 'id', 'value': 'RecursiveFact'}, 'param': {'type': 'id', 'value': 'x'}, 'param_type': {'type': 'type_int', 'value': 'int'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'prev'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'x': {'type': 'int', 'assigned': True, 'address': 1000}, 'prev': {'type': 'int', 'assigned': True, 'address': 1001}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'condition_if_else', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('LESS_THAN', '<'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}}]}, 'body1': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'fact_result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}]}, 'body2': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'prev'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}, {'type': 'statement', 'value': {'type': 'f_call_one_expression', 'function': {'type': 'id', 'value': 'RecursiveFact'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'prev'}}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'fact_result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'fact_result'}}}, Token('MULT_SIGN', '*'), {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}]}}}}}]}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'n'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 5}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'fact_result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}, {'type': 'statement', 'value': {'type': 'f_call_one_expression', 'function': {'type': 'id', 'value': 'RecursiveFact'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}}}}, {'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'string', 'value': 'El factorial de '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}}, {'type': 'string', 'value': ' es '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'fact_result'}}}}}, {'type': 'string', 'value': '.'}]}}]}}
 
 
 Directorio de funciones y variables:
@@ -329,7 +333,8 @@ Cuádruplos generados:
 19  9                                3000      
 20  9                                9001      
 21  9                                3001      
-22  17                                         
+22  9                                9002      
+23  17                                         
 
 
 Tabla de constantes:
@@ -337,8 +342,9 @@ Tabla de constantes:
 Valor: 2          | Tipo: int        | Dirección: 7000      
 Valor: 1          | Tipo: int        | Dirección: 7001      
 Valor: 5          | Tipo: int        | Dirección: 7002      
-Valor: Factorial of  | Tipo: string     | Dirección: 9000      
-Valor:  is        | Tipo: string     | Dirección: 9001      
+Valor: El factorial de  | Tipo: string     | Dirección: 9000      
+Valor:  es        | Tipo: string     | Dirección: 9001      
+Valor: .          | Tipo: string     | Dirección: 9002      
 
 
 Uso de memoria:
@@ -358,10 +364,10 @@ FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
 CONSTANTE
 INT -> Rango: 7000 - 7999 | Dirección actual: 7003
 FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
-STRING -> Rango: 9000 - 9999 | Dirección actual: 9002
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9003
 -----------------------------------------------------------
 
 
 Salida de la Máquina Virtual:
 ------------------------------
-Factorial of 5 is 120
+El factorial de 5 es 120.

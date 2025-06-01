@@ -5,37 +5,32 @@ Código original:
 ------------------------------
 program FibonacciRecursive;
 var
-  i, n, fib_val : int; 
+  n, i, fib : int;
 
-void CalculateFib(x : int) [
+void fibo(x : int) [
   var
-    local_temp_fib_n_minus_1, local_temp_fib_n_minus_2 : int;
+    a, b : int;
   {
     if (x < 2) {
-      fib_val = x; // F(0) = 0, F(1) = 1
+      fib = x;
     } else {
-      
-      // CÃ¡lculo de Fib(x-1)
-      CalculateFib(x-1);
-      local_temp_fib_n_minus_1 = fib_val; // Use local variable
-
-      // CÃ¡lculo de Fib(x-2)
-      CalculateFib(x-2);
-      local_temp_fib_n_minus_2 = fib_val; // Use local variable
-
-      fib_val = local_temp_fib_n_minus_1 + local_temp_fib_n_minus_2; 
+      fibo(x - 1);
+      a = fib;
+      fibo(x - 2);
+      b = fib;
+      fib = a + b;
     };
   }
 ];
 
 main {
-  n = 10; 
-  print("Recursive Fibonacci sequence up to F(9):");
-
+  n = 9; 
+  print("Serie de Fibonacci desde F(0) hasta F(", n, "):");
+  
   i = 0;
-  while (i < n) do {
-    CalculateFib(i); 
-    print(fib_val);  
+  while (i < n + 1) do {  
+    fibo(i);
+    print(fib);
     i = i + 1;
   };
 }
@@ -52,16 +47,16 @@ PROGRAM_KWORD    | 'program'
 ID               | 'FibonacciRecursive'
 SEMICOLON        | ';'       
 VAR_KWORD        | 'var'     
-ID               | 'i'       
-COMMA            | ','       
 ID               | 'n'       
 COMMA            | ','       
-ID               | 'fib_val' 
+ID               | 'i'       
+COMMA            | ','       
+ID               | 'fib'     
 COLON            | ':'       
 INT_KWORD        | 'int'     
 SEMICOLON        | ';'       
 VOID_KWORD       | 'void'    
-ID               | 'CalculateFib'
+ID               | 'fibo'    
 L_PARENTHESIS    | '('       
 ID               | 'x'       
 COLON            | ':'       
@@ -69,9 +64,9 @@ INT_KWORD        | 'int'
 R_PARENTHESIS    | ')'       
 L_BRACKET        | '['       
 VAR_KWORD        | 'var'     
-ID               | 'local_temp_fib_n_minus_1'
+ID               | 'a'       
 COMMA            | ','       
-ID               | 'local_temp_fib_n_minus_2'
+ID               | 'b'       
 COLON            | ':'       
 INT_KWORD        | 'int'     
 SEMICOLON        | ';'       
@@ -83,40 +78,40 @@ LESS_THAN        | '<'
 CTE              | '2'       
 R_PARENTHESIS    | ')'       
 L_CURLY_BRACE    | '{'       
-ID               | 'fib_val' 
+ID               | 'fib'     
 EQUAL            | '='       
 ID               | 'x'       
 SEMICOLON        | ';'       
 R_CURLY_BRACE    | '}'       
 ELSE_KWORD       | 'else'    
 L_CURLY_BRACE    | '{'       
-ID               | 'CalculateFib'
+ID               | 'fibo'    
 L_PARENTHESIS    | '('       
 ID               | 'x'       
 MINUS            | '-'       
 CTE              | '1'       
 R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
-ID               | 'local_temp_fib_n_minus_1'
+ID               | 'a'       
 EQUAL            | '='       
-ID               | 'fib_val' 
+ID               | 'fib'     
 SEMICOLON        | ';'       
-ID               | 'CalculateFib'
+ID               | 'fibo'    
 L_PARENTHESIS    | '('       
 ID               | 'x'       
 MINUS            | '-'       
 CTE              | '2'       
 R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
-ID               | 'local_temp_fib_n_minus_2'
+ID               | 'b'       
 EQUAL            | '='       
-ID               | 'fib_val' 
+ID               | 'fib'     
 SEMICOLON        | ';'       
-ID               | 'fib_val' 
+ID               | 'fib'     
 EQUAL            | '='       
-ID               | 'local_temp_fib_n_minus_1'
+ID               | 'a'       
 PLUS             | '+'       
-ID               | 'local_temp_fib_n_minus_2'
+ID               | 'b'       
 SEMICOLON        | ';'       
 R_CURLY_BRACE    | '}'       
 SEMICOLON        | ';'       
@@ -127,11 +122,15 @@ MAIN_KWORD       | 'main'
 L_CURLY_BRACE    | '{'       
 ID               | 'n'       
 EQUAL            | '='       
-CTE              | '10'      
+CTE              | '9'       
 SEMICOLON        | ';'       
 PRINT_KWORD      | 'print'   
 L_PARENTHESIS    | '('       
-STRING           | '"Recursive Fibonacci sequence up to F(9):"'
+STRING           | '"Serie de Fibonacci desde F(0) hasta F("'
+COMMA            | ','       
+ID               | 'n'       
+COMMA            | ','       
+STRING           | '"):"'    
 R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
 ID               | 'i'       
@@ -143,17 +142,19 @@ L_PARENTHESIS    | '('
 ID               | 'i'       
 LESS_THAN        | '<'       
 ID               | 'n'       
+PLUS             | '+'       
+CTE              | '1'       
 R_PARENTHESIS    | ')'       
 DO_KWORD         | 'do'      
 L_CURLY_BRACE    | '{'       
-ID               | 'CalculateFib'
+ID               | 'fibo'    
 L_PARENTHESIS    | '('       
 ID               | 'i'       
 R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
 PRINT_KWORD      | 'print'   
 L_PARENTHESIS    | '('       
-ID               | 'fib_val' 
+ID               | 'fib'     
 R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
 ID               | 'i'       
@@ -176,17 +177,17 @@ program_vars_funcs
   ;
   vars_multiple_ids
     var
-    i
-    ,
     n
     ,
-    fib_val
+    i
+    ,
+    fib
     :
     type_int	int
     ;
   funcs_id
     void
-    CalculateFib
+    fibo
     (
     x
     :
@@ -195,9 +196,9 @@ program_vars_funcs
     [
     vars_multiple_ids
       var
-      local_temp_fib_n_minus_1
+      a
       ,
-      local_temp_fib_n_minus_2
+      b
       :
       type_int	int
       ;
@@ -220,7 +221,7 @@ program_vars_funcs
             {
             statement
               assign
-                fib_val
+                fib
                 =
                 expression_simple
                   exp_simple
@@ -233,7 +234,7 @@ program_vars_funcs
             {
             statement
               f_call_one_expression
-                CalculateFib
+                fibo
                 (
                 expression_simple
                   exp_minus
@@ -247,16 +248,16 @@ program_vars_funcs
                 ;
             statement
               assign
-                local_temp_fib_n_minus_1
+                a
                 =
                 expression_simple
                   exp_simple
                     term_simple
-                      factor_id	fib_val
+                      factor_id	fib
                 ;
             statement
               f_call_one_expression
-                CalculateFib
+                fibo
                 (
                 expression_simple
                   exp_minus
@@ -270,25 +271,25 @@ program_vars_funcs
                 ;
             statement
               assign
-                local_temp_fib_n_minus_2
+                b
                 =
                 expression_simple
                   exp_simple
                     term_simple
-                      factor_id	fib_val
+                      factor_id	fib
                 ;
             statement
               assign
-                fib_val
+                fib
                 =
                 expression_simple
                   exp_plus
                     exp_simple
                       term_simple
-                        factor_id	local_temp_fib_n_minus_1
+                        factor_id	a
                     +
                     term_simple
-                      factor_id	local_temp_fib_n_minus_2
+                      factor_id	b
                 ;
             }
           ;
@@ -305,13 +306,20 @@ program_vars_funcs
         expression_simple
           exp_simple
             term_simple
-              factor_cte	10
+              factor_cte	9
         ;
     statement
-      print_string
+      print_multiple_expressions
         print
         (
-        "Recursive Fibonacci sequence up to F(9):"
+        "Serie de Fibonacci desde F(0) hasta F("
+        ,
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	n
+        ,
+        "):"
         )
         ;
     statement
@@ -332,16 +340,20 @@ program_vars_funcs
             term_simple
               factor_id	i
           <
-          exp_simple
+          exp_plus
+            exp_simple
+              term_simple
+                factor_id	n
+            +
             term_simple
-              factor_id	n
+              factor_cte	1
         )
         do
         body_statement
           {
           statement
             f_call_one_expression
-              CalculateFib
+              fibo
               (
               expression_simple
                 exp_simple
@@ -356,7 +368,7 @@ program_vars_funcs
               expression_simple
                 exp_simple
                   term_simple
-                    factor_id	fib_val
+                    factor_id	fib
               )
               ;
           statement
@@ -381,7 +393,7 @@ program_vars_funcs
 
 Árbol transformado (AST):
 ------------------------------
-{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'FibonacciRecursive'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'i'}, {'type': 'id', 'value': 'n'}, {'type': 'id', 'value': 'fib_val'}], 'type': {'type': 'type_int', 'value': 'int'}}]}, 'funcs': [{'type': 'funcs_id', 'funcs_name': {'type': 'id', 'value': 'CalculateFib'}, 'param': {'type': 'id', 'value': 'x'}, 'param_type': {'type': 'type_int', 'value': 'int'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'local_temp_fib_n_minus_1'}, {'type': 'id', 'value': 'local_temp_fib_n_minus_2'}], 'type': {'type': 'type_int', 'value': 'int'}}], 'x': {'type': 'int', 'assigned': True, 'address': 1000}, 'local_temp_fib_n_minus_1': {'type': 'int', 'assigned': True, 'address': 1001}, 'local_temp_fib_n_minus_2': {'type': 'int', 'assigned': True, 'address': 1002}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'condition_if_else', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('LESS_THAN', '<'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}}]}, 'body1': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'fib_val'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}}}]}, 'body2': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'f_call_one_expression', 'function': {'type': 'id', 'value': 'CalculateFib'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'local_temp_fib_n_minus_1'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'fib_val'}}}}}}}, {'type': 'statement', 'value': {'type': 'f_call_one_expression', 'function': {'type': 'id', 'value': 'CalculateFib'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'local_temp_fib_n_minus_2'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'fib_val'}}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'fib_val'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'local_temp_fib_n_minus_1'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'local_temp_fib_n_minus_2'}}}]}}}}]}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'n'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 10}}}}}}, {'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Recursive Fibonacci sequence up to F(9):'}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('LESS_THAN', '<'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'f_call_one_expression', 'function': {'type': 'id', 'value': 'CalculateFib'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'fib_val'}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}}}]}}
+{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'FibonacciRecursive'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'n'}, {'type': 'id', 'value': 'i'}, {'type': 'id', 'value': 'fib'}], 'type': {'type': 'type_int', 'value': 'int'}}]}, 'funcs': [{'type': 'funcs_id', 'funcs_name': {'type': 'id', 'value': 'fibo'}, 'param': {'type': 'id', 'value': 'x'}, 'param_type': {'type': 'type_int', 'value': 'int'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'a'}, {'type': 'id', 'value': 'b'}], 'type': {'type': 'type_int', 'value': 'int'}}], 'x': {'type': 'int', 'assigned': True, 'address': 1000}, 'a': {'type': 'int', 'assigned': True, 'address': 1001}, 'b': {'type': 'int', 'assigned': True, 'address': 1002}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'condition_if_else', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('LESS_THAN', '<'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}}]}, 'body1': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'fib'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}}}]}, 'body2': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'f_call_one_expression', 'function': {'type': 'id', 'value': 'fibo'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'a'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'fib'}}}}}}}, {'type': 'statement', 'value': {'type': 'f_call_one_expression', 'function': {'type': 'id', 'value': 'fibo'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'b'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'fib'}}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'fib'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}}]}}}}]}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'n'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 9}}}}}}, {'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'string', 'value': 'Serie de Fibonacci desde F(0) hasta F('}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}}, {'type': 'string', 'value': '):'}]}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('LESS_THAN', '<'), {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'f_call_one_expression', 'function': {'type': 'id', 'value': 'fibo'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'fib'}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}}}]}}
 
 
 Directorio de funciones y variables:
@@ -389,19 +401,19 @@ Directorio de funciones y variables:
 Scope: global
 Start Point: 0
   Variables:
-    i : int | Dirección: 3000
-    n : int | Dirección: 3001
-    fib_val : int | Dirección: 3002
-  Recursos: temporals(int=2), vars(int=3)
+    n : int | Dirección: 3000
+    i : int | Dirección: 3001
+    fib : int | Dirección: 3002
+  Recursos: temporals(int=3), vars(int=3)
 
-Scope: CalculateFib
+Scope: fibo
 Start Point: 1
   Parámetros:
     x : int
   Variables:
     x : int | Dirección: 1000
-    local_temp_fib_n_minus_1 : int | Dirección: 1001
-    local_temp_fib_n_minus_2 : int | Dirección: 1002
+    a : int | Dirección: 1001
+    b : int | Dirección: 1002
   Recursos: temporals(int=4), vars(int=2), params(int=1)
 
 
@@ -413,41 +425,45 @@ Cuádruplos generados:
 2   11         5000                  5         
 3   7          1000                  3002      
 4   10                               17        
-5   13         CalculateFib                      
+5   13         fibo                            
 6   2          1000       7001       5001      
 7   15         5001                  p1        
-8   14         CalculateFib                      
+8   14         fibo                            
 9   7          3002                  1001      
-10  13         CalculateFib                      
+10  13         fibo                            
 11  2          1000       7000       5002      
 12  15         5002                  p1        
-13  14         CalculateFib                      
+13  14         fibo                            
 14  7          3002                  1002      
 15  1          1001       1002       5003      
 16  7          5003                  3002      
 17  16                                         
-18  7          7002                  3001      
+18  7          7002                  3000      
 19  9                                9000      
-20  17                                         
-21  7          7003                  3000      
-22  6          3000       3001       5004      
-23  11         5004                  32        
-24  13         CalculateFib                      
-25  15         3000                  p1        
-26  14         CalculateFib                      
-27  9                                3002      
-28  17                                         
-29  1          3000       7001       5005      
-30  7          5005                  3000      
-31  10                               22        
+20  9                                3000      
+21  9                                9001      
+22  17                                         
+23  7          7003                  3001      
+24  1          3000       7001       5004      
+25  6          3001       5004       5005      
+26  11         5005                  35        
+27  13         fibo                            
+28  15         3001                  p1        
+29  14         fibo                            
+30  9                                3002      
+31  17                                         
+32  1          3001       7001       5006      
+33  7          5006                  3001      
+34  10                               24        
 
 
 Tabla de constantes:
 ------------------------------
 Valor: 2          | Tipo: int        | Dirección: 7000      
 Valor: 1          | Tipo: int        | Dirección: 7001      
-Valor: 10         | Tipo: int        | Dirección: 7002      
-Valor: Recursive Fibonacci sequence up to F(9): | Tipo: string     | Dirección: 9000      
+Valor: 9          | Tipo: int        | Dirección: 7002      
+Valor: Serie de Fibonacci desde F(0) hasta F( | Tipo: string     | Dirección: 9000      
+Valor: ):         | Tipo: string     | Dirección: 9001      
 Valor: 0          | Tipo: int        | Dirección: 7003      
 
 
@@ -462,19 +478,19 @@ INT -> Rango: 3000 - 3999 | Dirección actual: 3003
 FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4000
 -----------------------------------------------------------
 TEMPORAL
-INT -> Rango: 5000 - 5999 | Dirección actual: 5006
+INT -> Rango: 5000 - 5999 | Dirección actual: 5007
 FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
 -----------------------------------------------------------
 CONSTANTE
 INT -> Rango: 7000 - 7999 | Dirección actual: 7004
 FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
-STRING -> Rango: 9000 - 9999 | Dirección actual: 9001
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9002
 -----------------------------------------------------------
 
 
 Salida de la Máquina Virtual:
 ------------------------------
-Recursive Fibonacci sequence up to F(9):
+Serie de Fibonacci desde F(0) hasta F(9):
 0
 1
 1

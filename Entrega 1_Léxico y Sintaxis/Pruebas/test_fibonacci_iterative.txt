@@ -1,26 +1,24 @@
-program FibonacciIterative;
+program FibonacciIterativo;
 var
   n, a, b, temp, i : int;
 
 main {
-  n = 10; // Calcular Fibonacci hasta el término 9 (F(0) a F(9))
-  a = 0;
-  b = 1;
-  i = 0;
 
-  print("Iterative Fibonacci sequence up to F(", n-1,"):");
+  n = 9;    
+  a = 0;  // F(i-2)
+  b = 1;  // F(i-1)
+  i = 0;  // Contador 
 
-  if (n > 0) {
-    print(a);
-    i = i + 1;
-  };
+  print("Fibonacci hasta F(", n, "):");
 
   while (i < n) do {
-    print(b);
+    print(a);
     temp = a + b;
     a = b;
     b = temp;
     i = i + 1;
   };
+
+  print(a);
 }
 end

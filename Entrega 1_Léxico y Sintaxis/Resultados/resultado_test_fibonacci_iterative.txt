@@ -3,30 +3,28 @@
 
 Código original:
 ------------------------------
-program FibonacciIterative;
+program FibonacciIterativo;
 var
   n, a, b, temp, i : int;
 
 main {
-  n = 10; // Calcular Fibonacci hasta el tÃ©rmino 9 (F(0) a F(9))
-  a = 0;
-  b = 1;
-  i = 0;
 
-  print("Iterative Fibonacci sequence up to F(", n-1,"):");
+  n = 9;    
+  a = 0;  // F(i-2)
+  b = 1;  // F(i-1)
+  i = 0;  // Contador 
 
-  if (n > 0) {
-    print(a);
-    i = i + 1;
-  };
+  print("Fibonacci hasta F(", n, "):");
 
   while (i < n) do {
-    print(b);
+    print(a);
     temp = a + b;
     a = b;
     b = temp;
     i = i + 1;
   };
+
+  print(a);
 }
 end
 
@@ -38,7 +36,7 @@ Tokens encontrados:
 Token            |   Carácter
 ------------------------------
 PROGRAM_KWORD    | 'program' 
-ID               | 'FibonacciIterative'
+ID               | 'FibonacciIterativo'
 SEMICOLON        | ';'       
 VAR_KWORD        | 'var'     
 ID               | 'n'       
@@ -57,7 +55,7 @@ MAIN_KWORD       | 'main'
 L_CURLY_BRACE    | '{'       
 ID               | 'n'       
 EQUAL            | '='       
-CTE              | '10'      
+CTE              | '9'       
 SEMICOLON        | ';'       
 ID               | 'a'       
 EQUAL            | '='       
@@ -73,34 +71,12 @@ CTE              | '0'
 SEMICOLON        | ';'       
 PRINT_KWORD      | 'print'   
 L_PARENTHESIS    | '('       
-STRING           | '"Iterative Fibonacci sequence up to F("'
+STRING           | '"Fibonacci hasta F("'
 COMMA            | ','       
 ID               | 'n'       
-MINUS            | '-'       
-CTE              | '1'       
 COMMA            | ','       
 STRING           | '"):"'    
 R_PARENTHESIS    | ')'       
-SEMICOLON        | ';'       
-IF_KWORD         | 'if'      
-L_PARENTHESIS    | '('       
-ID               | 'n'       
-GREATER_THAN     | '>'       
-CTE              | '0'       
-R_PARENTHESIS    | ')'       
-L_CURLY_BRACE    | '{'       
-PRINT_KWORD      | 'print'   
-L_PARENTHESIS    | '('       
-ID               | 'a'       
-R_PARENTHESIS    | ')'       
-SEMICOLON        | ';'       
-ID               | 'i'       
-EQUAL            | '='       
-ID               | 'i'       
-PLUS             | '+'       
-CTE              | '1'       
-SEMICOLON        | ';'       
-R_CURLY_BRACE    | '}'       
 SEMICOLON        | ';'       
 WHILE_KWORD      | 'while'   
 L_PARENTHESIS    | '('       
@@ -112,7 +88,7 @@ DO_KWORD         | 'do'
 L_CURLY_BRACE    | '{'       
 PRINT_KWORD      | 'print'   
 L_PARENTHESIS    | '('       
-ID               | 'b'       
+ID               | 'a'       
 R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
 ID               | 'temp'    
@@ -137,6 +113,11 @@ CTE              | '1'
 SEMICOLON        | ';'       
 R_CURLY_BRACE    | '}'       
 SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'a'       
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
 R_CURLY_BRACE    | '}'       
 END_KWORD        | 'end'     
 
@@ -145,7 +126,7 @@ END_KWORD        | 'end'
 ------------------------------
 program_vars
   program
-  FibonacciIterative
+  FibonacciIterativo
   ;
   vars_multiple_ids
     var
@@ -171,7 +152,7 @@ program_vars
         expression_simple
           exp_simple
             term_simple
-              factor_cte	10
+              factor_cte	9
         ;
     statement
       assign
@@ -204,59 +185,15 @@ program_vars
       print_multiple_expressions
         print
         (
-        "Iterative Fibonacci sequence up to F("
+        "Fibonacci hasta F("
         ,
         expression_simple
-          exp_minus
-            exp_simple
-              term_simple
-                factor_id	n
-            -
-            term_simple
-              factor_cte	1
-        ,
-        "):"
-        )
-        ;
-    statement
-      condition_if
-        if
-        (
-        expression_greater_than
           exp_simple
             term_simple
               factor_id	n
-          >
-          exp_simple
-            term_simple
-              factor_cte	0
+        ,
+        "):"
         )
-        body_statement
-          {
-          statement
-            f_call_one_expression
-              print
-              (
-              expression_simple
-                exp_simple
-                  term_simple
-                    factor_id	a
-              )
-              ;
-          statement
-            assign
-              i
-              =
-              expression_simple
-                exp_plus
-                  exp_simple
-                    term_simple
-                      factor_id	i
-                  +
-                  term_simple
-                    factor_cte	1
-              ;
-          }
         ;
     statement
       cycle
@@ -281,7 +218,7 @@ program_vars
               expression_simple
                 exp_simple
                   term_simple
-                    factor_id	b
+                    factor_id	a
               )
               ;
           statement
@@ -330,6 +267,16 @@ program_vars
               ;
           }
         ;
+    statement
+      f_call_one_expression
+        print
+        (
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	a
+        )
+        ;
     }
   end
 
@@ -337,7 +284,7 @@ program_vars
 
 Árbol transformado (AST):
 ------------------------------
-{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'FibonacciIterative'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'n'}, {'type': 'id', 'value': 'a'}, {'type': 'id', 'value': 'b'}, {'type': 'id', 'value': 'temp'}, {'type': 'id', 'value': 'i'}], 'type': {'type': 'type_int', 'value': 'int'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'n'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 10}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'a'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'b'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}}}}, {'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'string', 'value': 'Iterative Fibonacci sequence up to F('}, {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}, {'type': 'string', 'value': '):'}]}}, {'type': 'statement', 'value': {'type': 'condition_if', 'condition': {'type': 'expression_greater_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}, Token('GREATER_THAN', '>'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('LESS_THAN', '<'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'temp'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'a'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'b'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'temp'}}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}}}]}}
+{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'FibonacciIterativo'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'n'}, {'type': 'id', 'value': 'a'}, {'type': 'id', 'value': 'b'}, {'type': 'id', 'value': 'temp'}, {'type': 'id', 'value': 'i'}], 'type': {'type': 'type_int', 'value': 'int'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'n'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 9}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'a'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'b'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}}}}, {'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'string', 'value': 'Fibonacci hasta F('}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}}, {'type': 'string', 'value': '):'}]}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('LESS_THAN', '<'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'temp'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'a'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'b'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'temp'}}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}}}]}}
 
 
 Directorio de funciones y variables:
@@ -350,7 +297,7 @@ Start Point: 0
     b : int | Dirección: 3002
     temp : int | Dirección: 3003
     i : int | Dirección: 3004
-  Recursos: temporals(int=6), vars(int=5)
+  Recursos: temporals(int=3), vars(int=5)
 
 
 
@@ -362,35 +309,30 @@ Cuádruplos generados:
 3   7          7002                  3002      
 4   7          7001                  3004      
 5   9                                9000      
-6   2          3000       7002       5000      
-7   9                                5000      
-8   9                                9001      
-9   17                                         
-10  5          3000       7001       5001      
-11  11         5001                  16        
-12  9                                3001      
-13  17                                         
-14  1          3004       7002       5002      
-15  7          5002                  3004      
-16  6          3004       3000       5003      
-17  11         5003                  27        
-18  9                                3002      
-19  17                                         
-20  1          3001       3002       5004      
-21  7          5004                  3003      
-22  7          3002                  3001      
-23  7          3003                  3002      
-24  1          3004       7002       5005      
-25  7          5005                  3004      
-26  10                               16        
+6   9                                3000      
+7   9                                9001      
+8   17                                         
+9   6          3004       3000       5000      
+10  11         5000                  20        
+11  9                                3001      
+12  17                                         
+13  1          3001       3002       5001      
+14  7          5001                  3003      
+15  7          3002                  3001      
+16  7          3003                  3002      
+17  1          3004       7002       5002      
+18  7          5002                  3004      
+19  10                               9         
+20  9                                3001      
+21  17                                         
 
 
 Tabla de constantes:
 ------------------------------
-Valor: 10         | Tipo: int        | Dirección: 7000      
+Valor: 9          | Tipo: int        | Dirección: 7000      
 Valor: 0          | Tipo: int        | Dirección: 7001      
 Valor: 1          | Tipo: int        | Dirección: 7002      
-Valor: Iterative Fibonacci sequence up to F( | Tipo: string     | Dirección: 9000      
+Valor: Fibonacci hasta F( | Tipo: string     | Dirección: 9000      
 Valor: ):         | Tipo: string     | Dirección: 9001      
 
 
@@ -405,7 +347,7 @@ INT -> Rango: 3000 - 3999 | Dirección actual: 3005
 FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4000
 -----------------------------------------------------------
 TEMPORAL
-INT -> Rango: 5000 - 5999 | Dirección actual: 5006
+INT -> Rango: 5000 - 5999 | Dirección actual: 5003
 FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
 -----------------------------------------------------------
 CONSTANTE
@@ -417,7 +359,7 @@ STRING -> Rango: 9000 - 9999 | Dirección actual: 9002
 
 Salida de la Máquina Virtual:
 ------------------------------
-Iterative Fibonacci sequence up to F(9):
+Fibonacci hasta F(9):
 0
 1
 1

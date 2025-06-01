@@ -20,6 +20,6 @@ main {
   n = 5;
   fact_result = 1; 
   RecursiveFact(n);
-  print("Factorial of ", n, " is ", fact_result);
+  print("El factorial de ", n, " es ", fact_result, ".");
 }
 end
