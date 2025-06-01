@@ -1,0 +1,277 @@
+[RESULTADO] EXITOSO
+--------------------------------------------------
+
+Código original:
+------------------------------
+/* Prueba: f_call_multiple_expressions, term_div_sign, factor_plus (unary) */
+
+program TestFunctionCallMultiExpr;
+var
+  calcResult : float;
+void ComplexCalc(a : int, b : float, c : int) [
+  {
+    calcResult = (a / b) * c;
+  }
+];
+
+main
+{
+  calcResult = 0.0;
+  ComplexCalc(10, 2.0, +3);
+  print(calcResult);
+}
+
+
+end
+
+
+
+--------------------------------------------------
+
+Tokens encontrados:
+------------------------------
+Token            |   Carácter
+------------------------------
+PROGRAM_KWORD    | 'program' 
+ID               | 'TestFunctionCallMultiExpr'
+SEMICOLON        | ';'       
+VAR_KWORD        | 'var'     
+ID               | 'calcResult'
+COLON            | ':'       
+FLOAT_KWORD      | 'float'   
+SEMICOLON        | ';'       
+VOID_KWORD       | 'void'    
+ID               | 'ComplexCalc'
+L_PARENTHESIS    | '('       
+ID               | 'a'       
+COLON            | ':'       
+INT_KWORD        | 'int'     
+COMMA            | ','       
+ID               | 'b'       
+COLON            | ':'       
+FLOAT_KWORD      | 'float'   
+COMMA            | ','       
+ID               | 'c'       
+COLON            | ':'       
+INT_KWORD        | 'int'     
+R_PARENTHESIS    | ')'       
+L_BRACKET        | '['       
+L_CURLY_BRACE    | '{'       
+ID               | 'calcResult'
+EQUAL            | '='       
+L_PARENTHESIS    | '('       
+ID               | 'a'       
+DIV_SIGN         | '/'       
+ID               | 'b'       
+R_PARENTHESIS    | ')'       
+MULT_SIGN        | '*'       
+ID               | 'c'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+R_BRACKET        | ']'       
+SEMICOLON        | ';'       
+MAIN_KWORD       | 'main'    
+L_CURLY_BRACE    | '{'       
+ID               | 'calcResult'
+EQUAL            | '='       
+CTE              | '0.0'     
+SEMICOLON        | ';'       
+ID               | 'ComplexCalc'
+L_PARENTHESIS    | '('       
+CTE              | '10'      
+COMMA            | ','       
+CTE              | '2.0'     
+COMMA            | ','       
+PLUS             | '+'       
+CTE              | '3'       
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'calcResult'
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+END_KWORD        | 'end'     
+
+
+Árbol sintáctico (raw):
+------------------------------
+program_vars_funcs
+  program
+  TestFunctionCallMultiExpr
+  ;
+  vars_one_id
+    var
+    calcResult
+    :
+    type_float	float
+    ;
+  funcs_multiple_ids_no_vars
+    void
+    ComplexCalc
+    (
+    a
+    :
+    type_int	int
+    ,
+    b
+    :
+    type_float	float
+    ,
+    c
+    :
+    type_int	int
+    )
+    [
+    body_statement
+      {
+      statement
+        assign
+          calcResult
+          =
+          expression_simple
+            exp_simple
+              term_mult_sign
+                term_simple
+                  factor_expression
+                    (
+                    expression_simple
+                      exp_simple
+                        term_div_sign
+                          term_simple
+                            factor_id	a
+                          /
+                          factor_id	b
+                    )
+                *
+                factor_id	c
+          ;
+      }
+    ]
+    ;
+  main
+  body_statement
+    {
+    statement
+      assign
+        calcResult
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	0.0
+        ;
+    statement
+      f_call_multiple_expressions
+        ComplexCalc
+        (
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	10
+        ,
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	2.0
+        ,
+        expression_simple
+          exp_simple
+            term_simple
+              factor_plus
+                +
+                factor_cte	3
+        )
+        ;
+    statement
+      f_call_one_expression
+        print
+        (
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	calcResult
+        )
+        ;
+    }
+  end
+
+
+
+Árbol transformado (AST):
+------------------------------
+{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'TestFunctionCallMultiExpr'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'calcResult'}, 'type': {'type': 'type_float', 'value': 'float'}}]}, 'funcs': [{'type': 'funcs_multiple_ids_no_vars', 'funcs_name': {'type': 'id', 'value': 'ComplexCalc'}, 'parameters': [{'id': {'type': 'id', 'value': 'a'}, 'type': {'type': 'type_int', 'value': 'int'}}, {'id': {'type': 'id', 'value': 'b'}, 'type': {'type': 'type_float', 'value': 'float'}}, {'id': {'type': 'id', 'value': 'c'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'calcResult'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}, Token('DIV_SIGN', '/'), {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}]}}}}}, Token('MULT_SIGN', '*'), {'type': 'factor_id', 'value': {'type': 'id', 'value': 'c'}}]}}}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'calcResult'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0.0}}}}}}, {'type': 'statement', 'value': {'type': 'f_call_multiple_expressions', 'function': {'type': 'id', 'value': 'ComplexCalc'}, 'value': [{'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 10}}}}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2.0}}}}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 3}}}}]}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'calcResult'}}}}}}]}}
+
+
+Directorio de funciones y variables:
+------------------------------
+Scope: global
+Start Point: 0
+  Variables:
+    calcResult : float | Dirección: 4000
+  Recursos: vars(float=1)
+
+Scope: ComplexCalc
+Start Point: 1
+  Parámetros:
+    a : int
+    b : float
+    c : int
+  Variables:
+    a : int | Dirección: 1000
+    b : float | Dirección: 2000
+    c : int | Dirección: 1001
+  Recursos: temporals(float=2), params(int=2, float=1)
+
+
+
+Cuádruplos generados:
+------------------------------
+0   10                               5         
+1   4          1000       2000       6000      
+2   3          6000       1001       6001      
+3   7          6001                  4000      
+4   16                                         
+5   7          8000                  4000      
+6   13         ComplexCalc                      
+7   15         7000                  p1        
+8   15         8001                  p2        
+9   15         7001                  p3        
+10  14         ComplexCalc                      
+11  9                                4000      
+12  17                                         
+
+
+Tabla de constantes:
+------------------------------
+Valor: 0.0        | Tipo: float      | Dirección: 8000      
+Valor: 10         | Tipo: int        | Dirección: 7000      
+Valor: 2.0        | Tipo: float      | Dirección: 8001      
+Valor: 3          | Tipo: int        | Dirección: 7001      
+
+
+Uso de memoria:
+------------------------------
+LOCAL
+INT -> Rango: 1000 - 1999 | Dirección actual: 1002
+FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2001
+-----------------------------------------------------------
+GLOBAL
+INT -> Rango: 3000 - 3999 | Dirección actual: 3000
+FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4001
+-----------------------------------------------------------
+TEMPORAL
+INT -> Rango: 5000 - 5999 | Dirección actual: 5000
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6002
+-----------------------------------------------------------
+CONSTANTE
+INT -> Rango: 7000 - 7999 | Dirección actual: 7002
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8002
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9000
+-----------------------------------------------------------
+
+
+Salida de la Máquina Virtual:
+------------------------------
+15.0

@@ -53,7 +53,7 @@ class SemanticAnalyzer:
         params = []
 
         # Dependiendo del tipo de función, se obtienen los parámetros y el tipo de cada uno.
-        if func_node["type"] == "funcs_id": # Función con un solo parámetro 
+        if func_node["type"] == "funcs_id" or func_node["type"] == "funcs_id_no_vars": # Función con un solo parámetro 
 
             # Se obtiene el nombre del parámetro
             param = func_node["param"]
@@ -64,7 +64,7 @@ class SemanticAnalyzer:
             # Se agrega el parámetro a la lista de parámetros
             params.append({"id": param["value"], "type": ptype})
         
-        elif func_node["type"] == "funcs_multiple_ids": # Función con múltiples parámetros
+        elif func_node["type"] == "funcs_multiple_ids" or func_node["type"] == "funcs_multiple_ids_no_vars": # Función con múltiples parámetros
 
             # Se recorre la lista de parámetros y se almacena su nombre y tipo en la lista de parámetros
             for p in func_node.get("parameters", []):
@@ -147,7 +147,9 @@ class SemanticAnalyzer:
             return
         
         # Dependiendo del tipo de cuerpo, se analizan las declaraciones de variables o las sentencias.
-        if body_node["type"] == "body_statement":
+        if body_node["type"] == "body_simple": 
+            return
+        elif body_node["type"] == "body_statement":
 
             # Recorre la lista de sentencias y las analiza una por una
             for stmt in body_node["value"]:
@@ -157,12 +159,12 @@ class SemanticAnalyzer:
     
     # Método para analizar una sentencia específica dentro del cuerpo.
     def analyze_statement(self, stmt_node):
-        t = stmt_node.get("type")
+        stmt_type = stmt_node.get("type")
 
-        if t == "statement":
+        if stmt_type == "statement":
             self.analyze_statement(stmt_node["value"])
 
-        elif t == "assign":
+        elif stmt_type == "assign":
             self.validate_assign(stmt_node) 
             var_id = stmt_node["id"]["value"]
             self.analyze_expression(stmt_node["value"])
@@ -170,10 +172,10 @@ class SemanticAnalyzer:
             # Se marca la variable como asignada
             self.dir.find_variable(var_id)["assigned"] = True
 
-        elif "f_call" in t:
+        elif "f_call" in stmt_type:
             self.validate_function_call(stmt_node)
 
-        elif t == "print_expression":
+        elif stmt_type == "print_expression":
             # Si hay multiples valores a imprimir
             if isinstance(stmt_node["value"], list):
                 count = len(stmt_node["value"])
@@ -188,8 +190,9 @@ class SemanticAnalyzer:
                 self.validate_expression_uses(stmt_node["value"])
                 self.analyze_expression(stmt_node["value"])                
                 self.quad_gen.generate_print_quad()
+            self.quad_gen.generate_print_newline_quad() 
 
-        elif t == "print_multiple_expressions":
+        elif stmt_type == "print_multiple_expressions":
             # Si hay múltiples valores a imprimir
             if isinstance(stmt_node["value"], list):
                 for item in stmt_node["value"]:
@@ -222,8 +225,9 @@ class SemanticAnalyzer:
                     self.validate_expression_uses(item)
                     self.analyze_expression(item)
                 self.quad_gen.generate_print_quad()
+            self.quad_gen.generate_print_newline_quad() 
 
-        elif t == "print_string":
+        elif stmt_type == "print_string":
             #self.validate_expression_uses(stmt_node["value"])
             value = stmt_node["value"]["value"]
             # Se genera un address para la cadena
@@ -233,21 +237,22 @@ class SemanticAnalyzer:
                 address = self.memory_manager.get_constant_address(value, "string")
 
             self.quad_gen.push_operand(address, "string")
-            self.quad_gen.generate_print_quad()
+            self.quad_gen.generate_print_quad() 
+            self.quad_gen.generate_print_newline_quad() 
 
-        elif "condition" in t:
+        elif "condition" in stmt_type:
             self.analyze_expression(stmt_node["condition"])  
             self.quad_gen.generate_go("goToFalse")
             false_jump = self.quad_gen.jumps_stack.pop()
 
             # Analiza body del if
-            if t == "condition_if":
+            if stmt_type == "condition_if":
                 self.analyze_body(stmt_node["body"])
 
                 # No hay else, llena salto falso directamente
                 self.quad_gen.fill_jump(false_jump)
 
-            elif t == "condition_if_else":
+            elif stmt_type == "condition_if_else":
                 self.analyze_body(stmt_node["body1"])  # Cuerpo del if
 
                 # Hay else, entonces genero un goTo al final
@@ -259,7 +264,7 @@ class SemanticAnalyzer:
 
                 self.quad_gen.fill_jump(end_jump)  # Fin del else
 
-        elif t == "cycle":
+        elif stmt_type == "cycle":
             # Se guarda la ubicación del inicio del ciclo
             loop_start = len(self.quad_gen.filaCuadruplos)
 
@@ -353,7 +358,6 @@ class SemanticAnalyzer:
 
         # Almacena los parámetros esperados de la función.
         expected = self.dir.func_dir[func_name]["params"]
-        print(f"Parámetros esperados: {expected}")
 
         # Si el número de argumentos no coincide con el número de parámetros esperados, se lanza un error.
         if len(args) != len(expected):
@@ -419,7 +423,34 @@ class SemanticAnalyzer:
                 self.analyze_expression(expr["value"])
 
             elif t == "factor_minus":
-                self.analyze_expression(expr["value"])
+                inner = expr["value"]
+                if isinstance(inner, dict) and inner.get("type") == "factor_id":
+                    # Caso especial: -x
+                    var_id = inner["value"]["value"]
+                    var_info = self.dir.find_variable(var_id)
+                    if var_info is None:
+                        raise Exception(f"Variable '{var_id}' no declarada.")
+                    if not var_info.get("assigned", False):
+                        raise Exception(f"Variable '{var_id}' usada antes de ser asignada.")
+                    var_type = var_info["type"]
+                    address = var_info["address"]
+
+                    # Genera una constante 0 si no existe
+                    zero_address = self.memory_manager.get_constant_address(0, "int")
+                    if zero_address is None:
+                        zero_address = self.memory_manager.add_constant(0, "int")
+
+                    # Simula la operación: 0 - x
+                    self.quad_gen.push_operand(zero_address, "int")
+                    self.quad_gen.push_operand(address, var_type)
+                    self.quad_gen.push_operator("-")
+                    self.quad_gen.generate_quad_if_applicable()
+                else:
+                    # Si no es ID, se procesa normalmente (número negativo)
+                    self.analyze_expression(inner)
+
+            elif t == "factor_plus": 
+                self.analyze_expression(expr["value"]) 
 
             elif t in ["term_simple", "exp_simple", "expression_simple"]:
                 self.analyze_expression(expr["value"])

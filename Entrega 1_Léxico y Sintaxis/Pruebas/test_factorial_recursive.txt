@@ -1,0 +1,25 @@
+program RecursiveFactorial;
+var
+  n, fact_result : int;
+
+void RecursiveFact(x : int) [
+  var
+    prev : int;
+  {
+    if (x < 2) {
+      fact_result = 1;
+    } else {
+      prev = x - 1;
+      RecursiveFact(prev);
+      fact_result = fact_result * x;
+    };
+  }
+];
+
+main {
+  n = 5;
+  fact_result = 1; 
+  RecursiveFact(n);
+  print("Factorial of ", n, " is ", fact_result);
+}
+end

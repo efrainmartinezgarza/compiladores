@@ -1,0 +1,12 @@
+/* Prueba: f_call_one_expression, factor_minus (unary) */
+program TestFunctionCallOneExpr;
+var
+  outputVal : int;
+void SetValue(val : int) [ { outputVal = val; } ];
+main
+{
+  outputVal = 0;
+  SetValue(-5 + 2);
+  print(outputVal);
+}
+end

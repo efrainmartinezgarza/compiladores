@@ -1,0 +1,217 @@
+[RESULTADO] EXITOSO
+--------------------------------------------------
+
+Código original:
+------------------------------
+/* Prueba: program_vars_funcs, funcs_simple (with internal vars) */
+
+program TestProgramVarsFuncs;
+var
+  globalVar : int;
+void AnotherFunc() [
+  var
+    localVar : float;
+  {
+    localVar = 1.5;
+    globalVar = 1;
+  }
+];
+main
+{
+  globalVar = 1;
+  globalVar = globalVar + 2;
+}
+end
+
+
+--------------------------------------------------
+
+Tokens encontrados:
+------------------------------
+Token            |   Carácter
+------------------------------
+PROGRAM_KWORD    | 'program' 
+ID               | 'TestProgramVarsFuncs'
+SEMICOLON        | ';'       
+VAR_KWORD        | 'var'     
+ID               | 'globalVar'
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+VOID_KWORD       | 'void'    
+ID               | 'AnotherFunc'
+L_PARENTHESIS    | '('       
+R_PARENTHESIS    | ')'       
+L_BRACKET        | '['       
+VAR_KWORD        | 'var'     
+ID               | 'localVar'
+COLON            | ':'       
+FLOAT_KWORD      | 'float'   
+SEMICOLON        | ';'       
+L_CURLY_BRACE    | '{'       
+ID               | 'localVar'
+EQUAL            | '='       
+CTE              | '1.5'     
+SEMICOLON        | ';'       
+ID               | 'globalVar'
+EQUAL            | '='       
+CTE              | '1'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+R_BRACKET        | ']'       
+SEMICOLON        | ';'       
+MAIN_KWORD       | 'main'    
+L_CURLY_BRACE    | '{'       
+ID               | 'globalVar'
+EQUAL            | '='       
+CTE              | '1'       
+SEMICOLON        | ';'       
+ID               | 'globalVar'
+EQUAL            | '='       
+ID               | 'globalVar'
+PLUS             | '+'       
+CTE              | '2'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+END_KWORD        | 'end'     
+
+
+Árbol sintáctico (raw):
+------------------------------
+program_vars_funcs
+  program
+  TestProgramVarsFuncs
+  ;
+  vars_one_id
+    var
+    globalVar
+    :
+    type_int	int
+    ;
+  funcs_simple
+    void
+    AnotherFunc
+    (
+    )
+    [
+    vars_one_id
+      var
+      localVar
+      :
+      type_float	float
+      ;
+    body_statement
+      {
+      statement
+        assign
+          localVar
+          =
+          expression_simple
+            exp_simple
+              term_simple
+                factor_cte	1.5
+          ;
+      statement
+        assign
+          globalVar
+          =
+          expression_simple
+            exp_simple
+              term_simple
+                factor_cte	1
+          ;
+      }
+    ]
+    ;
+  main
+  body_statement
+    {
+    statement
+      assign
+        globalVar
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	1
+        ;
+    statement
+      assign
+        globalVar
+        =
+        expression_simple
+          exp_plus
+            exp_simple
+              term_simple
+                factor_id	globalVar
+            +
+            term_simple
+              factor_cte	2
+        ;
+    }
+  end
+
+
+
+Árbol transformado (AST):
+------------------------------
+{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'TestProgramVarsFuncs'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'globalVar'}, 'type': {'type': 'type_int', 'value': 'int'}}]}, 'funcs': [{'type': 'funcs_simple', 'funcs_name': {'type': 'id', 'value': 'AnotherFunc'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'localVar'}, 'type': {'type': 'type_float', 'value': 'float'}}], 'localVar': {'type': 'float', 'assigned': True, 'address': 2000}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'localVar'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1.5}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'globalVar'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'globalVar'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'globalVar'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'globalVar'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}]}}}}]}}
+
+
+Directorio de funciones y variables:
+------------------------------
+Scope: global
+Start Point: 0
+  Variables:
+    globalVar : int | Dirección: 3000
+  Recursos: temporals(int=1), vars(int=1)
+
+Scope: AnotherFunc
+Start Point: 1
+  Variables:
+    localVar : float | Dirección: 2000
+  Recursos: vars(float=1)
+
+
+
+Cuádruplos generados:
+------------------------------
+0   10                               4         
+1   7          8000                  2000      
+2   7          7000                  3000      
+3   16                                         
+4   7          7000                  3000      
+5   1          3000       7001       5000      
+6   7          5000                  3000      
+
+
+Tabla de constantes:
+------------------------------
+Valor: 1.5        | Tipo: float      | Dirección: 8000      
+Valor: 1          | Tipo: int        | Dirección: 7000      
+Valor: 2          | Tipo: int        | Dirección: 7001      
+
+
+Uso de memoria:
+------------------------------
+LOCAL
+INT -> Rango: 1000 - 1999 | Dirección actual: 1000
+FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2001
+-----------------------------------------------------------
+GLOBAL
+INT -> Rango: 3000 - 3999 | Dirección actual: 3001
+FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4000
+-----------------------------------------------------------
+TEMPORAL
+INT -> Rango: 5000 - 5999 | Dirección actual: 5001
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
+-----------------------------------------------------------
+CONSTANTE
+INT -> Rango: 7000 - 7999 | Dirección actual: 7002
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8001
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9000
+-----------------------------------------------------------
+
+
+Salida de la Máquina Virtual:
+------------------------------

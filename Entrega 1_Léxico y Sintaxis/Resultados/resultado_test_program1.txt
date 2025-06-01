@@ -1,7 +1,25 @@
 [RESULTADO] EXITOSO
 --------------------------------------------------
 
-📝 Tokens encontrados:
+Código original:
+------------------------------
+program myProgram;
+var x, y: int; c_d8: float;
+void greet(x:int, y:int) [ var msg: float; { print(y); } ];
+void printSum(a: int, b: int) [ var result: int; { result = a + b * 2; print(result); } ];
+
+main {
+  x = 2;
+  x = 3 + (4 - 2) * x / 2; 
+  c_d8 = x / 2.0;
+  print(c_d8);
+  greet(x, x + 1);
+}
+end
+
+--------------------------------------------------
+
+Tokens encontrados:
 ------------------------------
 Token            |   Carácter
 ------------------------------
@@ -19,19 +37,105 @@ ID               | 'c_d8'
 COLON            | ':'       
 FLOAT_KWORD      | 'float'   
 SEMICOLON        | ';'       
+VOID_KWORD       | 'void'    
+ID               | 'greet'   
+L_PARENTHESIS    | '('       
+ID               | 'x'       
+COLON            | ':'       
+INT_KWORD        | 'int'     
+COMMA            | ','       
+ID               | 'y'       
+COLON            | ':'       
+INT_KWORD        | 'int'     
+R_PARENTHESIS    | ')'       
+L_BRACKET        | '['       
+VAR_KWORD        | 'var'     
+ID               | 'msg'     
+COLON            | ':'       
+FLOAT_KWORD      | 'float'   
+SEMICOLON        | ';'       
+L_CURLY_BRACE    | '{'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'y'       
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+R_BRACKET        | ']'       
+SEMICOLON        | ';'       
+VOID_KWORD       | 'void'    
+ID               | 'printSum'
+L_PARENTHESIS    | '('       
+ID               | 'a'       
+COLON            | ':'       
+INT_KWORD        | 'int'     
+COMMA            | ','       
+ID               | 'b'       
+COLON            | ':'       
+INT_KWORD        | 'int'     
+R_PARENTHESIS    | ')'       
+L_BRACKET        | '['       
+VAR_KWORD        | 'var'     
+ID               | 'result'  
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+L_CURLY_BRACE    | '{'       
+ID               | 'result'  
+EQUAL            | '='       
+ID               | 'a'       
+PLUS             | '+'       
+ID               | 'b'       
+MULT_SIGN        | '*'       
+CTE              | '2'       
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'result'  
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+R_BRACKET        | ']'       
+SEMICOLON        | ';'       
 MAIN_KWORD       | 'main'    
 L_CURLY_BRACE    | '{'       
 ID               | 'x'       
 EQUAL            | '='       
+CTE              | '2'       
+SEMICOLON        | ';'       
+ID               | 'x'       
+EQUAL            | '='       
 CTE              | '3'       
 PLUS             | '+'       
+L_PARENTHESIS    | '('       
 CTE              | '4'       
 MINUS            | '-'       
 CTE              | '2'       
+R_PARENTHESIS    | ')'       
 MULT_SIGN        | '*'       
-CTE              | '5'       
+ID               | 'x'       
 DIV_SIGN         | '/'       
 CTE              | '2'       
+SEMICOLON        | ';'       
+ID               | 'c_d8'    
+EQUAL            | '='       
+ID               | 'x'       
+DIV_SIGN         | '/'       
+CTE              | '2.0'     
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'c_d8'    
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+ID               | 'greet'   
+L_PARENTHESIS    | '('       
+ID               | 'x'       
+COMMA            | ','       
+ID               | 'x'       
+PLUS             | '+'       
+CTE              | '1'       
+R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
 R_CURLY_BRACE    | '}'       
 END_KWORD        | 'end'     
@@ -39,7 +143,7 @@ END_KWORD        | 'end'
 
 Árbol sintáctico (raw):
 ------------------------------
-program_vars
+program_vars_funcs
   program
   myProgram
   ;
@@ -55,6 +159,90 @@ program_vars
     :
     type_float	float
     ;
+  funcs_multiple_ids
+    void
+    greet
+    (
+    x
+    :
+    type_int	int
+    ,
+    y
+    :
+    type_int	int
+    )
+    [
+    vars_one_id
+      var
+      msg
+      :
+      type_float	float
+      ;
+    body_statement
+      {
+      statement
+        f_call_one_expression
+          print
+          (
+          expression_simple
+            exp_simple
+              term_simple
+                factor_id	y
+          )
+          ;
+      }
+    ]
+    ;
+  funcs_multiple_ids
+    void
+    printSum
+    (
+    a
+    :
+    type_int	int
+    ,
+    b
+    :
+    type_int	int
+    )
+    [
+    vars_one_id
+      var
+      result
+      :
+      type_int	int
+      ;
+    body_statement
+      {
+      statement
+        assign
+          result
+          =
+          expression_simple
+            exp_plus
+              exp_simple
+                term_simple
+                  factor_id	a
+              +
+              term_mult_sign
+                term_simple
+                  factor_id	b
+                *
+                factor_cte	2
+          ;
+      statement
+        f_call_one_expression
+          print
+          (
+          expression_simple
+            exp_simple
+              term_simple
+                factor_id	result
+          )
+          ;
+      }
+    ]
+    ;
   main
   body_statement
     {
@@ -63,23 +251,79 @@ program_vars
         x
         =
         expression_simple
-          exp_minus
-            exp_plus
-              exp_simple
-                term_simple
-                  factor_cte	3
-              +
+          exp_simple
+            term_simple
+              factor_cte	2
+        ;
+    statement
+      assign
+        x
+        =
+        expression_simple
+          exp_plus
+            exp_simple
               term_simple
-                factor_cte	4
-            -
+                factor_cte	3
+            +
             term_div_sign
               term_mult_sign
                 term_simple
-                  factor_cte	2
+                  factor_expression
+                    (
+                    expression_simple
+                      exp_minus
+                        exp_simple
+                          term_simple
+                            factor_cte	4
+                        -
+                        term_simple
+                          factor_cte	2
+                    )
                 *
-                factor_cte	5
+                factor_id	x
               /
               factor_cte	2
+        ;
+    statement
+      assign
+        c_d8
+        =
+        expression_simple
+          exp_simple
+            term_div_sign
+              term_simple
+                factor_id	x
+              /
+              factor_cte	2.0
+        ;
+    statement
+      f_call_one_expression
+        print
+        (
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	c_d8
+        )
+        ;
+    statement
+      f_call_multiple_expressions
+        greet
+        (
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	x
+        ,
+        expression_simple
+          exp_plus
+            exp_simple
+              term_simple
+                factor_id	x
+            +
+            term_simple
+              factor_cte	1
+        )
         ;
     }
   end
@@ -88,52 +332,103 @@ program_vars
 
 Árbol transformado (AST):
 ------------------------------
-{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'myProgram'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'x'}, {'type': 'id', 'value': 'y'}], 'type': {'type': 'type_int', 'value': 'int'}}, {'ids': [{'type': 'id', 'value': 'c_d8'}], 'type': {'type': 'type_float', 'value': 'float'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 3}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 4}}]}, Token('MINUS', '-'), {'type': 'term', 'value': [{'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}, Token('MULT_SIGN', '*'), {'type': 'factor_cte', 'value': 5}]}, Token('DIV_SIGN', '/'), {'type': 'factor_cte', 'value': 2}]}]}}}}]}}
+{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'myProgram'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'x'}, {'type': 'id', 'value': 'y'}], 'type': {'type': 'type_int', 'value': 'int'}}, {'ids': [{'type': 'id', 'value': 'c_d8'}], 'type': {'type': 'type_float', 'value': 'float'}}]}, 'funcs': [{'type': 'funcs_multiple_ids', 'funcs_name': {'type': 'id', 'value': 'greet'}, 'parameters': [{'id': {'type': 'id', 'value': 'x'}, 'type': {'type': 'type_int', 'value': 'int'}}, {'id': {'type': 'id', 'value': 'y'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'msg'}, 'type': {'type': 'type_float', 'value': 'float'}}], 'x': {'type': 'int', 'assigned': True, 'address': 1000}, 'y': {'type': 'int', 'assigned': True, 'address': 1001}, 'msg': {'type': 'float', 'assigned': False, 'address': 2000}}, 'body': {'type': 'body_statement', 'value': [{'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}}}]}}, {'type': 'funcs_multiple_ids', 'funcs_name': {'type': 'id', 'value': 'printSum'}, 'parameters': [{'id': {'type': 'id', 'value': 'a'}, 'type': {'type': 'type_int', 'value': 'int'}}, {'id': {'type': 'id', 'value': 'b'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'result'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'a': {'type': 'int', 'assigned': True, 'address': 1002}, 'b': {'type': 'int', 'assigned': True, 'address': 1003}, 'result': {'type': 'int', 'assigned': True, 'address': 1004}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}, Token('PLUS', '+'), {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}}, Token('MULT_SIGN', '*'), {'type': 'factor_cte', 'value': 2}]}]}}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'result'}}}}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 3}}}, Token('PLUS', '+'), {'type': 'term', 'value': [{'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 4}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}]}}}}, Token('MULT_SIGN', '*'), {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}]}, Token('DIV_SIGN', '/'), {'type': 'factor_cte', 'value': 2}]}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'c_d8'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}, Token('DIV_SIGN', '/'), {'type': 'factor_cte', 'value': 2.0}]}}}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'c_d8'}}}}}}, {'type': 'statement', 'value': {'type': 'f_call_multiple_expressions', 'function': {'type': 'id', 'value': 'greet'}, 'value': [{'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}, {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}]}}]}}
 
 
 Directorio de funciones y variables:
 ------------------------------
 Scope: global
+Start Point: 0
   Variables:
     x : int | Dirección: 3000
     y : int | Dirección: 3001
     c_d8 : float | Dirección: 4000
+  Recursos: temporals(int=5, float=1), vars(int=2, float=1)
+
+Scope: greet
+Start Point: 1
+  Parámetros:
+    x : int
+    y : int
+  Variables:
+    x : int | Dirección: 1000
+    y : int | Dirección: 1001
+    msg : float | Dirección: 2000
+  Recursos: vars(float=1), params(int=2)
+
+Scope: printSum
+Start Point: 4
+  Parámetros:
+    a : int
+    b : int
+  Variables:
+    a : int | Dirección: 1002
+    b : int | Dirección: 1003
+    result : int | Dirección: 1004
+  Recursos: temporals(int=2), vars(int=1), params(int=2)
 
 
 
 Cuádruplos generados:
 ------------------------------
-0   1          7000       7001       5000      
-1   3          7002       7003       5001      
-2   4          5001       7002       5002      
-3   2          5000       5002       5003      
-4   7          5003                  3000      
+0   10                               10        
+1   9                                1001      
+2   17                                         
+3   16                                         
+4   3          1003       7000       5000      
+5   1          1002       5000       5001      
+6   7          5001                  1004      
+7   9                                1004      
+8   17                                         
+9   16                                         
+10  7          7000                  3000      
+11  2          7002       7000       5002      
+12  3          5002       3000       5003      
+13  4          5003       7000       5004      
+14  1          7001       5004       5005      
+15  7          5005                  3000      
+16  4          3000       8000       6000      
+17  7          6000                  4000      
+18  9                                4000      
+19  17                                         
+20  13         greet                           
+21  15         3000                  p1        
+22  1          3000       7003       5006      
+23  15         5006                  p2        
+24  14         greet                           
 
 
 Tabla de constantes:
 ------------------------------
-Valor: 3          | Tipo: int        | Dirección: 7000      
-Valor: 4          | Tipo: int        | Dirección: 7001      
-Valor: 2          | Tipo: int        | Dirección: 7002      
-Valor: 5          | Tipo: int        | Dirección: 7003      
+Valor: 2          | Tipo: int        | Dirección: 7000      
+Valor: 3          | Tipo: int        | Dirección: 7001      
+Valor: 4          | Tipo: int        | Dirección: 7002      
+Valor: 2.0        | Tipo: float      | Dirección: 8000      
+Valor: 1          | Tipo: int        | Dirección: 7003      
 
 
 Uso de memoria:
 ------------------------------
 LOCAL
-INT -> Rango: 1000 - 1999 | Dirección actual: 1000
-FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2000
+INT -> Rango: 1000 - 1999 | Dirección actual: 1005
+FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2001
 -----------------------------------------------------------
 GLOBAL
 INT -> Rango: 3000 - 3999 | Dirección actual: 3002
 FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4001
 -----------------------------------------------------------
 TEMPORAL
-INT -> Rango: 5000 - 5999 | Dirección actual: 5004
-FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
+INT -> Rango: 5000 - 5999 | Dirección actual: 5007
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6001
 -----------------------------------------------------------
 CONSTANTE
 INT -> Rango: 7000 - 7999 | Dirección actual: 7004
-FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8001
 STRING -> Rango: 9000 - 9999 | Dirección actual: 9000
 -----------------------------------------------------------
+
+
+Salida de la Máquina Virtual:
+------------------------------
+2.5
+6

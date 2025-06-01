@@ -1,0 +1,104 @@
+[RESULTADO] EXITOSO
+--------------------------------------------------
+
+Código original:
+------------------------------
+/* Test case for print_string */
+program TestPrintString;
+main
+{
+  print("Hello, World!");
+}
+end
+
+
+--------------------------------------------------
+
+Tokens encontrados:
+------------------------------
+Token            |   Carácter
+------------------------------
+PROGRAM_KWORD    | 'program' 
+ID               | 'TestPrintString'
+SEMICOLON        | ';'       
+MAIN_KWORD       | 'main'    
+L_CURLY_BRACE    | '{'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+STRING           | '"Hello, World!"'
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+END_KWORD        | 'end'     
+
+
+Árbol sintáctico (raw):
+------------------------------
+program_simple
+  program
+  TestPrintString
+  ;
+  main
+  body_statement
+    {
+    statement
+      print_string
+        print
+        (
+        "Hello, World!"
+        )
+        ;
+    }
+  end
+
+
+
+Árbol transformado (AST):
+------------------------------
+{'type': 'program_simple', 'program_name': {'type': 'id', 'value': 'TestPrintString'}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Hello, World!'}}}]}}
+
+
+Directorio de funciones y variables:
+------------------------------
+Scope: global
+Start Point: 0
+  Variables:
+
+
+
+Cuádruplos generados:
+------------------------------
+0   10                               1         
+1   9                                9000      
+2   17                                         
+
+
+Tabla de constantes:
+------------------------------
+Valor: Hello, World! | Tipo: string     | Dirección: 9000      
+
+
+Uso de memoria:
+------------------------------
+LOCAL
+INT -> Rango: 1000 - 1999 | Dirección actual: 1000
+FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2000
+-----------------------------------------------------------
+GLOBAL
+INT -> Rango: 3000 - 3999 | Dirección actual: 3000
+FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4000
+-----------------------------------------------------------
+TEMPORAL
+INT -> Rango: 5000 - 5999 | Dirección actual: 5000
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
+-----------------------------------------------------------
+CONSTANTE
+INT -> Rango: 7000 - 7999 | Dirección actual: 7000
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9001
+-----------------------------------------------------------
+
+
+Salida de la Máquina Virtual:
+------------------------------
+Hello, World!

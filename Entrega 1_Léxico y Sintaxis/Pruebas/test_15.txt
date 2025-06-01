@@ -1,0 +1,7 @@
+/*Prueba: print_string */
+program TestPrintString;
+main
+{
+  print("Hello, World!");
+}
+end

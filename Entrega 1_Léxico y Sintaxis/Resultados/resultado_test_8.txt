@@ -1,0 +1,203 @@
+[RESULTADO] EXITOSO
+--------------------------------------------------
+
+Código original:
+------------------------------
+/* Test case for assign, expression_simple, exp_plus, term_simple, factor_id, factor_cte (FLOAT) */
+program TestAssignmentsAndExpressions;
+var
+  numA : int;
+  numB : float;
+  res : float;
+main
+{
+  numA = 100;
+  numB = 20.5;
+  res = numA + numB - 5.0;
+  print(res);
+}
+end
+
+
+--------------------------------------------------
+
+Tokens encontrados:
+------------------------------
+Token            |   Carácter
+------------------------------
+PROGRAM_KWORD    | 'program' 
+ID               | 'TestAssignmentsAndExpressions'
+SEMICOLON        | ';'       
+VAR_KWORD        | 'var'     
+ID               | 'numA'    
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+ID               | 'numB'    
+COLON            | ':'       
+FLOAT_KWORD      | 'float'   
+SEMICOLON        | ';'       
+ID               | 'res'     
+COLON            | ':'       
+FLOAT_KWORD      | 'float'   
+SEMICOLON        | ';'       
+MAIN_KWORD       | 'main'    
+L_CURLY_BRACE    | '{'       
+ID               | 'numA'    
+EQUAL            | '='       
+CTE              | '100'     
+SEMICOLON        | ';'       
+ID               | 'numB'    
+EQUAL            | '='       
+CTE              | '20.5'    
+SEMICOLON        | ';'       
+ID               | 'res'     
+EQUAL            | '='       
+ID               | 'numA'    
+PLUS             | '+'       
+ID               | 'numB'    
+MINUS            | '-'       
+CTE              | '5.0'     
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'res'     
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+END_KWORD        | 'end'     
+
+
+Árbol sintáctico (raw):
+------------------------------
+program_vars
+  program
+  TestAssignmentsAndExpressions
+  ;
+  vars_one_id
+    var
+    numA
+    :
+    type_int	int
+    ;
+    numB
+    :
+    type_float	float
+    ;
+    res
+    :
+    type_float	float
+    ;
+  main
+  body_statement
+    {
+    statement
+      assign
+        numA
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	100
+        ;
+    statement
+      assign
+        numB
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	20.5
+        ;
+    statement
+      assign
+        res
+        =
+        expression_simple
+          exp_minus
+            exp_plus
+              exp_simple
+                term_simple
+                  factor_id	numA
+              +
+              term_simple
+                factor_id	numB
+            -
+            term_simple
+              factor_cte	5.0
+        ;
+    statement
+      f_call_one_expression
+        print
+        (
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	res
+        )
+        ;
+    }
+  end
+
+
+
+Árbol transformado (AST):
+------------------------------
+{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'TestAssignmentsAndExpressions'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'numA'}, 'type': {'type': 'type_int', 'value': 'int'}}, {'id': {'type': 'id', 'value': 'numB'}, 'type': {'type': 'type_float', 'value': 'float'}}, {'id': {'type': 'id', 'value': 'res'}, 'type': {'type': 'type_float', 'value': 'float'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'numA'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 100}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'numB'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 20.5}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'res'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'numA'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'numB'}}}]}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 5.0}}]}}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'res'}}}}}}]}}
+
+
+Directorio de funciones y variables:
+------------------------------
+Scope: global
+Start Point: 0
+  Variables:
+    numA : int | Dirección: 3000
+    numB : float | Dirección: 4000
+    res : float | Dirección: 4001
+  Recursos: temporals(float=2), vars(int=1, float=2)
+
+
+
+Cuádruplos generados:
+------------------------------
+0   10                               1         
+1   7          7000                  3000      
+2   7          8000                  4000      
+3   1          3000       4000       6000      
+4   2          6000       8001       6001      
+5   7          6001                  4001      
+6   9                                4001      
+7   17                                         
+
+
+Tabla de constantes:
+------------------------------
+Valor: 100        | Tipo: int        | Dirección: 7000      
+Valor: 20.5       | Tipo: float      | Dirección: 8000      
+Valor: 5.0        | Tipo: float      | Dirección: 8001      
+
+
+Uso de memoria:
+------------------------------
+LOCAL
+INT -> Rango: 1000 - 1999 | Dirección actual: 1000
+FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2000
+-----------------------------------------------------------
+GLOBAL
+INT -> Rango: 3000 - 3999 | Dirección actual: 3001
+FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4002
+-----------------------------------------------------------
+TEMPORAL
+INT -> Rango: 5000 - 5999 | Dirección actual: 5000
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6002
+-----------------------------------------------------------
+CONSTANTE
+INT -> Rango: 7000 - 7999 | Dirección actual: 7001
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8002
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9000
+-----------------------------------------------------------
+
+
+Salida de la Máquina Virtual:
+------------------------------
+115.5

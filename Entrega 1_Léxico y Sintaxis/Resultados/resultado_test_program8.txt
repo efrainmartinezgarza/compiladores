@@ -1,0 +1,212 @@
+[RESULTADO] EXITOSO
+--------------------------------------------------
+
+Código original:
+------------------------------
+program constants;
+var x: int; y: float;
+
+main {
+  x = -5 + 3 * (10 - 2);
+  y = +4.5 / 1.5;
+  print(x, y);
+}
+end
+
+
+--------------------------------------------------
+
+Tokens encontrados:
+------------------------------
+Token            |   Carácter
+------------------------------
+PROGRAM_KWORD    | 'program' 
+ID               | 'constants'
+SEMICOLON        | ';'       
+VAR_KWORD        | 'var'     
+ID               | 'x'       
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+ID               | 'y'       
+COLON            | ':'       
+FLOAT_KWORD      | 'float'   
+SEMICOLON        | ';'       
+MAIN_KWORD       | 'main'    
+L_CURLY_BRACE    | '{'       
+ID               | 'x'       
+EQUAL            | '='       
+MINUS            | '-'       
+CTE              | '5'       
+PLUS             | '+'       
+CTE              | '3'       
+MULT_SIGN        | '*'       
+L_PARENTHESIS    | '('       
+CTE              | '10'      
+MINUS            | '-'       
+CTE              | '2'       
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+ID               | 'y'       
+EQUAL            | '='       
+PLUS             | '+'       
+CTE              | '4.5'     
+DIV_SIGN         | '/'       
+CTE              | '1.5'     
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'x'       
+COMMA            | ','       
+ID               | 'y'       
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+END_KWORD        | 'end'     
+
+
+Árbol sintáctico (raw):
+------------------------------
+program_vars
+  program
+  constants
+  ;
+  vars_one_id
+    var
+    x
+    :
+    type_int	int
+    ;
+    y
+    :
+    type_float	float
+    ;
+  main
+  body_statement
+    {
+    statement
+      assign
+        x
+        =
+        expression_simple
+          exp_plus
+            exp_simple
+              term_simple
+                factor_minus
+                  -
+                  factor_cte	5
+            +
+            term_mult_sign
+              term_simple
+                factor_cte	3
+              *
+              factor_expression
+                (
+                expression_simple
+                  exp_minus
+                    exp_simple
+                      term_simple
+                        factor_cte	10
+                    -
+                    term_simple
+                      factor_cte	2
+                )
+        ;
+    statement
+      assign
+        y
+        =
+        expression_simple
+          exp_simple
+            term_div_sign
+              term_simple
+                factor_plus
+                  +
+                  factor_cte	4.5
+              /
+              factor_cte	1.5
+        ;
+    statement
+      f_call_multiple_expressions
+        print
+        (
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	x
+        ,
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	y
+        )
+        ;
+    }
+  end
+
+
+
+Árbol transformado (AST):
+------------------------------
+{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'constants'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'x'}, 'type': {'type': 'type_int', 'value': 'int'}}, {'id': {'type': 'id', 'value': 'y'}, 'type': {'type': 'type_float', 'value': 'float'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_minus', 'value': {'type': 'factor_cte', 'value': 5}}}}, Token('PLUS', '+'), {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 3}}, Token('MULT_SIGN', '*'), {'type': 'factor_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 10}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}]}}}]}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'y'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 4.5}}, Token('DIV_SIGN', '/'), {'type': 'factor_cte', 'value': 1.5}]}}}}}, {'type': 'print_expression', 'value': [{'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}}]}]}}
+
+
+Directorio de funciones y variables:
+------------------------------
+Scope: global
+Start Point: 0
+  Variables:
+    x : int | Dirección: 3000
+    y : float | Dirección: 4000
+  Recursos: temporals(int=3, float=1), vars(int=1, float=1)
+
+
+
+Cuádruplos generados:
+------------------------------
+0   10                               1         
+1   2          7002       7003       5000      
+2   3          7001       5000       5001      
+3   1          7000       5001       5002      
+4   7          5002                  3000      
+5   4          8000       8001       6000      
+6   7          6000                  4000      
+7   9                                3000      
+8   9                                4000      
+9   17                                         
+
+
+Tabla de constantes:
+------------------------------
+Valor: 5          | Tipo: int        | Dirección: 7000      
+Valor: 3          | Tipo: int        | Dirección: 7001      
+Valor: 10         | Tipo: int        | Dirección: 7002      
+Valor: 2          | Tipo: int        | Dirección: 7003      
+Valor: 4.5        | Tipo: float      | Dirección: 8000      
+Valor: 1.5        | Tipo: float      | Dirección: 8001      
+
+
+Uso de memoria:
+------------------------------
+LOCAL
+INT -> Rango: 1000 - 1999 | Dirección actual: 1000
+FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2000
+-----------------------------------------------------------
+GLOBAL
+INT -> Rango: 3000 - 3999 | Dirección actual: 3001
+FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4001
+-----------------------------------------------------------
+TEMPORAL
+INT -> Rango: 5000 - 5999 | Dirección actual: 5003
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6001
+-----------------------------------------------------------
+CONSTANTE
+INT -> Rango: 7000 - 7999 | Dirección actual: 7004
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8002
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9000
+-----------------------------------------------------------
+
+
+Salida de la Máquina Virtual:
+------------------------------
+293.0

@@ -1,0 +1,37 @@
+program FibonacciRecursive;
+var
+  i, n, fib_val : int; 
+
+void CalculateFib(x : int) [
+  var
+    local_temp_fib_n_minus_1, local_temp_fib_n_minus_2 : int;
+  {
+    if (x < 2) {
+      fib_val = x; // F(0) = 0, F(1) = 1
+    } else {
+      
+      // Cálculo de Fib(x-1)
+      CalculateFib(x-1);
+      local_temp_fib_n_minus_1 = fib_val; // Use local variable
+
+      // Cálculo de Fib(x-2)
+      CalculateFib(x-2);
+      local_temp_fib_n_minus_2 = fib_val; // Use local variable
+
+      fib_val = local_temp_fib_n_minus_1 + local_temp_fib_n_minus_2; 
+    };
+  }
+];
+
+main {
+  n = 10; 
+  print("Recursive Fibonacci sequence up to F(9):");
+
+  i = 0;
+  while (i < n) do {
+    CalculateFib(i); 
+    print(fib_val);  
+    i = i + 1;
+  };
+}
+end

@@ -1,0 +1,12 @@
+
+/* Prueba: program_funcs, funcs_no_vars, body_statement, assign, factor_id, factor_cte (INT) */
+
+program TestProgramWithFuncs;
+var myOtherVar: int;
+
+void MyFunction() [ var myVar: int; { myVar = 10; } ];
+main
+{
+  myOtherVar = 5;
+}
+end

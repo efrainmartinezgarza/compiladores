@@ -1,0 +1,16 @@
+/* Prueba: condition_if, expression_greater_than */
+program TestIfCondition;
+var
+  age : int;
+  canVote : int; 
+main
+{
+  age = 18;
+  canVote = 0;
+  if (age > 17) {
+    canVote = 1;
+    print("Puede votar");
+  };
+  
+}
+end

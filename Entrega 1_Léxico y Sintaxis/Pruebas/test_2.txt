@@ -1,0 +1,10 @@
+/* Prueba: program_vars, vars_one_id, type_int, type_float */
+program TestProgramWithVars;
+var
+  myInt : int;
+  myFloat : float;
+main
+{
+}
+end
+

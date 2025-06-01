@@ -106,6 +106,12 @@ class QuadGenerator:
         # Generación del cuádruplo de impresión
         self.filaCuadruplos.append((operator, '', '', value))
 
+    def generate_print_newline_quad(self): 
+        operator = "PRINT_NL"
+        if (self.debug_mode == False):
+            operator = self.transform_operador_to_number(operator)
+        self.filaCuadruplos.append((operator, '', '', ''))
+
     def print_filaCuadruplos(self):     
         for i, cuad in enumerate(self.filaCuadruplos):
             op, left, right, res = cuad
@@ -226,7 +232,9 @@ class QuadGenerator:
         elif operator == "param":
             return 15
         elif operator == "ENDFUNC":
-            return 16     
+            return 16   
+        elif operator == "PRINT_NL":
+            return 17  
         else:
             raise ValueError(f"Operador desconocido: {operator}")
 

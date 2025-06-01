@@ -129,7 +129,7 @@ class VirtualMachine:
             '/': 4,
             '>': 5,
             '<': 6,
-            '=': 7,
+            '=': 7, # Note: This is likely assignment, not comparison equality. Comparison is usually == or similar.
             '!=': 8,
             'print': 9,
             'goTo': 10,
@@ -138,7 +138,8 @@ class VirtualMachine:
             'ERA': 13,
             'goSub': 14,
             'param': 15,
-            'ENDFUNC': 16
+            'ENDFUNC': 16,
+            'PRINT_NL': 17 # Added for newline after print statements
         }
 
         # Si se recibió un número entero, solo se verifica si es un ID válido
@@ -166,13 +167,13 @@ class VirtualMachine:
 
             # Descomposición del cuádruplo en sus componentes
             op, left, right, result = quad
-
+            
             # Validación: ¿Se ha realizado un salto?
             jumped = False
 
             # Operador del cuádruplo a examinar (convertido a ID numérico)
             op_id = self.operator_to_id(op) 
-
+            
             # Opciones de ejecución según el ID del operador
             match op_id:
 
@@ -224,14 +225,14 @@ class VirtualMachine:
                     val = int(self.get_value(left) != self.get_value(right))
                     self.set_value(result, val)
 
-                case 9:  # Imprimir (print)
+                case 9:  # Imprimir (print) 
                     val = self.get_value(result)
-                    print(val)
+                    print(val, end="")
 
                 case 10:  # Salto incondicional (goTo)
 
                     # Validación: Si el salto está fuera de rango, se lanza un error
-                    if not (0 <= result < len(self.quadruples)):
+                    if not (0 <= result < len(self.quadruples) + 1):
                         raise IndexError(f"Error: IP={result} se encuentra fuera de rango permitido")
                     
                     # Actualización del puntero de instrucción al cuádruplo de destino
@@ -265,7 +266,7 @@ class VirtualMachine:
 
                     # Si la condición es verdadera, se salta al cuádruplo indicado por 'result'
                     if cond is not None and cond == True:
-                        if not (0 <= result < len(self.quadruples)):
+                        if not (0 <= result < len(self.quadruples) + 1):
                             raise IndexError(f"Error: IP={result} se encuentra fuera de rango permitido")
                         self.instruction_pointer = result
                         jumped = True
@@ -373,6 +374,9 @@ class VirtualMachine:
                     self.current_scope = context['scope']
                     self.current_local_memory = context['local_memory'] 
                     jumped = True
+
+                case 17: # PRINT_NL 
+                    print() 
 
                 case _: # Operación no reconocida (Error)
                     raise ValueError(f"Operación no reconocida: {op}")

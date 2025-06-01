@@ -4,7 +4,8 @@ import sys
 from lark import Token, Tree
 
 # Asegúrate de importar lo necesario desde main.py
-from main import parser, MyTransformer, Directory
+from main_debug import parser, MyTransformer, Directory
+from virtual_machine import VirtualMachine # Added import
 
 # Rutas del proyecto
 MAIN_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -28,7 +29,7 @@ def tree_to_dict(tree):
 
 def analyze_file(file_path):
     file_name = os.path.basename(file_path)
-    print(f"\nAnalizando: {file_name}")
+    # print(f"\nAnalizando: {file_name}") # Removed individual analysis print
 
     try:
         with open(file_path, 'r') as f:
@@ -65,8 +66,14 @@ def analyze_file(file_path):
     output_capture = StringIO()
     sys.stdout = output_capture
 
+    # Primero, imprimir el código original al buffer de captura
+    print("Código original:")
+    print("------------------------------")
+    print(test_code) # test_code ya contiene el código del archivo leído
+    print("\n" + "-" * 50 + "\n") # Separador
+
     try:
-        print("📝 Tokens encontrados:")
+        print("Tokens encontrados:")
         print("------------------------------")
         print("Token            |   Carácter")
         print("------------------------------")
@@ -102,6 +109,23 @@ def analyze_file(file_path):
             print("------------------------------")
             checker.memory_manager.print_memory()
 
+            # Ejecutar con Máquina Virtual
+            print("\n\nSalida de la Máquina Virtual:")
+            print("------------------------------")
+            try:
+                quadruples = checker.quad_gen.filaCuadruplos
+                function_directory = checker.function_dir.func_dir
+                constant_table = checker.memory_manager.constants_table
+
+                if quadruples is not None and function_directory is not None and constant_table is not None:
+                    vm = VirtualMachine(quadruples, function_directory, constant_table)
+                    vm.run()  # VM's print output will go to output_capture
+                else:
+                    print("No se pudo ejecutar la VM: faltan componentes (cuádruplos, dir. funciones o tabla de constantes).")
+
+            except Exception as vm_e:
+                print(f"ERROR durante la ejecución de la Máquina Virtual: {vm_e}")
+
     finally:
         sys.stdout = sys.__stdout__  # Restaura stdout
 
@@ -113,17 +137,41 @@ def analyze_file(file_path):
         f.write(f"[RESULTADO] {status}\n")
         f.write("-" * 50 + "\n\n")
         if status == "ERROR DETECTADO":
+            f.write("Código original:\n") # También incluir el código original en caso de error
+            f.write("------------------------------\n")
+            f.write(test_code + "\n\n")
             f.write("Mensaje de error:\n")
             f.write(f"{error_msg}\n")
         else:
             f.write(full_output)
 
-    print(f"[{status}] {file_name}")
+    # print(f"[{status}] {file_name}") # Removed individual status print
+    return status, file_name # Added return
 
 # Ejecutar todas las pruebas
-for file_name in os.listdir(TEST_FOLDER):
-    if file_name.endswith(".txt"):
-        file_path = os.path.join(TEST_FOLDER, file_name)
-        analyze_file(file_path)
+failed_files = []
+all_successful = True
 
-print(f"\nPruebas completadas. Resultados guardados en: {RESULT_FOLDER}")
+for file_name_iter in os.listdir(TEST_FOLDER): # Renamed file_name to file_name_iter to avoid conflict
+    if file_name_iter.endswith(".txt"):
+        file_path = os.path.join(TEST_FOLDER, file_name_iter)
+        status, f_name = analyze_file(file_path) # Capture returned status and filename
+        if status == "ERROR DETECTADO":
+            all_successful = False
+            failed_files.append(f_name)
+
+# Impresión de resultados finales
+
+print("\n\nRESULTADOS DE LAS PRUEBAS")
+print("---------------------------------------------------------------------------------")
+
+if all_successful:
+    print("Todos los resultados fueron exitosos.")
+else:
+    print("\nExistieron errores en los siguientes archivos:")
+    for f_name in failed_files:
+        print(f"  - {f_name}")
+
+print(f"Las pruebas fueron completadas y los resultados guardados.")
+
+print("---------------------------------------------------------------------------------\n")

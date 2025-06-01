@@ -1,0 +1,310 @@
+[RESULTADO] EXITOSO
+--------------------------------------------------
+
+Código original:
+------------------------------
+program fibMini;
+var a, b, c, i: int;
+
+main {
+  a = 0; b = 1;
+  i = 0;
+  while (i < 5) do {
+    print(a);
+    c = a + b;
+    a = b;
+    b = c;
+    i = i + 1;
+  };
+
+  print("Fin");
+}
+end
+
+
+--------------------------------------------------
+
+Tokens encontrados:
+------------------------------
+Token            |   Carácter
+------------------------------
+PROGRAM_KWORD    | 'program' 
+ID               | 'fibMini' 
+SEMICOLON        | ';'       
+VAR_KWORD        | 'var'     
+ID               | 'a'       
+COMMA            | ','       
+ID               | 'b'       
+COMMA            | ','       
+ID               | 'c'       
+COMMA            | ','       
+ID               | 'i'       
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+MAIN_KWORD       | 'main'    
+L_CURLY_BRACE    | '{'       
+ID               | 'a'       
+EQUAL            | '='       
+CTE              | '0'       
+SEMICOLON        | ';'       
+ID               | 'b'       
+EQUAL            | '='       
+CTE              | '1'       
+SEMICOLON        | ';'       
+ID               | 'i'       
+EQUAL            | '='       
+CTE              | '0'       
+SEMICOLON        | ';'       
+WHILE_KWORD      | 'while'   
+L_PARENTHESIS    | '('       
+ID               | 'i'       
+LESS_THAN        | '<'       
+CTE              | '5'       
+R_PARENTHESIS    | ')'       
+DO_KWORD         | 'do'      
+L_CURLY_BRACE    | '{'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'a'       
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+ID               | 'c'       
+EQUAL            | '='       
+ID               | 'a'       
+PLUS             | '+'       
+ID               | 'b'       
+SEMICOLON        | ';'       
+ID               | 'a'       
+EQUAL            | '='       
+ID               | 'b'       
+SEMICOLON        | ';'       
+ID               | 'b'       
+EQUAL            | '='       
+ID               | 'c'       
+SEMICOLON        | ';'       
+ID               | 'i'       
+EQUAL            | '='       
+ID               | 'i'       
+PLUS             | '+'       
+CTE              | '1'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+STRING           | '"Fin"'   
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+END_KWORD        | 'end'     
+
+
+Árbol sintáctico (raw):
+------------------------------
+program_vars
+  program
+  fibMini
+  ;
+  vars_multiple_ids
+    var
+    a
+    ,
+    b
+    ,
+    c
+    ,
+    i
+    :
+    type_int	int
+    ;
+  main
+  body_statement
+    {
+    statement
+      assign
+        a
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	0
+        ;
+    statement
+      assign
+        b
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	1
+        ;
+    statement
+      assign
+        i
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	0
+        ;
+    statement
+      cycle
+        while
+        (
+        expression_less_than
+          exp_simple
+            term_simple
+              factor_id	i
+          <
+          exp_simple
+            term_simple
+              factor_cte	5
+        )
+        do
+        body_statement
+          {
+          statement
+            f_call_one_expression
+              print
+              (
+              expression_simple
+                exp_simple
+                  term_simple
+                    factor_id	a
+              )
+              ;
+          statement
+            assign
+              c
+              =
+              expression_simple
+                exp_plus
+                  exp_simple
+                    term_simple
+                      factor_id	a
+                  +
+                  term_simple
+                    factor_id	b
+              ;
+          statement
+            assign
+              a
+              =
+              expression_simple
+                exp_simple
+                  term_simple
+                    factor_id	b
+              ;
+          statement
+            assign
+              b
+              =
+              expression_simple
+                exp_simple
+                  term_simple
+                    factor_id	c
+              ;
+          statement
+            assign
+              i
+              =
+              expression_simple
+                exp_plus
+                  exp_simple
+                    term_simple
+                      factor_id	i
+                  +
+                  term_simple
+                    factor_cte	1
+              ;
+          }
+        ;
+    statement
+      print_string
+        print
+        (
+        "Fin"
+        )
+        ;
+    }
+  end
+
+
+
+Árbol transformado (AST):
+------------------------------
+{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'fibMini'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'a'}, {'type': 'id', 'value': 'b'}, {'type': 'id', 'value': 'c'}, {'type': 'id', 'value': 'i'}], 'type': {'type': 'type_int', 'value': 'int'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'a'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'b'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('LESS_THAN', '<'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 5}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'c'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'a'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'b'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'c'}}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}}}, {'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Fin'}}}]}}
+
+
+Directorio de funciones y variables:
+------------------------------
+Scope: global
+Start Point: 0
+  Variables:
+    a : int | Dirección: 3000
+    b : int | Dirección: 3001
+    c : int | Dirección: 3002
+    i : int | Dirección: 3003
+  Recursos: temporals(int=3), vars(int=4)
+
+
+
+Cuádruplos generados:
+------------------------------
+0   10                               1         
+1   7          7000                  3000      
+2   7          7001                  3001      
+3   7          7000                  3003      
+4   6          3003       7002       5000      
+5   11         5000                  15        
+6   9                                3000      
+7   17                                         
+8   1          3000       3001       5001      
+9   7          5001                  3002      
+10  7          3001                  3000      
+11  7          3002                  3001      
+12  1          3003       7001       5002      
+13  7          5002                  3003      
+14  10                               4         
+15  9                                9000      
+16  17                                         
+
+
+Tabla de constantes:
+------------------------------
+Valor: 0          | Tipo: int        | Dirección: 7000      
+Valor: 1          | Tipo: int        | Dirección: 7001      
+Valor: 5          | Tipo: int        | Dirección: 7002      
+Valor: Fin        | Tipo: string     | Dirección: 9000      
+
+
+Uso de memoria:
+------------------------------
+LOCAL
+INT -> Rango: 1000 - 1999 | Dirección actual: 1000
+FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2000
+-----------------------------------------------------------
+GLOBAL
+INT -> Rango: 3000 - 3999 | Dirección actual: 3004
+FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4000
+-----------------------------------------------------------
+TEMPORAL
+INT -> Rango: 5000 - 5999 | Dirección actual: 5003
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
+-----------------------------------------------------------
+CONSTANTE
+INT -> Rango: 7000 - 7999 | Dirección actual: 7003
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9001
+-----------------------------------------------------------
+
+
+Salida de la Máquina Virtual:
+------------------------------
+0
+1
+1
+2
+3
+Fin

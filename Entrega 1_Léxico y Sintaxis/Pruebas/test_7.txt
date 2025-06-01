@@ -1,0 +1,18 @@
+/* Prueba: funcs_multiple_ids (function with multiple parameters) */
+program TestFuncWithMultiParams;
+var
+  sumResult : float;
+void SumThem(val1 : int, val2 : float) [
+  var
+    temp : float;
+  {
+    temp = val2; 
+    sumResult = temp + val1;
+  }
+];
+main
+{
+  SumThem(3, 3.0);
+  print(sumResult);
+}
+end

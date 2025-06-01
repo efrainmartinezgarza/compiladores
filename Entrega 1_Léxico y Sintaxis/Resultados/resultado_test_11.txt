@@ -1,0 +1,257 @@
+[RESULTADO] EXITOSO
+--------------------------------------------------
+
+Código original:
+------------------------------
+/* Prueba: cycle (while-do), exp_minus, term_mult_sign, factor_expression */
+program TestWhileCycle;
+var
+  counter : int;
+  accumulator : int;
+main
+{
+  counter = 5;
+  accumulator = 0;
+  while (counter > 0) do {
+    accumulator = accumulator + (counter * 2);
+    counter = counter - 1;
+  };
+
+  print(accumulator);
+}
+end
+
+
+--------------------------------------------------
+
+Tokens encontrados:
+------------------------------
+Token            |   Carácter
+------------------------------
+PROGRAM_KWORD    | 'program' 
+ID               | 'TestWhileCycle'
+SEMICOLON        | ';'       
+VAR_KWORD        | 'var'     
+ID               | 'counter' 
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+ID               | 'accumulator'
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+MAIN_KWORD       | 'main'    
+L_CURLY_BRACE    | '{'       
+ID               | 'counter' 
+EQUAL            | '='       
+CTE              | '5'       
+SEMICOLON        | ';'       
+ID               | 'accumulator'
+EQUAL            | '='       
+CTE              | '0'       
+SEMICOLON        | ';'       
+WHILE_KWORD      | 'while'   
+L_PARENTHESIS    | '('       
+ID               | 'counter' 
+GREATER_THAN     | '>'       
+CTE              | '0'       
+R_PARENTHESIS    | ')'       
+DO_KWORD         | 'do'      
+L_CURLY_BRACE    | '{'       
+ID               | 'accumulator'
+EQUAL            | '='       
+ID               | 'accumulator'
+PLUS             | '+'       
+L_PARENTHESIS    | '('       
+ID               | 'counter' 
+MULT_SIGN        | '*'       
+CTE              | '2'       
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+ID               | 'counter' 
+EQUAL            | '='       
+ID               | 'counter' 
+MINUS            | '-'       
+CTE              | '1'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'accumulator'
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+END_KWORD        | 'end'     
+
+
+Árbol sintáctico (raw):
+------------------------------
+program_vars
+  program
+  TestWhileCycle
+  ;
+  vars_one_id
+    var
+    counter
+    :
+    type_int	int
+    ;
+    accumulator
+    :
+    type_int	int
+    ;
+  main
+  body_statement
+    {
+    statement
+      assign
+        counter
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	5
+        ;
+    statement
+      assign
+        accumulator
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	0
+        ;
+    statement
+      cycle
+        while
+        (
+        expression_greater_than
+          exp_simple
+            term_simple
+              factor_id	counter
+          >
+          exp_simple
+            term_simple
+              factor_cte	0
+        )
+        do
+        body_statement
+          {
+          statement
+            assign
+              accumulator
+              =
+              expression_simple
+                exp_plus
+                  exp_simple
+                    term_simple
+                      factor_id	accumulator
+                  +
+                  term_simple
+                    factor_expression
+                      (
+                      expression_simple
+                        exp_simple
+                          term_mult_sign
+                            term_simple
+                              factor_id	counter
+                            *
+                            factor_cte	2
+                      )
+              ;
+          statement
+            assign
+              counter
+              =
+              expression_simple
+                exp_minus
+                  exp_simple
+                    term_simple
+                      factor_id	counter
+                  -
+                  term_simple
+                    factor_cte	1
+              ;
+          }
+        ;
+    statement
+      f_call_one_expression
+        print
+        (
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	accumulator
+        )
+        ;
+    }
+  end
+
+
+
+Árbol transformado (AST):
+------------------------------
+{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'TestWhileCycle'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'counter'}, 'type': {'type': 'type_int', 'value': 'int'}}, {'id': {'type': 'id', 'value': 'accumulator'}, 'type': {'type': 'type_int', 'value': 'int'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'counter'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 5}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'accumulator'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_greater_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'counter'}}}}, Token('GREATER_THAN', '>'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'accumulator'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'accumulator'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'counter'}}}, Token('MULT_SIGN', '*'), {'type': 'factor_cte', 'value': 2}]}}}}}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'counter'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'counter'}}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'accumulator'}}}}}}]}}
+
+
+Directorio de funciones y variables:
+------------------------------
+Scope: global
+Start Point: 0
+  Variables:
+    counter : int | Dirección: 3000
+    accumulator : int | Dirección: 3001
+  Recursos: temporals(int=4), vars(int=2)
+
+
+
+Cuádruplos generados:
+------------------------------
+0   10                               1         
+1   7          7000                  3000      
+2   7          7001                  3001      
+3   5          3000       7001       5000      
+4   11         5000                  11        
+5   3          3000       7002       5001      
+6   1          3001       5001       5002      
+7   7          5002                  3001      
+8   2          3000       7003       5003      
+9   7          5003                  3000      
+10  10                               3         
+11  9                                3001      
+12  17                                         
+
+
+Tabla de constantes:
+------------------------------
+Valor: 5          | Tipo: int        | Dirección: 7000      
+Valor: 0          | Tipo: int        | Dirección: 7001      
+Valor: 2          | Tipo: int        | Dirección: 7002      
+Valor: 1          | Tipo: int        | Dirección: 7003      
+
+
+Uso de memoria:
+------------------------------
+LOCAL
+INT -> Rango: 1000 - 1999 | Dirección actual: 1000
+FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2000
+-----------------------------------------------------------
+GLOBAL
+INT -> Rango: 3000 - 3999 | Dirección actual: 3002
+FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4000
+-----------------------------------------------------------
+TEMPORAL
+INT -> Rango: 5000 - 5999 | Dirección actual: 5004
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
+-----------------------------------------------------------
+CONSTANTE
+INT -> Rango: 7000 - 7999 | Dirección actual: 7004
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9000
+-----------------------------------------------------------
+
+
+Salida de la Máquina Virtual:
+------------------------------
+30

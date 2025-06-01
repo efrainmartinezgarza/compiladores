@@ -1,0 +1,145 @@
+[RESULTADO] EXITOSO
+--------------------------------------------------
+
+Código original:
+------------------------------
+/* Prueba: print_expression */
+
+program TestPrintExpression;
+var
+  valueToPrint : int;
+main
+{
+  valueToPrint = 42;
+  print(valueToPrint * 2);
+}
+end
+
+
+--------------------------------------------------
+
+Tokens encontrados:
+------------------------------
+Token            |   Carácter
+------------------------------
+PROGRAM_KWORD    | 'program' 
+ID               | 'TestPrintExpression'
+SEMICOLON        | ';'       
+VAR_KWORD        | 'var'     
+ID               | 'valueToPrint'
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+MAIN_KWORD       | 'main'    
+L_CURLY_BRACE    | '{'       
+ID               | 'valueToPrint'
+EQUAL            | '='       
+CTE              | '42'      
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'valueToPrint'
+MULT_SIGN        | '*'       
+CTE              | '2'       
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+END_KWORD        | 'end'     
+
+
+Árbol sintáctico (raw):
+------------------------------
+program_vars
+  program
+  TestPrintExpression
+  ;
+  vars_one_id
+    var
+    valueToPrint
+    :
+    type_int	int
+    ;
+  main
+  body_statement
+    {
+    statement
+      assign
+        valueToPrint
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	42
+        ;
+    statement
+      f_call_one_expression
+        print
+        (
+        expression_simple
+          exp_simple
+            term_mult_sign
+              term_simple
+                factor_id	valueToPrint
+              *
+              factor_cte	2
+        )
+        ;
+    }
+  end
+
+
+
+Árbol transformado (AST):
+------------------------------
+{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'TestPrintExpression'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'valueToPrint'}, 'type': {'type': 'type_int', 'value': 'int'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'valueToPrint'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 42}}}}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'valueToPrint'}}}, Token('MULT_SIGN', '*'), {'type': 'factor_cte', 'value': 2}]}}}}]}}
+
+
+Directorio de funciones y variables:
+------------------------------
+Scope: global
+Start Point: 0
+  Variables:
+    valueToPrint : int | Dirección: 3000
+  Recursos: temporals(int=1), vars(int=1)
+
+
+
+Cuádruplos generados:
+------------------------------
+0   10                               1         
+1   7          7000                  3000      
+2   3          3000       7001       5000      
+3   9                                5000      
+4   17                                         
+
+
+Tabla de constantes:
+------------------------------
+Valor: 42         | Tipo: int        | Dirección: 7000      
+Valor: 2          | Tipo: int        | Dirección: 7001      
+
+
+Uso de memoria:
+------------------------------
+LOCAL
+INT -> Rango: 1000 - 1999 | Dirección actual: 1000
+FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2000
+-----------------------------------------------------------
+GLOBAL
+INT -> Rango: 3000 - 3999 | Dirección actual: 3001
+FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4000
+-----------------------------------------------------------
+TEMPORAL
+INT -> Rango: 5000 - 5999 | Dirección actual: 5001
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
+-----------------------------------------------------------
+CONSTANTE
+INT -> Rango: 7000 - 7999 | Dirección actual: 7002
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9000
+-----------------------------------------------------------
+
+
+Salida de la Máquina Virtual:
+------------------------------
+84

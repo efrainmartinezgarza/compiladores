@@ -1,0 +1,14 @@
+/* Prueba: assign, expression_simple, exp_plus, term_simple, factor_id, factor_cte (FLOAT) */
+program TestAssignmentsAndExpressions;
+var
+  numA : int;
+  numB : float;
+  res : float;
+main
+{
+  numA = 100;
+  numB = 20.5;
+  res = numA + numB - 5.0;
+  print(res);
+}
+end

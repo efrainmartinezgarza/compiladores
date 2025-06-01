@@ -1,7 +1,23 @@
 [RESULTADO] EXITOSO
 --------------------------------------------------
 
-📝 Tokens encontrados:
+Código original:
+------------------------------
+program myProgram;
+var x, y: int; a, b: float;
+main {
+  x = 2;
+  y = 4;
+  print("Hello world");
+  print(x, y + 2);
+  print(x);
+  print(x, y);
+}
+end
+
+--------------------------------------------------
+
+Tokens encontrados:
 ------------------------------
 Token            |   Carácter
 ------------------------------
@@ -23,6 +39,14 @@ FLOAT_KWORD      | 'float'
 SEMICOLON        | ';'       
 MAIN_KWORD       | 'main'    
 L_CURLY_BRACE    | '{'       
+ID               | 'x'       
+EQUAL            | '='       
+CTE              | '2'       
+SEMICOLON        | ';'       
+ID               | 'y'       
+EQUAL            | '='       
+CTE              | '4'       
+SEMICOLON        | ';'       
 PRINT_KWORD      | 'print'   
 L_PARENTHESIS    | '('       
 STRING           | '"Hello world"'
@@ -76,6 +100,24 @@ program_vars
   main
   body_statement
     {
+    statement
+      assign
+        x
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	2
+        ;
+    statement
+      assign
+        y
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	4
+        ;
     statement
       print_string
         print
@@ -134,35 +176,45 @@ program_vars
 
 Árbol transformado (AST):
 ------------------------------
-{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'myProgram'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'x'}, {'type': 'id', 'value': 'y'}], 'type': {'type': 'type_int', 'value': 'int'}}, {'ids': [{'type': 'id', 'value': 'a'}, {'type': 'id', 'value': 'b'}], 'type': {'type': 'type_float', 'value': 'float'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Hello world'}}}, {'type': 'print_expression', 'value': [{'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}, {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}]}}]}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}}, {'type': 'print_expression', 'value': [{'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}}]}]}}
+{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'myProgram'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'x'}, {'type': 'id', 'value': 'y'}], 'type': {'type': 'type_int', 'value': 'int'}}, {'ids': [{'type': 'id', 'value': 'a'}, {'type': 'id', 'value': 'b'}], 'type': {'type': 'type_float', 'value': 'float'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'y'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 4}}}}}}, {'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Hello world'}}}, {'type': 'print_expression', 'value': [{'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}, {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}]}}]}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}}, {'type': 'print_expression', 'value': [{'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}}]}]}}
 
 
 Directorio de funciones y variables:
 ------------------------------
 Scope: global
+Start Point: 0
   Variables:
     x : int | Dirección: 3000
     y : int | Dirección: 3001
     a : float | Dirección: 4000
     b : float | Dirección: 4001
+  Recursos: temporals(int=1), vars(int=2, float=2)
 
 
 
 Cuádruplos generados:
 ------------------------------
-0   9                                9000      
-1   9                                3000      
-2   1          3001       7000       5000      
-3   9                                5000      
-4   9                                3000      
+0   10                               1         
+1   7          7000                  3000      
+2   7          7001                  3001      
+3   9                                9000      
+4   17                                         
 5   9                                3000      
-6   9                                3001      
+6   1          3001       7000       5000      
+7   9                                5000      
+8   17                                         
+9   9                                3000      
+10  17                                         
+11  9                                3000      
+12  9                                3001      
+13  17                                         
 
 
 Tabla de constantes:
 ------------------------------
-Valor: Hello world | Tipo: string     | Dirección: 9000      
 Valor: 2          | Tipo: int        | Dirección: 7000      
+Valor: 4          | Tipo: int        | Dirección: 7001      
+Valor: Hello world | Tipo: string     | Dirección: 9000      
 
 
 Uso de memoria:
@@ -180,7 +232,15 @@ INT -> Rango: 5000 - 5999 | Dirección actual: 5001
 FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
 -----------------------------------------------------------
 CONSTANTE
-INT -> Rango: 7000 - 7999 | Dirección actual: 7001
+INT -> Rango: 7000 - 7999 | Dirección actual: 7002
 FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
 STRING -> Rango: 9000 - 9999 | Dirección actual: 9001
 -----------------------------------------------------------
+
+
+Salida de la Máquina Virtual:
+------------------------------
+Hello world
+26
+2
+24

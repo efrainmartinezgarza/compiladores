@@ -1,0 +1,209 @@
+[RESULTADO] EXITOSO
+--------------------------------------------------
+
+Código original:
+------------------------------
+/* Prueba: condition_if, expression_greater_than */
+program TestIfCondition;
+var
+  age : int;
+  canVote : int; 
+main
+{
+  age = 18;
+  canVote = 0;
+  if (age > 17) {
+    canVote = 1;
+    print("Puede votar");
+  };
+  
+}
+end
+
+
+--------------------------------------------------
+
+Tokens encontrados:
+------------------------------
+Token            |   Carácter
+------------------------------
+PROGRAM_KWORD    | 'program' 
+ID               | 'TestIfCondition'
+SEMICOLON        | ';'       
+VAR_KWORD        | 'var'     
+ID               | 'age'     
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+ID               | 'canVote' 
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+MAIN_KWORD       | 'main'    
+L_CURLY_BRACE    | '{'       
+ID               | 'age'     
+EQUAL            | '='       
+CTE              | '18'      
+SEMICOLON        | ';'       
+ID               | 'canVote' 
+EQUAL            | '='       
+CTE              | '0'       
+SEMICOLON        | ';'       
+IF_KWORD         | 'if'      
+L_PARENTHESIS    | '('       
+ID               | 'age'     
+GREATER_THAN     | '>'       
+CTE              | '17'      
+R_PARENTHESIS    | ')'       
+L_CURLY_BRACE    | '{'       
+ID               | 'canVote' 
+EQUAL            | '='       
+CTE              | '1'       
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+STRING           | '"Puede votar"'
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+END_KWORD        | 'end'     
+
+
+Árbol sintáctico (raw):
+------------------------------
+program_vars
+  program
+  TestIfCondition
+  ;
+  vars_one_id
+    var
+    age
+    :
+    type_int	int
+    ;
+    canVote
+    :
+    type_int	int
+    ;
+  main
+  body_statement
+    {
+    statement
+      assign
+        age
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	18
+        ;
+    statement
+      assign
+        canVote
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	0
+        ;
+    statement
+      condition_if
+        if
+        (
+        expression_greater_than
+          exp_simple
+            term_simple
+              factor_id	age
+          >
+          exp_simple
+            term_simple
+              factor_cte	17
+        )
+        body_statement
+          {
+          statement
+            assign
+              canVote
+              =
+              expression_simple
+                exp_simple
+                  term_simple
+                    factor_cte	1
+              ;
+          statement
+            print_string
+              print
+              (
+              "Puede votar"
+              )
+              ;
+          }
+        ;
+    }
+  end
+
+
+
+Árbol transformado (AST):
+------------------------------
+{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'TestIfCondition'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'age'}, 'type': {'type': 'type_int', 'value': 'int'}}, {'id': {'type': 'id', 'value': 'canVote'}, 'type': {'type': 'type_int', 'value': 'int'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'age'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 18}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'canVote'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}}}}, {'type': 'statement', 'value': {'type': 'condition_if', 'condition': {'type': 'expression_greater_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'age'}}}}, Token('GREATER_THAN', '>'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 17}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'canVote'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}, {'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Puede votar'}}}]}}}]}}
+
+
+Directorio de funciones y variables:
+------------------------------
+Scope: global
+Start Point: 0
+  Variables:
+    age : int | Dirección: 3000
+    canVote : int | Dirección: 3001
+  Recursos: temporals(int=1), vars(int=2)
+
+
+
+Cuádruplos generados:
+------------------------------
+0   10                               1         
+1   7          7000                  3000      
+2   7          7001                  3001      
+3   5          3000       7002       5000      
+4   11         5000                  8         
+5   7          7003                  3001      
+6   9                                9000      
+7   17                                         
+
+
+Tabla de constantes:
+------------------------------
+Valor: 18         | Tipo: int        | Dirección: 7000      
+Valor: 0          | Tipo: int        | Dirección: 7001      
+Valor: 17         | Tipo: int        | Dirección: 7002      
+Valor: 1          | Tipo: int        | Dirección: 7003      
+Valor: Puede votar | Tipo: string     | Dirección: 9000      
+
+
+Uso de memoria:
+------------------------------
+LOCAL
+INT -> Rango: 1000 - 1999 | Dirección actual: 1000
+FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2000
+-----------------------------------------------------------
+GLOBAL
+INT -> Rango: 3000 - 3999 | Dirección actual: 3002
+FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4000
+-----------------------------------------------------------
+TEMPORAL
+INT -> Rango: 5000 - 5999 | Dirección actual: 5001
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
+-----------------------------------------------------------
+CONSTANTE
+INT -> Rango: 7000 - 7999 | Dirección actual: 7004
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9001
+-----------------------------------------------------------
+
+
+Salida de la Máquina Virtual:
+------------------------------
+Puede votar

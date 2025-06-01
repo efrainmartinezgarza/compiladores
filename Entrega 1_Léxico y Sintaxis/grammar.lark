@@ -2,6 +2,10 @@
 // -----------------------------------------------------------------
 %import common.WS
 %ignore WS
+%import common.C_COMMENT
+%ignore C_COMMENT 
+%import common.CPP_COMMENT // Added for C++-style comments
+%ignore CPP_COMMENT // Added to ignore C++-style comments
 
 // Palabras clave
 // -----------------------------------------------------------------
@@ -81,7 +85,9 @@ vars: VAR_KWORD (ID COLON type SEMICOLON)+ -> vars_one_id
 
 funcs: VOID_KWORD ID L_PARENTHESIS R_PARENTHESIS L_BRACKET body R_BRACKET SEMICOLON -> funcs_no_vars
         | VOID_KWORD ID L_PARENTHESIS R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_simple
+        | VOID_KWORD ID L_PARENTHESIS ID COLON type R_PARENTHESIS L_BRACKET body R_BRACKET SEMICOLON -> funcs_id_no_vars
         | VOID_KWORD ID L_PARENTHESIS ID COLON type R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_id
+        | VOID_KWORD ID L_PARENTHESIS ID COLON type (COMMA ID COLON type)+ R_PARENTHESIS L_BRACKET body R_BRACKET SEMICOLON -> funcs_multiple_ids_no_vars
         | VOID_KWORD ID L_PARENTHESIS ID COLON type (COMMA ID COLON type)+ R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_multiple_ids
 
 body: L_CURLY_BRACE R_CURLY_BRACE -> body_simple

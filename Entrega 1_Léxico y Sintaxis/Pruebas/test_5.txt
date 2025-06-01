@@ -1,0 +1,19 @@
+/* Prueba: program_vars_funcs, funcs_simple (with internal vars) */
+
+program TestProgramVarsFuncs;
+var
+  globalVar : int;
+void AnotherFunc() [
+  var
+    localVar : float;
+  {
+    localVar = 1.5;
+    globalVar = 1;
+  }
+];
+main
+{
+  globalVar = 1;
+  globalVar = globalVar + 2;
+}
+end

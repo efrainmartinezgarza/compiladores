@@ -1,0 +1,19 @@
+/* Prueba: condition_if_else, expression_less_than, expression_not_equal */
+program TestIfElseCondition;
+var
+  score : int;
+  grade : int;
+main
+{
+  score = 75;
+  if (score < 60) {
+    grade = 3;
+  } else {
+    grade = 1; 
+  };
+
+  if (score != 100) {
+    print("No sacaste 100.");
+  };
+}
+end

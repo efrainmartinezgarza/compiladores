@@ -1,7 +1,23 @@
 [RESULTADO] EXITOSO
 --------------------------------------------------
 
-📝 Tokens encontrados:
+Código original:
+------------------------------
+program myProgram;
+var x: int;
+
+void printSum(a: int, b: int) [ var result: int; { result = a + b; print(result); } ];
+void greet() [ var msg: float; { print("Hello"); } ];
+
+main {
+  printSum(3, 4);
+  greet();
+}
+end
+
+--------------------------------------------------
+
+Tokens encontrados:
 ------------------------------
 Token            |   Carácter
 ------------------------------
@@ -195,16 +211,19 @@ program_vars_funcs
 
 Árbol transformado (AST):
 ------------------------------
-{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'myProgram'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'x'}, 'type': {'type': 'type_int', 'value': 'int'}}]}, 'funcs': [{'type': 'funcs_multiple_ids', 'funcs_name': {'type': 'id', 'value': 'printSum'}, 'parameters': [{'id': {'type': 'id', 'value': 'a'}, 'type': {'type': 'type_int', 'value': 'int'}}, {'id': {'type': 'id', 'value': 'b'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'result'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'a': {'type': 'int', 'assigned': False, 'address': 1000}, 'b': {'type': 'int', 'assigned': False, 'address': 1001}, 'result': {'type': 'int', 'assigned': False, 'address': 1002}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}}]}}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'result'}}}}}}]}}, {'type': 'funcs_simple', 'funcs_name': {'type': 'id', 'value': 'greet'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'msg'}, 'type': {'type': 'type_float', 'value': 'float'}}], 'msg': {'type': 'float', 'assigned': False, 'address': 2000}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Hello'}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'f_call_multiple_expressions', 'function': {'type': 'id', 'value': 'printSum'}, 'value': [{'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 3}}}}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 4}}}}]}}, {'type': 'statement', 'value': {'type': 'f_call_simple', 'value': {'type': 'id', 'value': 'greet'}}}]}}
+{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'myProgram'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'x'}, 'type': {'type': 'type_int', 'value': 'int'}}]}, 'funcs': [{'type': 'funcs_multiple_ids', 'funcs_name': {'type': 'id', 'value': 'printSum'}, 'parameters': [{'id': {'type': 'id', 'value': 'a'}, 'type': {'type': 'type_int', 'value': 'int'}}, {'id': {'type': 'id', 'value': 'b'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'result'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'a': {'type': 'int', 'assigned': True, 'address': 1000}, 'b': {'type': 'int', 'assigned': True, 'address': 1001}, 'result': {'type': 'int', 'assigned': True, 'address': 1002}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}}]}}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'result'}}}}}}]}}, {'type': 'funcs_simple', 'funcs_name': {'type': 'id', 'value': 'greet'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'msg'}, 'type': {'type': 'type_float', 'value': 'float'}}], 'msg': {'type': 'float', 'assigned': False, 'address': 2000}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Hello'}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'f_call_multiple_expressions', 'function': {'type': 'id', 'value': 'printSum'}, 'value': [{'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 3}}}}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 4}}}}]}}, {'type': 'statement', 'value': {'type': 'f_call_simple', 'value': {'type': 'id', 'value': 'greet'}}}]}}
 
 
 Directorio de funciones y variables:
 ------------------------------
 Scope: global
+Start Point: 0
   Variables:
     x : int | Dirección: 3000
+  Recursos: vars(int=1)
 
 Scope: printSum
+Start Point: 1
   Parámetros:
     a : int
     b : int
@@ -212,19 +231,33 @@ Scope: printSum
     a : int | Dirección: 1000
     b : int | Dirección: 1001
     result : int | Dirección: 1002
+  Recursos: temporals(int=1), vars(int=1), params(int=2)
 
 Scope: greet
+Start Point: 6
   Variables:
     msg : float | Dirección: 2000
+  Recursos: vars(float=1)
 
 
 
 Cuádruplos generados:
 ------------------------------
-0   1          1003       1004       5000      
-1   7          5000                  1002      
-2   9                                1005      
-3   9                                9000      
+0   10                               9         
+1   1          1000       1001       5000      
+2   7          5000                  1002      
+3   9                                1002      
+4   17                                         
+5   16                                         
+6   9                                9000      
+7   17                                         
+8   16                                         
+9   13         printSum                        
+10  15         7000                  p1        
+11  15         7001                  p2        
+12  14         printSum                        
+13  13         greet                           
+14  14         greet                           
 
 
 Tabla de constantes:
@@ -237,7 +270,7 @@ Valor: 4          | Tipo: int        | Dirección: 7001
 Uso de memoria:
 ------------------------------
 LOCAL
-INT -> Rango: 1000 - 1999 | Dirección actual: 1006
+INT -> Rango: 1000 - 1999 | Dirección actual: 1003
 FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2001
 -----------------------------------------------------------
 GLOBAL
@@ -253,3 +286,9 @@ INT -> Rango: 7000 - 7999 | Dirección actual: 7002
 FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
 STRING -> Rango: 9000 - 9999 | Dirección actual: 9001
 -----------------------------------------------------------
+
+
+Salida de la Máquina Virtual:
+------------------------------
+7
+Hello

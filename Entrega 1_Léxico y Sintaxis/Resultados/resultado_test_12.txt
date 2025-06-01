@@ -1,0 +1,191 @@
+[RESULTADO] EXITOSO
+--------------------------------------------------
+
+Código original:
+------------------------------
+/* Prueba: f_call_simple */
+program TestFunctionCallSimple;
+var
+  status : int;
+void Initialize() [ { status = 1; } ];
+main
+{
+  status = 0;
+  Initialize();
+  print(status);
+}
+end
+
+
+--------------------------------------------------
+
+Tokens encontrados:
+------------------------------
+Token            |   Carácter
+------------------------------
+PROGRAM_KWORD    | 'program' 
+ID               | 'TestFunctionCallSimple'
+SEMICOLON        | ';'       
+VAR_KWORD        | 'var'     
+ID               | 'status'  
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+VOID_KWORD       | 'void'    
+ID               | 'Initialize'
+L_PARENTHESIS    | '('       
+R_PARENTHESIS    | ')'       
+L_BRACKET        | '['       
+L_CURLY_BRACE    | '{'       
+ID               | 'status'  
+EQUAL            | '='       
+CTE              | '1'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+R_BRACKET        | ']'       
+SEMICOLON        | ';'       
+MAIN_KWORD       | 'main'    
+L_CURLY_BRACE    | '{'       
+ID               | 'status'  
+EQUAL            | '='       
+CTE              | '0'       
+SEMICOLON        | ';'       
+ID               | 'Initialize'
+L_PARENTHESIS    | '('       
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'status'  
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+END_KWORD        | 'end'     
+
+
+Árbol sintáctico (raw):
+------------------------------
+program_vars_funcs
+  program
+  TestFunctionCallSimple
+  ;
+  vars_one_id
+    var
+    status
+    :
+    type_int	int
+    ;
+  funcs_no_vars
+    void
+    Initialize
+    (
+    )
+    [
+    body_statement
+      {
+      statement
+        assign
+          status
+          =
+          expression_simple
+            exp_simple
+              term_simple
+                factor_cte	1
+          ;
+      }
+    ]
+    ;
+  main
+  body_statement
+    {
+    statement
+      assign
+        status
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	0
+        ;
+    statement
+      f_call_simple
+        Initialize
+        (
+        )
+        ;
+    statement
+      f_call_one_expression
+        print
+        (
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	status
+        )
+        ;
+    }
+  end
+
+
+
+Árbol transformado (AST):
+------------------------------
+{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'TestFunctionCallSimple'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'status'}, 'type': {'type': 'type_int', 'value': 'int'}}]}, 'funcs': [{'type': 'funcs_no_vars', 'funcs_name': {'type': 'id', 'value': 'Initialize'}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'status'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'status'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}}}}, {'type': 'statement', 'value': {'type': 'f_call_simple', 'value': {'type': 'id', 'value': 'Initialize'}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'status'}}}}}}]}}
+
+
+Directorio de funciones y variables:
+------------------------------
+Scope: global
+Start Point: 0
+  Variables:
+    status : int | Dirección: 3000
+  Recursos: vars(int=1)
+
+Scope: Initialize
+Start Point: 1
+  Variables:
+
+
+
+Cuádruplos generados:
+------------------------------
+0   10                               3         
+1   7          7000                  3000      
+2   16                                         
+3   7          7001                  3000      
+4   13         Initialize                      
+5   14         Initialize                      
+6   9                                3000      
+7   17                                         
+
+
+Tabla de constantes:
+------------------------------
+Valor: 1          | Tipo: int        | Dirección: 7000      
+Valor: 0          | Tipo: int        | Dirección: 7001      
+
+
+Uso de memoria:
+------------------------------
+LOCAL
+INT -> Rango: 1000 - 1999 | Dirección actual: 1000
+FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2000
+-----------------------------------------------------------
+GLOBAL
+INT -> Rango: 3000 - 3999 | Dirección actual: 3001
+FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4000
+-----------------------------------------------------------
+TEMPORAL
+INT -> Rango: 5000 - 5999 | Dirección actual: 5000
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
+-----------------------------------------------------------
+CONSTANTE
+INT -> Rango: 7000 - 7999 | Dirección actual: 7002
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9000
+-----------------------------------------------------------
+
+
+Salida de la Máquina Virtual:
+------------------------------
+1

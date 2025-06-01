@@ -1,0 +1,17 @@
+/* Prueba: cycle (while-do), exp_minus, term_mult_sign, factor_expression */
+program TestWhileCycle;
+var
+  counter : int;
+  accumulator : int;
+main
+{
+  counter = 5;
+  accumulator = 0;
+  while (counter > 0) do {
+    accumulator = accumulator + (counter * 2);
+    counter = counter - 1;
+  };
+
+  print(accumulator);
+}
+end

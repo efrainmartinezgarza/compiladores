@@ -1,0 +1,9 @@
+/* Prueba: vars_multiple_ids */
+program TestMultipleVars;
+var
+  a, b, c : int;
+  x, y : float;
+main
+{
+}
+end

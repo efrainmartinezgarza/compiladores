@@ -1,0 +1,282 @@
+[RESULTADO] EXITOSO
+--------------------------------------------------
+
+Código original:
+------------------------------
+program FactorialInMain;
+var
+  n, i, result : int;
+
+main {
+  n = 5;
+  result = 1;
+  i = 1;
+
+  while (i < n + 1) do {
+    result = result * i;
+    i = i + 1;
+  };
+
+  print("Factorial of ", n, " is ", result);
+}
+end
+
+
+--------------------------------------------------
+
+Tokens encontrados:
+------------------------------
+Token            |   Carácter
+------------------------------
+PROGRAM_KWORD    | 'program' 
+ID               | 'FactorialInMain'
+SEMICOLON        | ';'       
+VAR_KWORD        | 'var'     
+ID               | 'n'       
+COMMA            | ','       
+ID               | 'i'       
+COMMA            | ','       
+ID               | 'result'  
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+MAIN_KWORD       | 'main'    
+L_CURLY_BRACE    | '{'       
+ID               | 'n'       
+EQUAL            | '='       
+CTE              | '5'       
+SEMICOLON        | ';'       
+ID               | 'result'  
+EQUAL            | '='       
+CTE              | '1'       
+SEMICOLON        | ';'       
+ID               | 'i'       
+EQUAL            | '='       
+CTE              | '1'       
+SEMICOLON        | ';'       
+WHILE_KWORD      | 'while'   
+L_PARENTHESIS    | '('       
+ID               | 'i'       
+LESS_THAN        | '<'       
+ID               | 'n'       
+PLUS             | '+'       
+CTE              | '1'       
+R_PARENTHESIS    | ')'       
+DO_KWORD         | 'do'      
+L_CURLY_BRACE    | '{'       
+ID               | 'result'  
+EQUAL            | '='       
+ID               | 'result'  
+MULT_SIGN        | '*'       
+ID               | 'i'       
+SEMICOLON        | ';'       
+ID               | 'i'       
+EQUAL            | '='       
+ID               | 'i'       
+PLUS             | '+'       
+CTE              | '1'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+STRING           | '"Factorial of "'
+COMMA            | ','       
+ID               | 'n'       
+COMMA            | ','       
+STRING           | '" is "'  
+COMMA            | ','       
+ID               | 'result'  
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+END_KWORD        | 'end'     
+
+
+Árbol sintáctico (raw):
+------------------------------
+program_vars
+  program
+  FactorialInMain
+  ;
+  vars_multiple_ids
+    var
+    n
+    ,
+    i
+    ,
+    result
+    :
+    type_int	int
+    ;
+  main
+  body_statement
+    {
+    statement
+      assign
+        n
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	5
+        ;
+    statement
+      assign
+        result
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	1
+        ;
+    statement
+      assign
+        i
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	1
+        ;
+    statement
+      cycle
+        while
+        (
+        expression_less_than
+          exp_simple
+            term_simple
+              factor_id	i
+          <
+          exp_plus
+            exp_simple
+              term_simple
+                factor_id	n
+            +
+            term_simple
+              factor_cte	1
+        )
+        do
+        body_statement
+          {
+          statement
+            assign
+              result
+              =
+              expression_simple
+                exp_simple
+                  term_mult_sign
+                    term_simple
+                      factor_id	result
+                    *
+                    factor_id	i
+              ;
+          statement
+            assign
+              i
+              =
+              expression_simple
+                exp_plus
+                  exp_simple
+                    term_simple
+                      factor_id	i
+                  +
+                  term_simple
+                    factor_cte	1
+              ;
+          }
+        ;
+    statement
+      print_multiple_expressions
+        print
+        (
+        "Factorial of "
+        ,
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	n
+        ,
+        " is "
+        ,
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	result
+        )
+        ;
+    }
+  end
+
+
+
+Árbol transformado (AST):
+------------------------------
+{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'FactorialInMain'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'n'}, {'type': 'id', 'value': 'i'}, {'type': 'id', 'value': 'result'}], 'type': {'type': 'type_int', 'value': 'int'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'n'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 5}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}}}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('LESS_THAN', '<'), {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'result'}}}, Token('MULT_SIGN', '*'), {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}]}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'i'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'i'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}}}, {'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'string', 'value': 'Factorial of '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'n'}}}}}, {'type': 'string', 'value': ' is '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'result'}}}}}]}}]}}
+
+
+Directorio de funciones y variables:
+------------------------------
+Scope: global
+Start Point: 0
+  Variables:
+    n : int | Dirección: 3000
+    i : int | Dirección: 3001
+    result : int | Dirección: 3002
+  Recursos: temporals(int=4), vars(int=3)
+
+
+
+Cuádruplos generados:
+------------------------------
+0   10                               1         
+1   7          7000                  3000      
+2   7          7001                  3002      
+3   7          7001                  3001      
+4   1          3000       7001       5000      
+5   6          3001       5000       5001      
+6   11         5001                  12        
+7   3          3002       3001       5002      
+8   7          5002                  3002      
+9   1          3001       7001       5003      
+10  7          5003                  3001      
+11  10                               4         
+12  9                                9000      
+13  9                                3000      
+14  9                                9001      
+15  9                                3002      
+16  17                                         
+
+
+Tabla de constantes:
+------------------------------
+Valor: 5          | Tipo: int        | Dirección: 7000      
+Valor: 1          | Tipo: int        | Dirección: 7001      
+Valor: Factorial of  | Tipo: string     | Dirección: 9000      
+Valor:  is        | Tipo: string     | Dirección: 9001      
+
+
+Uso de memoria:
+------------------------------
+LOCAL
+INT -> Rango: 1000 - 1999 | Dirección actual: 1000
+FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2000
+-----------------------------------------------------------
+GLOBAL
+INT -> Rango: 3000 - 3999 | Dirección actual: 3003
+FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4000
+-----------------------------------------------------------
+TEMPORAL
+INT -> Rango: 5000 - 5999 | Dirección actual: 5004
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
+-----------------------------------------------------------
+CONSTANTE
+INT -> Rango: 7000 - 7999 | Dirección actual: 7002
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9002
+-----------------------------------------------------------
+
+
+Salida de la Máquina Virtual:
+------------------------------
+Factorial of 5 is 120

@@ -1,0 +1,11 @@
+/* Prueba: print_multiple_expressions */
+program TestPrintMultiple;
+var
+  name : int; 
+  age : int;
+main
+{
+  age = 30;
+  print("Tienes ", age,". Disfruta.");
+}
+end

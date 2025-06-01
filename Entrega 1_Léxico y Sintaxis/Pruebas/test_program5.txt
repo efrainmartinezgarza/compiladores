@@ -1,6 +1,8 @@
 program myProgram;
 var x, y: int; a, b: float;
 main {
+  x = 2;
+  y = 4;
   print("Hello world");
   print(x, y + 2);
   print(x);

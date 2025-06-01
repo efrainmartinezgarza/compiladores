@@ -1,0 +1,21 @@
+/* Prueba: f_call_multiple_expressions, term_div_sign, factor_plus (unary) */
+
+program TestFunctionCallMultiExpr;
+var
+  calcResult : float;
+void ComplexCalc(a : int, b : float, c : int) [
+  {
+    calcResult = (a / b) * c;
+  }
+];
+
+main
+{
+  calcResult = 0.0;
+  ComplexCalc(10, 2.0, +3);
+  print(calcResult);
+}
+
+
+end
+

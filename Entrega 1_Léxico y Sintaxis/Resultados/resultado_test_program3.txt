@@ -1,7 +1,23 @@
 [RESULTADO] EXITOSO
 --------------------------------------------------
 
-📝 Tokens encontrados:
+Código original:
+------------------------------
+program myProgram;
+var x: int; a, b: float;
+
+main {
+  a = 3.0;
+  x = 10;
+  b = 5.5;
+  while (a != 4.0) do { print(a); a = a + 1.0; };
+  while (x > 0) do { x = x - 1; };
+}
+end
+
+--------------------------------------------------
+
+Tokens encontrados:
 ------------------------------
 Token            |   Carácter
 ------------------------------
@@ -21,11 +37,23 @@ FLOAT_KWORD      | 'float'
 SEMICOLON        | ';'       
 MAIN_KWORD       | 'main'    
 L_CURLY_BRACE    | '{'       
+ID               | 'a'       
+EQUAL            | '='       
+CTE              | '3.0'     
+SEMICOLON        | ';'       
+ID               | 'x'       
+EQUAL            | '='       
+CTE              | '10'      
+SEMICOLON        | ';'       
+ID               | 'b'       
+EQUAL            | '='       
+CTE              | '5.5'     
+SEMICOLON        | ';'       
 WHILE_KWORD      | 'while'   
 L_PARENTHESIS    | '('       
 ID               | 'a'       
 NOT_EQUAL        | '!='      
-ID               | 'b'       
+CTE              | '4.0'     
 R_PARENTHESIS    | ')'       
 DO_KWORD         | 'do'      
 L_CURLY_BRACE    | '{'       
@@ -33,6 +61,12 @@ PRINT_KWORD      | 'print'
 L_PARENTHESIS    | '('       
 ID               | 'a'       
 R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+ID               | 'a'       
+EQUAL            | '='       
+ID               | 'a'       
+PLUS             | '+'       
+CTE              | '1.0'     
 SEMICOLON        | ';'       
 R_CURLY_BRACE    | '}'       
 SEMICOLON        | ';'       
@@ -78,6 +112,33 @@ program_vars
   body_statement
     {
     statement
+      assign
+        a
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	3.0
+        ;
+    statement
+      assign
+        x
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	10
+        ;
+    statement
+      assign
+        b
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	5.5
+        ;
+    statement
       cycle
         while
         (
@@ -88,7 +149,7 @@ program_vars
           !=
           exp_simple
             term_simple
-              factor_id	b
+              factor_cte	4.0
         )
         do
         body_statement
@@ -102,6 +163,19 @@ program_vars
                   term_simple
                     factor_id	a
               )
+              ;
+          statement
+            assign
+              a
+              =
+              expression_simple
+                exp_plus
+                  exp_simple
+                    term_simple
+                      factor_id	a
+                  +
+                  term_simple
+                    factor_cte	1.0
               ;
           }
         ;
@@ -143,36 +217,50 @@ program_vars
 
 Árbol transformado (AST):
 ------------------------------
-{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'myProgram'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'x'}], 'type': {'type': 'type_int', 'value': 'int'}}, {'ids': [{'type': 'id', 'value': 'a'}, {'type': 'id', 'value': 'b'}], 'type': {'type': 'type_float', 'value': 'float'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_not_equal', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}, Token('NOT_EQUAL', '!='), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}}}]}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_greater_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('GREATER_THAN', '>'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}}}]}}
+{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'myProgram'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'x'}], 'type': {'type': 'type_int', 'value': 'int'}}, {'ids': [{'type': 'id', 'value': 'a'}, {'type': 'id', 'value': 'b'}], 'type': {'type': 'type_float', 'value': 'float'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'a'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 3.0}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 10}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'b'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 5.5}}}}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_not_equal', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}, Token('NOT_EQUAL', '!='), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 4.0}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'a'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1.0}}]}}}}]}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_greater_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('GREATER_THAN', '>'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}}}]}}
 
 
 Directorio de funciones y variables:
 ------------------------------
 Scope: global
+Start Point: 0
   Variables:
     x : int | Dirección: 3000
     a : float | Dirección: 4000
     b : float | Dirección: 4001
+  Recursos: temporals(int=3, float=1), vars(int=1, float=2)
 
 
 
 Cuádruplos generados:
 ------------------------------
-0   8          4000       4001       5000      
-1   11         5000                  4         
-2   9                                4000      
-3   10                               0         
-4   5          3000       7000       5001      
-5   11         5001                  9         
-6   2          3000       7001       5002      
-7   7          5002                  3000      
-8   10                               4         
+0   10                               1         
+1   7          8000                  4000      
+2   7          7000                  3000      
+3   7          8001                  4001      
+4   8          4000       8002       5000      
+5   11         5000                  11        
+6   9                                4000      
+7   17                                         
+8   1          4000       8003       6000      
+9   7          6000                  4000      
+10  10                               4         
+11  5          3000       7001       5001      
+12  11         5001                  16        
+13  2          3000       7002       5002      
+14  7          5002                  3000      
+15  10                               11        
 
 
 Tabla de constantes:
 ------------------------------
-Valor: 0          | Tipo: int        | Dirección: 7000      
-Valor: 1          | Tipo: int        | Dirección: 7001      
+Valor: 3.0        | Tipo: float      | Dirección: 8000      
+Valor: 10         | Tipo: int        | Dirección: 7000      
+Valor: 5.5        | Tipo: float      | Dirección: 8001      
+Valor: 4.0        | Tipo: float      | Dirección: 8002      
+Valor: 1.0        | Tipo: float      | Dirección: 8003      
+Valor: 0          | Tipo: int        | Dirección: 7001      
+Valor: 1          | Tipo: int        | Dirección: 7002      
 
 
 Uso de memoria:
@@ -187,10 +275,15 @@ FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4002
 -----------------------------------------------------------
 TEMPORAL
 INT -> Rango: 5000 - 5999 | Dirección actual: 5003
-FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6001
 -----------------------------------------------------------
 CONSTANTE
-INT -> Rango: 7000 - 7999 | Dirección actual: 7002
-FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
+INT -> Rango: 7000 - 7999 | Dirección actual: 7003
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8004
 STRING -> Rango: 9000 - 9999 | Dirección actual: 9000
 -----------------------------------------------------------
+
+
+Salida de la Máquina Virtual:
+------------------------------
+3.0

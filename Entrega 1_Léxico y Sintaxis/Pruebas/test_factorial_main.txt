@@ -1,0 +1,17 @@
+program FactorialInMain;
+var
+  n, i, result : int;
+
+main {
+  n = 5;
+  result = 1;
+  i = 1;
+
+  while (i < n + 1) do {
+    result = result * i;
+    i = i + 1;
+  };
+
+  print("Factorial of ", n, " is ", result);
+}
+end

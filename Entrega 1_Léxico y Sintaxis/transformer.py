@@ -35,13 +35,17 @@ class MyTransformer(Transformer):
         else:
             numeric_value = factor
         return {"type": "factor_cte", "value": -numeric_value}
+    
+    def factor_minus(self, minus, factor):
+        # Dejamos pasar el factor tal cual para que el analizador semántico lo maneje
+        return {"type": "factor_minus", "value": factor}
 
     def factor_plus(self, plus, factor):
         if isinstance(factor, dict) and "value" in factor:
             numeric_value = factor["value"]
         else:
             numeric_value = factor
-        return {"type": "factor_cte", "value": +numeric_value}
+        return {"type": "factor_cte", "value": numeric_value}
     
     # ----------------------------------------------------------------------------------------------------------------------------
 
@@ -358,7 +362,9 @@ class MyTransformer(Transformer):
 
     """funcs: VOID_KWORD ID L_PARENTHESIS R_PARENTHESIS L_BRACKET body R_BRACKET SEMICOLON -> funcs_no_vars
         | VOID_KWORD ID L_PARENTHESIS R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_simple
+        | VOID_KWORD ID L_PARENTHESIS ID COLON type R_PARENTHESIS L_BRACKET body R_BRACKET SEMICOLON -> funcs_id_no_vars
         | VOID_KWORD ID L_PARENTHESIS ID COLON type R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_id
+        | VOID_KWORD ID L_PARENTHESIS ID COLON type (COMMA ID COLON type)+ R_PARENTHESIS L_BRACKET body R_BRACKET SEMICOLON -> funcs_multiple_ids_no_vars
         | VOID_KWORD ID L_PARENTHESIS ID COLON type (COMMA ID COLON type)+ R_PARENTHESIS L_BRACKET vars body R_BRACKET SEMICOLON -> funcs_multiple_ids"""
     
     def funcs_no_vars(self, void_kw, id, lpar, rpar, lbracket, body, rbracket, semicolon):
@@ -376,6 +382,15 @@ class MyTransformer(Transformer):
             "body": body
         }
     
+    def funcs_id_no_vars(self, void_kw, id, lpar, param, colon, param_type, rpar, lbracket, body, rbracket, semicolon):
+        return {
+            "type": "funcs_id_no_vars",
+            "funcs_name": id,
+            "param": param,
+            "param_type": param_type,
+            "body": body
+        }
+    
     def funcs_id(self, void_kw, id, lpar, param, colon, param_type, rpar, lbracket, vars, body, rbracket, semicolon):
         return {
             "type": "funcs_id",
@@ -385,6 +400,31 @@ class MyTransformer(Transformer):
             "vars": vars,
             "body": body
         }
+    
+    def funcs_multiple_ids_no_vars(self, void_kw, id, lpar, param, colon, param_type, *rest):
+            parameters = [{"id": param, "type": param_type}]
+            # The loop should iterate up to len(rest)-5 because there are 5 trailing tokens:
+            # R_PARENTHESIS, L_BRACKET, body, R_BRACKET, SEMICOLON
+            for i in range(0, len(rest)-5, 4): # Corrected loop range
+                # rest[i] is COMMA
+                param_id = rest[i + 1] # ID
+                # rest[i+2] is COLON
+                param_type_node = rest[i + 3] # type
+                parameters.append({
+                    "id": param_id,
+                    "type": param_type_node
+                })
+            # Corrected body_node indexing:
+            # rest[-1] is SEMICOLON
+            # rest[-2] is R_BRACKET (of body)
+            # rest[-3] is body
+            body_node = rest[-3] 
+            return {
+                "type": "funcs_multiple_ids_no_vars",
+                "funcs_name": id,
+                "parameters": parameters,
+                "body": body_node
+            }
     
     def funcs_multiple_ids(self, void_kw, id, lpar, param, colon, param_type, *rest):
         parameters = [{"id": param, "type": param_type}]

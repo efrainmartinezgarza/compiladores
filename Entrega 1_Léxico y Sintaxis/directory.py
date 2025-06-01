@@ -18,7 +18,6 @@ class Directory:
         if not self.program_ast:
             raise ValueError("No hay AST cargado.")
         self.analyzer.analyze(self.program_ast)
-        print("Análisis semántico completado correctamente.")
 
 
 

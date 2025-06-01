@@ -1,0 +1,159 @@
+[RESULTADO] EXITOSO
+--------------------------------------------------
+
+Código original:
+------------------------------
+/* Prueba: print_multiple_expressions */
+program TestPrintMultiple;
+var
+  name : int; 
+  age : int;
+main
+{
+  age = 30;
+  print("Tienes ", age,". Disfruta.");
+}
+end
+
+
+--------------------------------------------------
+
+Tokens encontrados:
+------------------------------
+Token            |   Carácter
+------------------------------
+PROGRAM_KWORD    | 'program' 
+ID               | 'TestPrintMultiple'
+SEMICOLON        | ';'       
+VAR_KWORD        | 'var'     
+ID               | 'name'    
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+ID               | 'age'     
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+MAIN_KWORD       | 'main'    
+L_CURLY_BRACE    | '{'       
+ID               | 'age'     
+EQUAL            | '='       
+CTE              | '30'      
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+STRING           | '"Tienes "'
+COMMA            | ','       
+ID               | 'age'     
+COMMA            | ','       
+STRING           | '". Disfruta."'
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+END_KWORD        | 'end'     
+
+
+Árbol sintáctico (raw):
+------------------------------
+program_vars
+  program
+  TestPrintMultiple
+  ;
+  vars_one_id
+    var
+    name
+    :
+    type_int	int
+    ;
+    age
+    :
+    type_int	int
+    ;
+  main
+  body_statement
+    {
+    statement
+      assign
+        age
+        =
+        expression_simple
+          exp_simple
+            term_simple
+              factor_cte	30
+        ;
+    statement
+      print_multiple_expressions
+        print
+        (
+        "Tienes "
+        ,
+        expression_simple
+          exp_simple
+            term_simple
+              factor_id	age
+        ,
+        ". Disfruta."
+        )
+        ;
+    }
+  end
+
+
+
+Árbol transformado (AST):
+------------------------------
+{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'TestPrintMultiple'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'name'}, 'type': {'type': 'type_int', 'value': 'int'}}, {'id': {'type': 'id', 'value': 'age'}, 'type': {'type': 'type_int', 'value': 'int'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'age'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 30}}}}}}, {'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'string', 'value': 'Tienes '}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'age'}}}}}, {'type': 'string', 'value': '. Disfruta.'}]}}]}}
+
+
+Directorio de funciones y variables:
+------------------------------
+Scope: global
+Start Point: 0
+  Variables:
+    name : int | Dirección: 3000
+    age : int | Dirección: 3001
+  Recursos: vars(int=2)
+
+
+
+Cuádruplos generados:
+------------------------------
+0   10                               1         
+1   7          7000                  3001      
+2   9                                9000      
+3   9                                3001      
+4   9                                9001      
+5   17                                         
+
+
+Tabla de constantes:
+------------------------------
+Valor: 30         | Tipo: int        | Dirección: 7000      
+Valor: Tienes     | Tipo: string     | Dirección: 9000      
+Valor: . Disfruta. | Tipo: string     | Dirección: 9001      
+
+
+Uso de memoria:
+------------------------------
+LOCAL
+INT -> Rango: 1000 - 1999 | Dirección actual: 1000
+FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2000
+-----------------------------------------------------------
+GLOBAL
+INT -> Rango: 3000 - 3999 | Dirección actual: 3002
+FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4000
+-----------------------------------------------------------
+TEMPORAL
+INT -> Rango: 5000 - 5999 | Dirección actual: 5000
+FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
+-----------------------------------------------------------
+CONSTANTE
+INT -> Rango: 7000 - 7999 | Dirección actual: 7001
+FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9002
+-----------------------------------------------------------
+
+
+Salida de la Máquina Virtual:
+------------------------------
+Tienes 30. Disfruta.

@@ -1,0 +1,12 @@
+/* Prueba: f_call_simple */
+program TestFunctionCallSimple;
+var
+  status : int;
+void Initialize() [ { status = 1; } ];
+main
+{
+  status = 0;
+  Initialize();
+  print(status);
+}
+end

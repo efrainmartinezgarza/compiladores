@@ -1,0 +1,17 @@
+/*Prueba: funcs_id (function with one parameter) */
+
+program TestFuncWithOneParam;
+var
+  result : int;
+
+void Calculate(p1 : int) [
+  {
+    result = p1 * 2;
+  }
+];
+
+main
+{
+  result = 0;
+}
+end

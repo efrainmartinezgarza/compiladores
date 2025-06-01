@@ -1,0 +1,11 @@
+/* Prueba: print_expression */
+
+program TestPrintExpression;
+var
+  valueToPrint : int;
+main
+{
+  valueToPrint = 42;
+  print(valueToPrint * 2);
+}
+end
