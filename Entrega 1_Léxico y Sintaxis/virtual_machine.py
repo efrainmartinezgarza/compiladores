@@ -39,7 +39,6 @@ class VirtualMachine:
         self.current_local_memory = {
             'int': {},
             'float': {},
-            'string': {}
         }
 
         # Inicialización de la memoria global con variables globales

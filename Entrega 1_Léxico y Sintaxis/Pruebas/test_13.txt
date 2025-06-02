@@ -1,12 +1,24 @@
-/* Prueba: f_call_one_expression, factor_minus (unary) */
-program TestFunctionCallOneExpr;
-var
-  outputVal : int;
-void SetValue(val : int) [ { outputVal = val; } ];
-main
-{
-  outputVal = 0;
-  SetValue(-5 + 2);
-  print(outputVal);
+program myProgram;
+var x, y: int; a, b: float; c_d8, d: int; total: int;
+
+void prinst() [{ print("Hello"); } ];
+void printSum(a: int, b: int) [ var result: int; { result = a + b; print(result); } ];
+void greet() [ var msg: float; { prinst(); } ];
+
+main {
+
+  x = 3 + 4 - 2 * 5 - 2;
+  y = 5;
+  total = x + y;
+
+  if (x < 5) { x = x + 1; } else { x = 0; }; 
+  if (x > 0) { print(x); };
+
+  while (y < 10) do { y = y + 1; print("Agua"); };
+  while (x > 0) do { x = x - 1; };
+  
+  greet();
+  
+ 
 }
 end

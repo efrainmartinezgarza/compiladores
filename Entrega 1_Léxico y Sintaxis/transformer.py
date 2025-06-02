@@ -35,10 +35,6 @@ class MyTransformer(Transformer):
         else:
             numeric_value = factor
         return {"type": "factor_cte", "value": -numeric_value}
-    
-    def factor_minus(self, minus, factor):
-        # Dejamos pasar el factor tal cual para que el analizador semántico lo maneje
-        return {"type": "factor_minus", "value": factor}
 
     def factor_plus(self, plus, factor):
         if isinstance(factor, dict) and "value" in factor:

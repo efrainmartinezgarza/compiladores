@@ -29,7 +29,6 @@ def tree_to_dict(tree):
 
 def analyze_file(file_path):
     file_name = os.path.basename(file_path)
-    # print(f"\nAnalizando: {file_name}") # Removed individual analysis print
 
     try:
         with open(file_path, 'r') as f:

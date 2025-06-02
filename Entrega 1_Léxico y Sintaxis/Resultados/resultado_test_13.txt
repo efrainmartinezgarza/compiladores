@@ -3,16 +3,28 @@
 
 Código original:
 ------------------------------
-/* Prueba: f_call_one_expression, factor_minus (unary) */
-program TestFunctionCallOneExpr;
-var
-  outputVal : int;
-void SetValue(val : int) [ { outputVal = val; } ];
-main
-{
-  outputVal = 0;
-  SetValue(-5 + 2);
-  print(outputVal);
+program myProgram;
+var x, y: int; a, b: float; c_d8, d: int; total: int;
+
+void prinst() [{ print("Hello"); } ];
+void printSum(a: int, b: int) [ var result: int; { result = a + b; print(result); } ];
+void greet() [ var msg: float; { prinst(); } ];
+
+main {
+
+  x = 3 + 4 - 2 * 5 - 2;
+  y = 5;
+  total = x + y;
+
+  if (x < 5) { x = x + 1; } else { x = 0; }; 
+  if (x > 0) { print(x); };
+
+  while (y < 10) do { y = y + 1; print("Agua"); };
+  while (x > 0) do { x = x - 1; };
+  
+  greet();
+  
+ 
 }
 end
 
@@ -24,46 +36,194 @@ Tokens encontrados:
 Token            |   Carácter
 ------------------------------
 PROGRAM_KWORD    | 'program' 
-ID               | 'TestFunctionCallOneExpr'
+ID               | 'myProgram'
 SEMICOLON        | ';'       
 VAR_KWORD        | 'var'     
-ID               | 'outputVal'
+ID               | 'x'       
+COMMA            | ','       
+ID               | 'y'       
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+ID               | 'a'       
+COMMA            | ','       
+ID               | 'b'       
+COLON            | ':'       
+FLOAT_KWORD      | 'float'   
+SEMICOLON        | ';'       
+ID               | 'c_d8'    
+COMMA            | ','       
+ID               | 'd'       
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
+ID               | 'total'   
 COLON            | ':'       
 INT_KWORD        | 'int'     
 SEMICOLON        | ';'       
 VOID_KWORD       | 'void'    
-ID               | 'SetValue'
+ID               | 'prinst'  
 L_PARENTHESIS    | '('       
-ID               | 'val'     
+R_PARENTHESIS    | ')'       
+L_BRACKET        | '['       
+L_CURLY_BRACE    | '{'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+STRING           | '"Hello"' 
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+R_BRACKET        | ']'       
+SEMICOLON        | ';'       
+VOID_KWORD       | 'void'    
+ID               | 'printSum'
+L_PARENTHESIS    | '('       
+ID               | 'a'       
+COLON            | ':'       
+INT_KWORD        | 'int'     
+COMMA            | ','       
+ID               | 'b'       
 COLON            | ':'       
 INT_KWORD        | 'int'     
 R_PARENTHESIS    | ')'       
 L_BRACKET        | '['       
+VAR_KWORD        | 'var'     
+ID               | 'result'  
+COLON            | ':'       
+INT_KWORD        | 'int'     
+SEMICOLON        | ';'       
 L_CURLY_BRACE    | '{'       
-ID               | 'outputVal'
+ID               | 'result'  
 EQUAL            | '='       
-ID               | 'val'     
+ID               | 'a'       
+PLUS             | '+'       
+ID               | 'b'       
+SEMICOLON        | ';'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'result'  
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+R_BRACKET        | ']'       
+SEMICOLON        | ';'       
+VOID_KWORD       | 'void'    
+ID               | 'greet'   
+L_PARENTHESIS    | '('       
+R_PARENTHESIS    | ')'       
+L_BRACKET        | '['       
+VAR_KWORD        | 'var'     
+ID               | 'msg'     
+COLON            | ':'       
+FLOAT_KWORD      | 'float'   
+SEMICOLON        | ';'       
+L_CURLY_BRACE    | '{'       
+ID               | 'prinst'  
+L_PARENTHESIS    | '('       
+R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
 R_CURLY_BRACE    | '}'       
 R_BRACKET        | ']'       
 SEMICOLON        | ';'       
 MAIN_KWORD       | 'main'    
 L_CURLY_BRACE    | '{'       
-ID               | 'outputVal'
+ID               | 'x'       
+EQUAL            | '='       
+CTE              | '3'       
+PLUS             | '+'       
+CTE              | '4'       
+MINUS            | '-'       
+CTE              | '2'       
+MULT_SIGN        | '*'       
+CTE              | '5'       
+MINUS            | '-'       
+CTE              | '2'       
+SEMICOLON        | ';'       
+ID               | 'y'       
+EQUAL            | '='       
+CTE              | '5'       
+SEMICOLON        | ';'       
+ID               | 'total'   
+EQUAL            | '='       
+ID               | 'x'       
+PLUS             | '+'       
+ID               | 'y'       
+SEMICOLON        | ';'       
+IF_KWORD         | 'if'      
+L_PARENTHESIS    | '('       
+ID               | 'x'       
+LESS_THAN        | '<'       
+CTE              | '5'       
+R_PARENTHESIS    | ')'       
+L_CURLY_BRACE    | '{'       
+ID               | 'x'       
+EQUAL            | '='       
+ID               | 'x'       
+PLUS             | '+'       
+CTE              | '1'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+ELSE_KWORD       | 'else'    
+L_CURLY_BRACE    | '{'       
+ID               | 'x'       
 EQUAL            | '='       
 CTE              | '0'       
 SEMICOLON        | ';'       
-ID               | 'SetValue'
+R_CURLY_BRACE    | '}'       
+SEMICOLON        | ';'       
+IF_KWORD         | 'if'      
 L_PARENTHESIS    | '('       
-MINUS            | '-'       
-CTE              | '5'       
-PLUS             | '+'       
-CTE              | '2'       
+ID               | 'x'       
+GREATER_THAN     | '>'       
+CTE              | '0'       
 R_PARENTHESIS    | ')'       
+L_CURLY_BRACE    | '{'       
+PRINT_KWORD      | 'print'   
+L_PARENTHESIS    | '('       
+ID               | 'x'       
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+SEMICOLON        | ';'       
+WHILE_KWORD      | 'while'   
+L_PARENTHESIS    | '('       
+ID               | 'y'       
+LESS_THAN        | '<'       
+CTE              | '10'      
+R_PARENTHESIS    | ')'       
+DO_KWORD         | 'do'      
+L_CURLY_BRACE    | '{'       
+ID               | 'y'       
+EQUAL            | '='       
+ID               | 'y'       
+PLUS             | '+'       
+CTE              | '1'       
 SEMICOLON        | ';'       
 PRINT_KWORD      | 'print'   
 L_PARENTHESIS    | '('       
-ID               | 'outputVal'
+STRING           | '"Agua"'  
+R_PARENTHESIS    | ')'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+SEMICOLON        | ';'       
+WHILE_KWORD      | 'while'   
+L_PARENTHESIS    | '('       
+ID               | 'x'       
+GREATER_THAN     | '>'       
+CTE              | '0'       
+R_PARENTHESIS    | ')'       
+DO_KWORD         | 'do'      
+L_CURLY_BRACE    | '{'       
+ID               | 'x'       
+EQUAL            | '='       
+ID               | 'x'       
+MINUS            | '-'       
+CTE              | '1'       
+SEMICOLON        | ';'       
+R_CURLY_BRACE    | '}'       
+SEMICOLON        | ';'       
+ID               | 'greet'   
+L_PARENTHESIS    | '('       
 R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
 R_CURLY_BRACE    | '}'       
@@ -74,33 +234,116 @@ END_KWORD        | 'end'
 ------------------------------
 program_vars_funcs
   program
-  TestFunctionCallOneExpr
+  myProgram
   ;
-  vars_one_id
+  vars_multiple_ids
     var
-    outputVal
+    x
+    ,
+    y
     :
     type_int	int
     ;
-  funcs_id_no_vars
-    void
-    SetValue
-    (
-    val
+    a
+    ,
+    b
+    :
+    type_float	float
+    ;
+    c_d8
+    ,
+    d
     :
     type_int	int
+    ;
+    total
+    :
+    type_int	int
+    ;
+  funcs_no_vars
+    void
+    prinst
+    (
     )
     [
     body_statement
       {
       statement
+        print_string
+          print
+          (
+          "Hello"
+          )
+          ;
+      }
+    ]
+    ;
+  funcs_multiple_ids
+    void
+    printSum
+    (
+    a
+    :
+    type_int	int
+    ,
+    b
+    :
+    type_int	int
+    )
+    [
+    vars_one_id
+      var
+      result
+      :
+      type_int	int
+      ;
+    body_statement
+      {
+      statement
         assign
-          outputVal
+          result
           =
+          expression_simple
+            exp_plus
+              exp_simple
+                term_simple
+                  factor_id	a
+              +
+              term_simple
+                factor_id	b
+          ;
+      statement
+        f_call_one_expression
+          print
+          (
           expression_simple
             exp_simple
               term_simple
-                factor_id	val
+                factor_id	result
+          )
+          ;
+      }
+    ]
+    ;
+  funcs_simple
+    void
+    greet
+    (
+    )
+    [
+    vars_one_id
+      var
+      msg
+      :
+      type_float	float
+      ;
+    body_statement
+      {
+      statement
+        f_call_simple
+          prinst
+          (
+          )
           ;
       }
     ]
@@ -110,37 +353,193 @@ program_vars_funcs
     {
     statement
       assign
-        outputVal
+        x
+        =
+        expression_simple
+          exp_minus
+            exp_minus
+              exp_plus
+                exp_simple
+                  term_simple
+                    factor_cte	3
+                +
+                term_simple
+                  factor_cte	4
+              -
+              term_mult_sign
+                term_simple
+                  factor_cte	2
+                *
+                factor_cte	5
+            -
+            term_simple
+              factor_cte	2
+        ;
+    statement
+      assign
+        y
         =
         expression_simple
           exp_simple
             term_simple
-              factor_cte	0
+              factor_cte	5
         ;
     statement
-      f_call_one_expression
-        SetValue
-        (
+      assign
+        total
+        =
         expression_simple
           exp_plus
             exp_simple
               term_simple
-                factor_minus
-                  -
-                  factor_cte	5
+                factor_id	x
             +
             term_simple
-              factor_cte	2
-        )
+              factor_id	y
         ;
     statement
-      f_call_one_expression
-        print
+      condition_if_else
+        if
         (
-        expression_simple
+        expression_less_than
           exp_simple
             term_simple
-              factor_id	outputVal
+              factor_id	x
+          <
+          exp_simple
+            term_simple
+              factor_cte	5
+        )
+        body_statement
+          {
+          statement
+            assign
+              x
+              =
+              expression_simple
+                exp_plus
+                  exp_simple
+                    term_simple
+                      factor_id	x
+                  +
+                  term_simple
+                    factor_cte	1
+              ;
+          }
+        else
+        body_statement
+          {
+          statement
+            assign
+              x
+              =
+              expression_simple
+                exp_simple
+                  term_simple
+                    factor_cte	0
+              ;
+          }
+        ;
+    statement
+      condition_if
+        if
+        (
+        expression_greater_than
+          exp_simple
+            term_simple
+              factor_id	x
+          >
+          exp_simple
+            term_simple
+              factor_cte	0
+        )
+        body_statement
+          {
+          statement
+            f_call_one_expression
+              print
+              (
+              expression_simple
+                exp_simple
+                  term_simple
+                    factor_id	x
+              )
+              ;
+          }
+        ;
+    statement
+      cycle
+        while
+        (
+        expression_less_than
+          exp_simple
+            term_simple
+              factor_id	y
+          <
+          exp_simple
+            term_simple
+              factor_cte	10
+        )
+        do
+        body_statement
+          {
+          statement
+            assign
+              y
+              =
+              expression_simple
+                exp_plus
+                  exp_simple
+                    term_simple
+                      factor_id	y
+                  +
+                  term_simple
+                    factor_cte	1
+              ;
+          statement
+            print_string
+              print
+              (
+              "Agua"
+              )
+              ;
+          }
+        ;
+    statement
+      cycle
+        while
+        (
+        expression_greater_than
+          exp_simple
+            term_simple
+              factor_id	x
+          >
+          exp_simple
+            term_simple
+              factor_cte	0
+        )
+        do
+        body_statement
+          {
+          statement
+            assign
+              x
+              =
+              expression_simple
+                exp_minus
+                  exp_simple
+                    term_simple
+                      factor_id	x
+                  -
+                  term_simple
+                    factor_cte	1
+              ;
+          }
+        ;
+    statement
+      f_call_simple
+        greet
+        (
         )
         ;
     }
@@ -150,7 +549,7 @@ program_vars_funcs
 
 Árbol transformado (AST):
 ------------------------------
-{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'TestFunctionCallOneExpr'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'outputVal'}, 'type': {'type': 'type_int', 'value': 'int'}}]}, 'funcs': [{'type': 'funcs_id_no_vars', 'funcs_name': {'type': 'id', 'value': 'SetValue'}, 'param': {'type': 'id', 'value': 'val'}, 'param_type': {'type': 'type_int', 'value': 'int'}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'outputVal'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'val'}}}}}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'outputVal'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}}}}, {'type': 'statement', 'value': {'type': 'f_call_one_expression', 'function': {'type': 'id', 'value': 'SetValue'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_minus', 'value': {'type': 'factor_cte', 'value': 5}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}]}}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'outputVal'}}}}}}]}}
+{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'myProgram'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'x'}, {'type': 'id', 'value': 'y'}], 'type': {'type': 'type_int', 'value': 'int'}}, {'ids': [{'type': 'id', 'value': 'a'}, {'type': 'id', 'value': 'b'}], 'type': {'type': 'type_float', 'value': 'float'}}, {'ids': [{'type': 'id', 'value': 'c_d8'}, {'type': 'id', 'value': 'd'}], 'type': {'type': 'type_int', 'value': 'int'}}, {'ids': [{'type': 'id', 'value': 'total'}], 'type': {'type': 'type_int', 'value': 'int'}}]}, 'funcs': [{'type': 'funcs_no_vars', 'funcs_name': {'type': 'id', 'value': 'prinst'}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Hello'}}}]}}, {'type': 'funcs_multiple_ids', 'funcs_name': {'type': 'id', 'value': 'printSum'}, 'parameters': [{'id': {'type': 'id', 'value': 'a'}, 'type': {'type': 'type_int', 'value': 'int'}}, {'id': {'type': 'id', 'value': 'b'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'result'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'a': {'type': 'int', 'assigned': True, 'address': 1000}, 'b': {'type': 'int', 'assigned': True, 'address': 1001}, 'result': {'type': 'int', 'assigned': True, 'address': 1002}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}}]}}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'result'}}}}}}]}}, {'type': 'funcs_simple', 'funcs_name': {'type': 'id', 'value': 'greet'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'msg'}, 'type': {'type': 'type_float', 'value': 'float'}}], 'msg': {'type': 'float', 'assigned': False, 'address': 2000}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'f_call_simple', 'value': {'type': 'id', 'value': 'prinst'}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp', 'value': [{'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 3}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 4}}]}, Token('MINUS', '-'), {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}, Token('MULT_SIGN', '*'), {'type': 'factor_cte', 'value': 5}]}]}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'y'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 5}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'total'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}]}}}}, {'type': 'statement', 'value': {'type': 'condition_if_else', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('LESS_THAN', '<'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 5}}}]}, 'body1': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}, 'body2': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}}}}]}}}, {'type': 'statement', 'value': {'type': 'condition_if', 'condition': {'type': 'expression_greater_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('GREATER_THAN', '>'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}}]}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}, Token('LESS_THAN', '<'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 10}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'y'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}, {'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Agua'}}}]}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_greater_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('GREATER_THAN', '>'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}}}, {'type': 'statement', 'value': {'type': 'f_call_simple', 'value': {'type': 'id', 'value': 'greet'}}}]}}
 
 
 Directorio de funciones y variables:
@@ -158,61 +557,125 @@ Directorio de funciones y variables:
 Scope: global
 Start Point: 0
   Variables:
-    outputVal : int | Dirección: 3000
-  Recursos: temporals(int=1), vars(int=1)
+    x : int | Dirección: 3000
+    y : int | Dirección: 3001
+    a : float | Dirección: 4000
+    b : float | Dirección: 4001
+    c_d8 : int | Dirección: 3002
+    d : int | Dirección: 3003
+    total : int | Dirección: 3004
+  Recursos: temporals(int=12), vars(int=5, float=2)
 
-Scope: SetValue
+Scope: prinst
 Start Point: 1
-  Parámetros:
-    val : int
   Variables:
-    val : int | Dirección: 1000
-  Recursos: params(int=1)
+
+Scope: printSum
+Start Point: 4
+  Parámetros:
+    a : int
+    b : int
+  Variables:
+    a : int | Dirección: 1000
+    b : int | Dirección: 1001
+    result : int | Dirección: 1002
+  Recursos: temporals(int=1), vars(int=1), params(int=2)
+
+Scope: greet
+Start Point: 9
+  Variables:
+    msg : float | Dirección: 2000
+  Recursos: vars(float=1)
 
 
 
 Cuádruplos generados:
 ------------------------------
-0   10                               3         
-1   7          1000                  3000      
-2   16                                         
-3   7          7000                  3000      
-4   13         SetValue                        
-5   1          7001       7002       5000      
-6   15         5000                  p1        
-7   14         SetValue                        
-8   9                                3000      
-9   17                                         
+0   10                               12        
+1   9                                9000      
+2   17                                         
+3   16                                         
+4   1          1000       1001       5000      
+5   7          5000                  1002      
+6   9                                1002      
+7   17                                         
+8   16                                         
+9   13         prinst                          
+10  14         prinst                          
+11  16                                         
+12  1          7000       7001       5001      
+13  3          7002       7003       5002      
+14  2          5001       5002       5003      
+15  2          5003       7002       5004      
+16  7          5004                  3000      
+17  7          7003                  3001      
+18  1          3000       3001       5005      
+19  7          5005                  3004      
+20  6          3000       7003       5006      
+21  11         5006                  25        
+22  1          3000       7004       5007      
+23  7          5007                  3000      
+24  10                               26        
+25  7          7005                  3000      
+26  5          3000       7005       5008      
+27  11         5008                  30        
+28  9                                3000      
+29  17                                         
+30  6          3001       7006       5009      
+31  11         5009                  37        
+32  1          3001       7004       5010      
+33  7          5010                  3001      
+34  9                                9001      
+35  17                                         
+36  10                               30        
+37  5          3000       7005       5011      
+38  11         5011                  42        
+39  2          3000       7004       5012      
+40  7          5012                  3000      
+41  10                               37        
+42  13         greet                           
+43  14         greet                           
 
 
 Tabla de constantes:
 ------------------------------
-Valor: 0          | Tipo: int        | Dirección: 7000      
-Valor: 5          | Tipo: int        | Dirección: 7001      
+Valor: Hello      | Tipo: string     | Dirección: 9000      
+Valor: 3          | Tipo: int        | Dirección: 7000      
+Valor: 4          | Tipo: int        | Dirección: 7001      
 Valor: 2          | Tipo: int        | Dirección: 7002      
+Valor: 5          | Tipo: int        | Dirección: 7003      
+Valor: 1          | Tipo: int        | Dirección: 7004      
+Valor: 0          | Tipo: int        | Dirección: 7005      
+Valor: 10         | Tipo: int        | Dirección: 7006      
+Valor: Agua       | Tipo: string     | Dirección: 9001      
 
 
 Uso de memoria:
 ------------------------------
 LOCAL
-INT -> Rango: 1000 - 1999 | Dirección actual: 1001
-FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2000
+INT -> Rango: 1000 - 1999 | Dirección actual: 1003
+FLOAT -> Rango: 2000 - 2999 | Dirección actual: 2001
 -----------------------------------------------------------
 GLOBAL
-INT -> Rango: 3000 - 3999 | Dirección actual: 3001
-FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4000
+INT -> Rango: 3000 - 3999 | Dirección actual: 3005
+FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4002
 -----------------------------------------------------------
 TEMPORAL
-INT -> Rango: 5000 - 5999 | Dirección actual: 5001
+INT -> Rango: 5000 - 5999 | Dirección actual: 5013
 FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
 -----------------------------------------------------------
 CONSTANTE
-INT -> Rango: 7000 - 7999 | Dirección actual: 7003
+INT -> Rango: 7000 - 7999 | Dirección actual: 7007
 FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
-STRING -> Rango: 9000 - 9999 | Dirección actual: 9000
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9002
 -----------------------------------------------------------
 
 
 Salida de la Máquina Virtual:
 ------------------------------
-7
+Agua
+Agua
+Agua
+Agua
+Agua
+Hello

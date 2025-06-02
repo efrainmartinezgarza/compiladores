@@ -148,7 +148,7 @@ program_vars
 
 Árbol transformado (AST):
 ------------------------------
-{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'constants'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'x'}, 'type': {'type': 'type_int', 'value': 'int'}}, {'id': {'type': 'id', 'value': 'y'}, 'type': {'type': 'type_float', 'value': 'float'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_minus', 'value': {'type': 'factor_cte', 'value': 5}}}}, Token('PLUS', '+'), {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 3}}, Token('MULT_SIGN', '*'), {'type': 'factor_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 10}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}]}}}]}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'y'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 4.5}}, Token('DIV_SIGN', '/'), {'type': 'factor_cte', 'value': 1.5}]}}}}}, {'type': 'print_expression', 'value': [{'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}}]}]}}
+{'type': 'program_vars', 'program_name': {'type': 'id', 'value': 'constants'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'x'}, 'type': {'type': 'type_int', 'value': 'int'}}, {'id': {'type': 'id', 'value': 'y'}, 'type': {'type': 'type_float', 'value': 'float'}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': -5}}}, Token('PLUS', '+'), {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 3}}, Token('MULT_SIGN', '*'), {'type': 'factor_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 10}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}]}}}]}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'y'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 4.5}}, Token('DIV_SIGN', '/'), {'type': 'factor_cte', 'value': 1.5}]}}}}}, {'type': 'print_expression', 'value': [{'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}}]}]}}
 
 
 Directorio de funciones y variables:
@@ -178,7 +178,7 @@ Cuádruplos generados:
 
 Tabla de constantes:
 ------------------------------
-Valor: 5          | Tipo: int        | Dirección: 7000      
+Valor: -5         | Tipo: int        | Dirección: 7000      
 Valor: 3          | Tipo: int        | Dirección: 7001      
 Valor: 10         | Tipo: int        | Dirección: 7002      
 Valor: 2          | Tipo: int        | Dirección: 7003      
@@ -209,4 +209,4 @@ STRING -> Rango: 9000 - 9999 | Dirección actual: 9000
 
 Salida de la Máquina Virtual:
 ------------------------------
-293.0
+193.0

@@ -8,7 +8,7 @@ var x, y: int; a, b: float; c_d8, d: int; total: int;
 
 void prinst() [{ print("Hello"); } ];
 void printSum(a: int, b: int) [ var result: int; { result = a + b; print(result); } ];
-void greet() [ var msg: float; { print("Hello"); } ];
+void greet() [ var msg: float; { prinst(); } ];
 
 main {
 
@@ -22,15 +22,9 @@ main {
   while (y < 10) do { y = y + 1; print("Agua"); };
   while (x > 0) do { x = x - 1; };
   
-  printSum(2, 4);
   greet();
   
-  print("Hello world");
-  print(y + 2);
-  print(x);
-  print("cama de agua",y, "agua");
-  print(y, "perro");
-
+ 
 }
 end
 
@@ -124,9 +118,8 @@ COLON            | ':'
 FLOAT_KWORD      | 'float'   
 SEMICOLON        | ';'       
 L_CURLY_BRACE    | '{'       
-PRINT_KWORD      | 'print'   
+ID               | 'prinst'  
 L_PARENTHESIS    | '('       
-STRING           | '"Hello"' 
 R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
 R_CURLY_BRACE    | '}'       
@@ -229,48 +222,8 @@ CTE              | '1'
 SEMICOLON        | ';'       
 R_CURLY_BRACE    | '}'       
 SEMICOLON        | ';'       
-ID               | 'printSum'
-L_PARENTHESIS    | '('       
-CTE              | '2'       
-COMMA            | ','       
-CTE              | '4'       
-R_PARENTHESIS    | ')'       
-SEMICOLON        | ';'       
 ID               | 'greet'   
 L_PARENTHESIS    | '('       
-R_PARENTHESIS    | ')'       
-SEMICOLON        | ';'       
-PRINT_KWORD      | 'print'   
-L_PARENTHESIS    | '('       
-STRING           | '"Hello world"'
-R_PARENTHESIS    | ')'       
-SEMICOLON        | ';'       
-PRINT_KWORD      | 'print'   
-L_PARENTHESIS    | '('       
-ID               | 'y'       
-PLUS             | '+'       
-CTE              | '2'       
-R_PARENTHESIS    | ')'       
-SEMICOLON        | ';'       
-PRINT_KWORD      | 'print'   
-L_PARENTHESIS    | '('       
-ID               | 'x'       
-R_PARENTHESIS    | ')'       
-SEMICOLON        | ';'       
-PRINT_KWORD      | 'print'   
-L_PARENTHESIS    | '('       
-STRING           | '"cama de agua"'
-COMMA            | ','       
-ID               | 'y'       
-COMMA            | ','       
-STRING           | '"agua"'  
-R_PARENTHESIS    | ')'       
-SEMICOLON        | ';'       
-PRINT_KWORD      | 'print'   
-L_PARENTHESIS    | '('       
-ID               | 'y'       
-COMMA            | ','       
-STRING           | '"perro"' 
 R_PARENTHESIS    | ')'       
 SEMICOLON        | ';'       
 R_CURLY_BRACE    | '}'       
@@ -387,10 +340,9 @@ program_vars_funcs
     body_statement
       {
       statement
-        print_string
-          print
+        f_call_simple
+          prinst
           (
-          "Hello"
           )
           ;
       }
@@ -405,19 +357,20 @@ program_vars_funcs
         =
         expression_simple
           exp_minus
-            exp_plus
-              exp_simple
+            exp_minus
+              exp_plus
+                exp_simple
+                  term_simple
+                    factor_cte	3
+                +
                 term_simple
-                  factor_cte	3
-              +
-              term_simple
-                factor_cte	4
-            -
-            term_mult_sign
-              term_simple
-                factor_cte	2
-              *
-              factor_cte	5
+                  factor_cte	4
+              -
+              term_mult_sign
+                term_simple
+                  factor_cte	2
+                *
+                factor_cte	5
             -
             term_simple
               factor_cte	2
@@ -584,81 +537,9 @@ program_vars_funcs
           }
         ;
     statement
-      f_call_multiple_expressions
-        printSum
-        (
-        expression_simple
-          exp_simple
-            term_simple
-              factor_cte	2
-        ,
-        expression_simple
-          exp_simple
-            term_simple
-              factor_cte	4
-        )
-        ;
-    statement
       f_call_simple
         greet
         (
-        )
-        ;
-    statement
-      print_string
-        print
-        (
-        "Hello world"
-        )
-        ;
-    statement
-      f_call_one_expression
-        print
-        (
-        expression_simple
-          exp_plus
-            exp_simple
-              term_simple
-                factor_id	y
-            +
-            term_simple
-              factor_cte	2
-        )
-        ;
-    statement
-      f_call_one_expression
-        print
-        (
-        expression_simple
-          exp_simple
-            term_simple
-              factor_id	x
-        )
-        ;
-    statement
-      print_multiple_expressions
-        print
-        (
-        "cama de agua"
-        ,
-        expression_simple
-          exp_simple
-            term_simple
-              factor_id	y
-        ,
-        "agua"
-        )
-        ;
-    statement
-      print_multiple_expressions
-        print
-        (
-        expression_simple
-          exp_simple
-            term_simple
-              factor_id	y
-        ,
-        "perro"
         )
         ;
     }
@@ -668,7 +549,7 @@ program_vars_funcs
 
 Árbol transformado (AST):
 ------------------------------
-{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'myProgram'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'x'}, {'type': 'id', 'value': 'y'}], 'type': {'type': 'type_int', 'value': 'int'}}, {'ids': [{'type': 'id', 'value': 'a'}, {'type': 'id', 'value': 'b'}], 'type': {'type': 'type_float', 'value': 'float'}}, {'ids': [{'type': 'id', 'value': 'c_d8'}, {'type': 'id', 'value': 'd'}], 'type': {'type': 'type_int', 'value': 'int'}}, {'ids': [{'type': 'id', 'value': 'total'}], 'type': {'type': 'type_int', 'value': 'int'}}]}, 'funcs': [{'type': 'funcs_no_vars', 'funcs_name': {'type': 'id', 'value': 'prinst'}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Hello'}}}]}}, {'type': 'funcs_multiple_ids', 'funcs_name': {'type': 'id', 'value': 'printSum'}, 'parameters': [{'id': {'type': 'id', 'value': 'a'}, 'type': {'type': 'type_int', 'value': 'int'}}, {'id': {'type': 'id', 'value': 'b'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'result'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'a': {'type': 'int', 'assigned': True, 'address': 1000}, 'b': {'type': 'int', 'assigned': True, 'address': 1001}, 'result': {'type': 'int', 'assigned': True, 'address': 1002}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}}]}}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'result'}}}}}}]}}, {'type': 'funcs_simple', 'funcs_name': {'type': 'id', 'value': 'greet'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'msg'}, 'type': {'type': 'type_float', 'value': 'float'}}], 'msg': {'type': 'float', 'assigned': False, 'address': 2000}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Hello'}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 3}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 4}}]}, Token('MINUS', '-'), {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}, Token('MULT_SIGN', '*'), {'type': 'factor_cte', 'value': 5}]}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'y'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 5}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'total'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}]}}}}, {'type': 'statement', 'value': {'type': 'condition_if_else', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('LESS_THAN', '<'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 5}}}]}, 'body1': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}, 'body2': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}}}}]}}}, {'type': 'statement', 'value': {'type': 'condition_if', 'condition': {'type': 'expression_greater_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('GREATER_THAN', '>'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}}]}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}, Token('LESS_THAN', '<'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 10}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'y'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}, {'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Agua'}}}]}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_greater_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('GREATER_THAN', '>'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}}}, {'type': 'statement', 'value': {'type': 'f_call_multiple_expressions', 'function': {'type': 'id', 'value': 'printSum'}, 'value': [{'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}}}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 4}}}}]}}, {'type': 'statement', 'value': {'type': 'f_call_simple', 'value': {'type': 'id', 'value': 'greet'}}}, {'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Hello world'}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}]}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}}, {'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'string', 'value': 'cama de agua'}, {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}}, {'type': 'string', 'value': 'agua'}]}}, {'type': 'statement', 'value': {'type': 'print_multiple_expressions', 'value': [{'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}}, {'type': 'string', 'value': 'perro'}]}}]}}
+{'type': 'program_vars_funcs', 'program_name': {'type': 'id', 'value': 'myProgram'}, 'vars': {'type': 'vars_multiple_ids', 'declarations': [{'ids': [{'type': 'id', 'value': 'x'}, {'type': 'id', 'value': 'y'}], 'type': {'type': 'type_int', 'value': 'int'}}, {'ids': [{'type': 'id', 'value': 'a'}, {'type': 'id', 'value': 'b'}], 'type': {'type': 'type_float', 'value': 'float'}}, {'ids': [{'type': 'id', 'value': 'c_d8'}, {'type': 'id', 'value': 'd'}], 'type': {'type': 'type_int', 'value': 'int'}}, {'ids': [{'type': 'id', 'value': 'total'}], 'type': {'type': 'type_int', 'value': 'int'}}]}, 'funcs': [{'type': 'funcs_no_vars', 'funcs_name': {'type': 'id', 'value': 'prinst'}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Hello'}}}]}}, {'type': 'funcs_multiple_ids', 'funcs_name': {'type': 'id', 'value': 'printSum'}, 'parameters': [{'id': {'type': 'id', 'value': 'a'}, 'type': {'type': 'type_int', 'value': 'int'}}, {'id': {'type': 'id', 'value': 'b'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'result'}, 'type': {'type': 'type_int', 'value': 'int'}}], 'a': {'type': 'int', 'assigned': True, 'address': 1000}, 'b': {'type': 'int', 'assigned': True, 'address': 1001}, 'result': {'type': 'int', 'assigned': True, 'address': 1002}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'result'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'a'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'b'}}}]}}}}, {'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'result'}}}}}}]}}, {'type': 'funcs_simple', 'funcs_name': {'type': 'id', 'value': 'greet'}, 'vars': {'type': 'vars_one_id', 'declarations': [{'id': {'type': 'id', 'value': 'msg'}, 'type': {'type': 'type_float', 'value': 'float'}}], 'msg': {'type': 'float', 'assigned': False, 'address': 2000}}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'f_call_simple', 'value': {'type': 'id', 'value': 'prinst'}}}]}}], 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp', 'value': [{'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 3}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 4}}]}, Token('MINUS', '-'), {'type': 'term', 'value': [{'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}, Token('MULT_SIGN', '*'), {'type': 'factor_cte', 'value': 5}]}]}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 2}}]}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'y'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 5}}}}}}, {'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'total'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}]}}}}, {'type': 'statement', 'value': {'type': 'condition_if_else', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('LESS_THAN', '<'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 5}}}]}, 'body1': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}, 'body2': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}}}}]}}}, {'type': 'statement', 'value': {'type': 'condition_if', 'condition': {'type': 'expression_greater_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('GREATER_THAN', '>'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'print_expression', 'value': {'type': 'expression_simple', 'value': {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}}}]}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_less_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}, Token('LESS_THAN', '<'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 10}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'y'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'y'}}}}, Token('PLUS', '+'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}, {'type': 'statement', 'value': {'type': 'print_string', 'value': {'type': 'string', 'value': 'Agua'}}}]}}}, {'type': 'statement', 'value': {'type': 'cycle', 'condition': {'type': 'expression_greater_than', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('GREATER_THAN', '>'), {'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 0}}}]}, 'body': {'type': 'body_statement', 'value': [{'type': 'statement', 'value': {'type': 'assign', 'id': {'type': 'id', 'value': 'x'}, 'value': {'type': 'expression_simple', 'value': {'type': 'exp', 'value': [{'type': 'exp_simple', 'value': {'type': 'term_simple', 'value': {'type': 'factor_id', 'value': {'type': 'id', 'value': 'x'}}}}, Token('MINUS', '-'), {'type': 'term_simple', 'value': {'type': 'factor_cte', 'value': 1}}]}}}}]}}}, {'type': 'statement', 'value': {'type': 'f_call_simple', 'value': {'type': 'id', 'value': 'greet'}}}]}}
 
 
 Directorio de funciones y variables:
@@ -683,7 +564,7 @@ Start Point: 0
     c_d8 : int | Dirección: 3002
     d : int | Dirección: 3003
     total : int | Dirección: 3004
-  Recursos: temporals(int=13), vars(int=5, float=2)
+  Recursos: temporals(int=12), vars(int=5, float=2)
 
 Scope: prinst
 Start Point: 1
@@ -719,8 +600,8 @@ Cuádruplos generados:
 6   9                                1002      
 7   17                                         
 8   16                                         
-9   9                                9000      
-10  17                                         
+9   13         prinst                          
+10  14         prinst                          
 11  16                                         
 12  1          7000       7001       5001      
 13  3          7002       7003       5002      
@@ -752,26 +633,8 @@ Cuádruplos generados:
 39  2          3000       7004       5012      
 40  7          5012                  3000      
 41  10                               37        
-42  13         printSum                        
-43  15         7002                  p1        
-44  15         7001                  p2        
-45  14         printSum                        
-46  13         greet                           
-47  14         greet                           
-48  9                                9002      
-49  17                                         
-50  1          3001       7002       5013      
-51  9                                5013      
-52  17                                         
-53  9                                3000      
-54  17                                         
-55  9                                9003      
-56  9                                3001      
-57  9                                9004      
-58  17                                         
-59  9                                3001      
-60  9                                9005      
-61  17                                         
+42  13         greet                           
+43  14         greet                           
 
 
 Tabla de constantes:
@@ -785,10 +648,6 @@ Valor: 1          | Tipo: int        | Dirección: 7004
 Valor: 0          | Tipo: int        | Dirección: 7005      
 Valor: 10         | Tipo: int        | Dirección: 7006      
 Valor: Agua       | Tipo: string     | Dirección: 9001      
-Valor: Hello world | Tipo: string     | Dirección: 9002      
-Valor: cama de agua | Tipo: string     | Dirección: 9003      
-Valor: agua       | Tipo: string     | Dirección: 9004      
-Valor: perro      | Tipo: string     | Dirección: 9005      
 
 
 Uso de memoria:
@@ -802,13 +661,13 @@ INT -> Rango: 3000 - 3999 | Dirección actual: 3005
 FLOAT -> Rango: 4000 - 4999 | Dirección actual: 4002
 -----------------------------------------------------------
 TEMPORAL
-INT -> Rango: 5000 - 5999 | Dirección actual: 5014
+INT -> Rango: 5000 - 5999 | Dirección actual: 5013
 FLOAT -> Rango: 6000 - 6999 | Dirección actual: 6000
 -----------------------------------------------------------
 CONSTANTE
 INT -> Rango: 7000 - 7999 | Dirección actual: 7007
 FLOAT -> Rango: 8000 - 8999 | Dirección actual: 8000
-STRING -> Rango: 9000 - 9999 | Dirección actual: 9006
+STRING -> Rango: 9000 - 9999 | Dirección actual: 9002
 -----------------------------------------------------------
 
 
@@ -819,10 +678,4 @@ Agua
 Agua
 Agua
 Agua
-6
 Hello
-Hello world
-12
--4
-cama de agua10agua
-10perro
