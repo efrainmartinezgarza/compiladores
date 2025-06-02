@@ -273,7 +273,7 @@ class VirtualMachine:
                 case 13:  # ERA: Establece el contexto de la función llamada
 
                     # Inicialización del contexto de la función (diccionario vacío)
-                    self.pending_local_memory = {'int': {}, 'float': {}, 'string': {}}
+                    self.pending_local_memory = {'int': {}, 'float': {}}
 
                     # Obtención del nombre de la función a ejecutar
                     self.current_scope = left
@@ -285,7 +285,7 @@ class VirtualMachine:
                     self.contador_parametros = 0
 
                     # Definición de las direcciones base locales para cada tipo de dato
-                    local_base_addresses = {'int': 1000, 'float': 2000, 'string': 9000}
+                    local_base_addresses = {'int': 1000, 'float': 2000}
 
                     # Obtiene la cantidad de recursos necesarios para la función actual (variables, parametros y temporales)
                     resources = self.function_directory[self.current_scope].get("resources", {})
